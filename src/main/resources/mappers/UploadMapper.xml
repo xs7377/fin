@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+    <mapper namespace="UploadMapper">
+    
+    	<insert id="imgUpload" parameterType="uploadDTO">
+    		{ call img_upload(#{pNum, mode=IN},#{oName, mode=IN},#{fName, mode=IN},#{kind,  mode=IN}) }
+    	</insert>
+    	<select id="imgView" parameterType="uploadDTO" resultType="uploadDTO">
+    		select * from image where pnum=#{pNum} and kind=#{kind}
+    	</select>
+    	
+    	<delete id="imgDelete" parameterType="java.lang.String">
+    		delete image where fname=#{fName}
+    	</delete>
+    	
+    	<insert id="noImage" parameterType="uploadDTO" statementType="CALLABLE">
+    		{ call noimage(#{pNum, mode=IN},#{kind, mode=IN}) }
+    	</insert>
+    	
+    </mapper>

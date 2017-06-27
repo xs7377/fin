@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <title>Pikaday</title>
+    <meta name="author" content="David Bushell">
+    <link rel="stylesheet" href="css/pikaday.css">
+    <link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+    <label for="Check_In">Date:</label>
+    <br>
+    <input type="text" id="Check_In">
+    
+    <label for="Check_Out"></label>
+    <br>
+    <input type="text" id="Check_Out">
+
+    <script src="pikaday.js"></script>
+    <script>
+    var check_in = new Pikaday(
+    {
+        field: document.getElementById('Check_In'),
+        firstDay: 1,
+        minDate: new Date(),
+        yearRange: [2000,2020],
+        onClose: function(selectedDate ){ 
+        	var date = new Date(selectedDate);
+        	date.setDate(date.getDate()+day);
+        	var st = ""+date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+        	selectedDate = st.trim();
+            // 종료일(toDate)의 선택할수있는 최소 날짜(minDate)를 선택한 시작일로 지정
+            $("#Check_Out").datepicker("option", "minDate", selectedDate);
+        }  
+    });
+    
+    var check_out = new Pikaday(
+    	    {
+    	        field: document.getElementById('Check_Out'),
+    	        firstDay: 1,
+    	        yearRange: [2000,2020]
+    	    });
+
+    </script>
+</body>
+</html>

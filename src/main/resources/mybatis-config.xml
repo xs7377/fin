@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+    
+    <configuration>
+    	<typeAliases>
+    		<typeAlias alias="auctionDTO" type="com.choa.auction.AuctionDTO"/>
+    		<typeAlias alias="map" type="java.util.Map"/>
+    		<typeAlias alias="categoryDTO" type="com.choa.auction.CategoryDTO"/>
+    		<typeAlias alias="uploadDTO" type="com.choa.upload.UploadDTO"/>
+    	</typeAliases>
+    </configuration>

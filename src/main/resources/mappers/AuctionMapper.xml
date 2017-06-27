@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+    
+    <mapper namespace="AuctionMapper">
+    
+    <resultMap type="com.choa.auction.AuctionDTO" id="auctionlist"></resultMap>
+   	<resultMap type="java.util.Map" id="myMap"></resultMap>
+   		<select id="getRank" resultType="com.choa.auction.RankDTO">
+   			select * from rank
+   		</select>
+		<insert id="setRank" parameterType="com.choa.auction.RankDTO">
+			insert into rank values(#{rank}, #{search})
+		</insert>
+   		<select id="getSearch" resultType="com.choa.auction.SearchDTO">
+   			select search from (select rownum r, S.* from (select * from search order by count desc) S) where r between 1 and 10
+   		</select>
+   		<select id="setSearch" parameterType="String">
+   			{ call auction_setSearch(#{search, mode=IN}) }
+   		</select>
+   		<select id="likeTop3" parameterType="String" resultType="auctionDTO">
+   			select * from (select rownum r, A.* from (select * from auction where category LIKE '%'||#{cate}||'%' order by likes asc) A ) where r between 1 and 3
+   		</select>
+    	<select id="ctgAllList" resultType="categoryDTO">
+    		select * from category order by num asc, pnum asc
+    	</select>
+    	<select id="list" parameterType="map" statementType="CALLABLE">
+			{ call auction_list(#{row.startRow, mode=IN},#{row.lastRow, mode=IN},#{pri_row.startRow, mode=IN},#{pri_row.lastRow, mode=IN}, #{category, mode=IN},
+			#{search, mode=IN},
+			#{total, mode=OUT, jdbcType=INTEGER, javaType=int, resultMap=auctionlist},
+			#{pri_total, mode=OUT, jdbcType=INTEGER, javaType=int, resultMap=auctionlist},
+			#{list, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=auctionlist},
+			#{pri_list, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=auctionlist}) }    	
+    	</select>
+    	
+    	<select id="id_list" parameterType="map" statementType="CALLABLE">
+    		{ call id_search(#{row.startRow, mode=IN},#{row.lastRow, mode=IN},#{pri_row.startRow, mode=IN},#{pri_row.lastRow, mode=IN},#{category, mode=IN},
+    		#{id, mode=IN},
+    		#{total, mode=OUT, jdbcType=INTEGER, javaType=int, resultMap=auctionlist},
+    		#{pri_total, mode=OUT, jdbcType=INTEGER, javaType=int, resultMap=auctionlist},
+    		#{list, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=auctionlist},
+    		#{pri_list, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=auctionlist}) } 
+    	</select>
+    	
+    	<select id="view" parameterType="map" statementType="CALLABLE">
+    		{ call auction_view(#{num, mode=IN},
+    		#{view, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=auctionlist},
+    		#{bidder, mode=OUT, jdbcType=INTEGER, javaType=int, resultMap=myMap}
+    		) } 
+    	</select>
+    	
+    	<update id="update" parameterType="map" statementType="CALLABLE">
+    		{ call auction_update(#{auctionDTO.title, mode=IN},#{auctionDTO.contents, mode=IN},#{auctionDTO.reply, mode=IN},#{auctionDTO.category, mode=IN},#{auctionDTO.primeum, mode=IN},
+    		#{auctionDTO.min_price, mode=IN},#{auctionDTO.max_price, mode=IN},#{auctionDTO.period, mode=IN},#{auctionDTO.num, mode=IN},
+    		#{result, mode=OUT, javaType=int, jdbcType=INTEGER, resultMap=myMap}) }
+    	</update>
+    	
+    	<delete id="delete" parameterType="java.lang.Integer">
+    		delete auction where num=#{num}
+    	</delete>
+    	
+    	<insert parameterType="map"  statementType="CALLABLE" id="write">
+    		{ call auction_write(#{auctionDTO.m_id, mode=IN},#{auctionDTO.title, mode=IN},#{auctionDTO.contents, mode=IN},#{auctionDTO.reply, mode=IN},#{auctionDTO.category, mode=IN},
+    		#{auctionDTO.primeum, mode=IN},#{auctionDTO.min_price, mode=IN},#{auctionDTO.max_price, mode=IN},#{auctionDTO.period, mode=IN},
+    		#{result, mode=OUT, javaType=int, jdbcType=INTEGER, resultMap=myMap},#{maxnum, mode=OUT, javaType=int, jdbcType=INTEGER, resultMap=myMap}) }
+    	</insert>
+    	
+    	<insert id="reply" parameterType="map">
+    		{ call auction_reply(#{kind, mode=IN},#{pNum, mode=IN},#{m_id, mode=IN},#{num, mode=IN}, #{contents, mode=IN}) }
+    	</insert>
+    	
+    	<select id="category" parameterType="java.lang.Integer" resultType="categoryDTO">
+    		select * from category where pnum=#{pnum} order by num asc
+    	</select>
+    	
+
+    	
+    </mapper>
