@@ -28,8 +28,17 @@ public class AuctionDAO {
 	
 	
 	public Map<String, Object> total_list(String search, String category, int lastNum)throws Exception{
-		
-		
+		Map<String, Object> map=new HashMap<String, Object>();
+		map.put("search", search);
+		map.put("category", category);
+		map.put("lastNum", lastNum);
+		sqlSession.selectList(NAME_SPACE+"total_list", map);
+		String [] ctg= {"패션","잡화","스포츠/레저/자동차","유아","가구/생활/건강","디지털/가전/컴퓨타","도서"};
+		for(int i=0;i<ctg.length;i++){
+			map.put("ctg", ctg[i]);
+			sqlSession.selectOne(NAME_SPACE+"category_count", map);
+		}
+		return map;
 	}
 	public List<RankDTO> getRank()throws Exception{
 		return sqlSession.selectList(NAME_SPACE+"getRank");
