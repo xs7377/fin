@@ -44,6 +44,7 @@ $(function() {
 		$(".rank-search").on("click",function(){
 			var sr=$(this).text();
 			alert(sr);
+			location.href="./totalList/"+sr;
 		});
 		//=======================================검색어순위변동================================
 		for(var i=0;i<=9;i++){

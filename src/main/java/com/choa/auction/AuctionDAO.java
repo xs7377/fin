@@ -33,10 +33,12 @@ public class AuctionDAO {
 		map.put("category", category);
 		map.put("lastNum", lastNum);
 		sqlSession.selectList(NAME_SPACE+"total_list", map);
-		String [] ctg= {"패션","잡화","스포츠/레저/자동차","유아","가구/생활/건강","디지털/가전/컴퓨타","도서"};
+		String [] ctg= {"패션","잡화","스포츠/레저/자동차","유아","가구/생활/건강","디지털/가전/컴퓨터","도서"};
 		for(int i=0;i<ctg.length;i++){
+			System.out.println(ctg.length);
 			map.put("ctg", ctg[i]);
-			sqlSession.selectOne(NAME_SPACE+"category_count", map);
+			System.out.println("list_count"+i);
+			map.put("list_count"+i,sqlSession.selectOne(NAME_SPACE+"category_count", map));
 		}
 		return map;
 	}

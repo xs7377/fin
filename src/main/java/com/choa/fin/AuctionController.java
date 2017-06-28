@@ -33,8 +33,20 @@ public class AuctionController {
 	@Inject
 	private AuctionService auctionService;
 	// ============================== totalList ==========================================
-	@RequestMapping(value="/totalList", method=RequestMethod.GET)
-	public void totalList()throws Exception{
+	@RequestMapping(value="/totalList/{search}", method=RequestMethod.GET)
+	public String totalList(@PathVariable(value="search") String search)throws Exception{
+		System.out.println("===================totalList");
+		Map<String, Object> map= auctionService.totalList(search, "", 5);
+		List<AuctionDTO> list=(List<AuctionDTO>)map.get("list");
+		System.out.println(list.size());
+		System.out.println(map.get("totalCount"));
+		for(int i=0;i<7;i++){
+			System.out.println(map.get("list_count"+i));
+		}
+		
+		
+		
+		return "auction/totalList";
 	}
 	// ============================== Home ==========================================
 	@RequestMapping(value="/home", method=RequestMethod.POST)

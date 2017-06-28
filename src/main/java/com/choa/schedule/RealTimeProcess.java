@@ -28,6 +28,6 @@ public class RealTimeProcess implements Job{
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		System.out.println(today.toString()+"=========검색어 업데이트");
+		//System.out.println(today.toString()+"=========검색어 업데이트");
 	}
 }
