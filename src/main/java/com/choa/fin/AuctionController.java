@@ -32,6 +32,10 @@ import com.choa.util.PageResult;
 public class AuctionController {
 	@Inject
 	private AuctionService auctionService;
+	// ============================== totalList ==========================================
+	@RequestMapping(value="/totalList", method=RequestMethod.GET)
+	public void totalList()throws Exception{
+	}
 	// ============================== Home ==========================================
 	@RequestMapping(value="/home", method=RequestMethod.POST)
 	public String home()throws Exception{
@@ -48,8 +52,9 @@ public class AuctionController {
 	@RequestMapping(value="/auctionList", method=RequestMethod.POST)
 	public void auctionList(int curPage, int perPage, int pri_curPage, String category, String kind, String search, String ctgNum, String view_kind,String isSearch, Model model)throws Exception{
 		System.out.println("==================================== SearchCount");
-		if(isSearch.equals('y')){
-			auctionService.setSearch(isSearch);
+		if(isSearch.equals("y")){
+			System.out.println("검색어 업뎃");
+			auctionService.setSearch(search);
 		}
 		System.out.println("==================================== AuctionList");
 		System.out.println("curpage : "+curPage);

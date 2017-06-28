@@ -27,7 +27,10 @@ public class AuctionDAO {
 	private String NAME_SPACE="AuctionMapper.";
 	
 	
-	
+	public Map<String, Object> total_list(String search, String category, int lastNum)throws Exception{
+		
+		
+	}
 	public List<RankDTO> getRank()throws Exception{
 		return sqlSession.selectList(NAME_SPACE+"getRank");
 	}

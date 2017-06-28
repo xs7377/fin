@@ -9,7 +9,43 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
 $(function() {
-	// =======================================검색어순위변동================================
+	// =======================================hover 밑줄처리================================
+		$(".rank-search").hover(function(){
+			$(this).addClass('udl');
+		},function(){
+			$(this).removeClass('udl');
+		});
+		$(".clk").hover(function(){
+			$(this).addClass('font-eft');
+		},function(){
+			$(this).removeClass('font-eft');
+		});
+		$(".cpt").hover(function(){
+			var p=$(this).parents('.al-list-wrap');
+			$(p).children('div').addClass('font-eft2');
+		},function(){
+			var p=$(this).parents('.al-list-wrap');
+			$(p).children('div').removeClass('font-eft2');
+		});
+		var pa=$(".al-pri-paging").children('a');
+		$(pa).hover(function(){
+			$(this).addClass('udl2');
+		},function(){
+			$(this).removeClass('udl2');
+		});
+		
+		var na=$(".al-nor-paging").children('a');
+		$(na).hover(function(){
+			$(this).addClass('udl2');
+		},function(){
+			$(this).removeClass('udl2');
+		});
+		//=======================================검색어link================================
+		$(".rank-search").on("click",function(){
+			var sr=$(this).text();
+			alert(sr);
+		});
+		//=======================================검색어순위변동================================
 		for(var i=0;i<=9;i++){
 			var rm=$("#rank_move_"+i).text();
 			if(rm*1<0){
@@ -23,6 +59,9 @@ $(function() {
 			}
 			if(rm=='new'){
 				$("#rank_move_"+i).addClass('green');
+			}
+			if(rm==0){
+				$("#rank_move_"+i).html('');
 			}
 		}	
 	// =======================================카테고리 제목 클릭================================
@@ -453,20 +492,22 @@ function movePage(curPage, perPage, pri_curPage, category, search, kind, ctgNum,
 	margin-bottom: 20px;
 	border-top: 1px solid #bcbcbc;
 }
-.al-nor6,.al-nor7,.al-nor8,.al-nor10,.al-nor11,.al-nor12{
+.al-nor6{
 	text-align:left;
 	height: 370px;
 	width:263.5px;	
 	margin-bottom: 20px;
 	margin-left:20px;
 	float:left;
+	cursor: pointer;
 }
-.al-nor5,.al-nor9{
+.al-nor5{
 	text-align:left;
 	height: 370px;
 	width:263.5px;	
 	margin-bottom: 20px;
 	float:left;
+	cursor: pointer;
 }
 .al-nor2,.al-nor3,.al-nor4{
 	height: 370px;
@@ -474,12 +515,14 @@ function movePage(curPage, perPage, pri_curPage, category, search, kind, ctgNum,
     margin-bottom: 20px;
     margin-left:20px;
     float:left;
+    cursor: pointer;
 }
 .al-nor1{
 	height: 370px;
 	width:263.5px;	
     margin-bottom: 20px;
     float:left;
+    cursor: pointer;
 }
 .al-subcontainer{
 	margin-left:344px;
@@ -501,7 +544,6 @@ function movePage(curPage, perPage, pri_curPage, category, search, kind, ctgNum,
 	float: right;
 }
 /*-------------------------	sideNav Style ------------------------------ */
-
 ul { 
 padding: 0;
 list-style-type: none;
@@ -948,7 +990,6 @@ a {
 .al-font{
 	font-size: 15px;
 	padding-top: 28px;
-	font-weight: bold;
 }
 .al-index-font{
 	font-size: 14px;
@@ -956,15 +997,6 @@ a {
 }
 .al-remove-bt{
 	border: none;
-}
-.back1{
-	background-color: ;
-}
-.back2{
-	background-color:;
-}
-.back3{
-	background-color: ;
 }
 .fc1{
 	color: gold;
@@ -984,7 +1016,27 @@ a {
 .green{
 	color: green;
 	font-weight: bold;
-	
+}
+.udl {
+	text-decoration: underline;
+	font-weight: bold;
+}
+.udl2 {
+	text-decoration: underline;
+}
+.rank-search{
+	cursor: pointer;
+}
+.font-eft{
+	text-shadow: 1px 1px 1px rgb(220,220,220);
+	box-shadow: 5px 5px 5px rgb(180,180,180);
+}
+.font-eft2{
+	text-decoration: underline;
+	font-weight: bold;
+}
+.cpt{
+	cursor: pointer;
 }
 </style>
 </head>
@@ -1343,8 +1395,8 @@ a {
 			<div class="al-top10-title">TOP10 검색어</div>
 			<div style="border:  1px solid #bcbcbc;box-shadow: 5px 5px 5px lightgray;padding-bottom: 3px;">
 			<c:forEach begin="0" end="9" step="1" var="i">
-				<div class="al-top10-rank"><span style="display: inline-block; width: 25px; font-weight: bold;">${i+1}.</span>
-					<span id="rank_search_${i}">${searchTop10[i].search}</span>
+				<div class="al-top10-rank"><span style="display: inline-block; width: 30px; font-weight: bold;color: rgba(56, 56, 56, 0.8);">${i+1}.</span>
+					<a id="rank_search_${i}" class="rank-search" style="color: black">${searchTop10[i].search}</a>
 					<span id="rank_move_${i}" style="float: right;font-size:14px">${rankMove[i]}</span>
 				</div>
 			</c:forEach>
@@ -1376,7 +1428,7 @@ a {
 			<div id="al_pri_wrap_album">
 			<div class="al-subcon">
 			<c:forEach begin="0" end="${pri_aucList.size()-1}" step="1" var="i">
-				<div class="al-nor${i+1}">
+				<div class="al-nor${i+1} clk">
 					<input type="hidden" class="pri_aucNum" id="pri_aucNum_${pri_aucList[i].num}" value="${pri_aucList[i].num}">
 					<div class="al-img" id="al_pri_img_${i}">이미지</div>
 					<div class="al-title">${pri_aucList[i].title}</div>
@@ -1402,8 +1454,8 @@ a {
 			<c:forEach begin="0" end="${pri_aucList.size()-1}" step="1" var="i">
 				<div class="al-list-wrap">
 					<input type="hidden" class="pri_aucNum_list" id="pri_aucNum_list_${pri_aucList[i].num}" value="${pri_aucList[i].num}">
-					<div class="al-list-img" id="al_pri_img_list_${i}"></div>
-					<div class="al-list-title al-font">${pri_aucList[i].title}</div>
+					<div class="al-list-img cpt" id="al_pri_img_list_${i}"></div>
+					<div class="al-list-title al-font"><span class="cpt">${pri_aucList[i].title}</span></div>
 					<div class="al-list-minP al-font">${pri_aucList[i].min_price}</div>
 					<div class="al-list-maxP al-font">${pri_aucList[i].max_price}</div>
 					<div class="al-list-buyer al-font">${pri_aucList[i].buyer}<c:if test="${pri_aucList[i].buyer eq '' || pri_aucList[i].buyer eq null  }">&nbsp;</c:if></div>
@@ -1418,7 +1470,14 @@ a {
 		<c:if test="${pri_aucList.size() ne 0}">
 			<c:if test="${pri_curPage ne 1}"><a href="#" class="al-pri-firstPage">[처음]</a></c:if>
 			<c:if test="${pri_pageResult.curBlock>1}"><a href="#" class="al-pri-prePage">[이전]</a></c:if>
-			<c:forEach begin="${pri_pageResult.startNum}" end="${pri_pageResult.lastNum}" step="1" var="i"><a href="#" class="al-pri-page">${i}</a>&nbsp;&nbsp;</c:forEach>
+			<c:forEach begin="${pri_pageResult.startNum}" end="${pri_pageResult.lastNum}" step="1" var="i">
+				<c:if test="${pri_curPage eq i }">
+					<a href="#" class="al-pri-page" style="font-weight: bold;">${i}</a>&nbsp;&nbsp;
+				</c:if>
+				<c:if test="${pri_curPage ne i }">
+					<a href="#" class="al-pri-page">${i}</a>&nbsp;&nbsp;
+				</c:if>
+			</c:forEach>
 			<c:if test="${pri_pageResult.curBlock < pri_pageResult.totalBlock}"><a href="#" class="al-pri-nextPage">[다음]</a></c:if>
 			<c:if test="${pri_curPage!=pri_pageResult.totalPage}"><a href="#" class="al-pri-lastPage">[마지막]</a></c:if>
 		</c:if>
@@ -1434,7 +1493,7 @@ a {
 			<div id="al_nor_wrap_album">
 			<c:forEach begin="0" end="${aucList.size()-1}" step="1" var="i">
 				<c:if test="${i%4 eq 0}">
-					<div class="al-nor5">
+					<div class="al-nor5 clk">
 						<input type="hidden" class="nor_aucNum" id="nor_aucNum_${aucList[i].num}" value="${aucList[i].num}">
 						<div class="al-img" id="al_nor_img_${i}">이미지</div>
 						<div class="al-title">${aucList[i].title}</div>
@@ -1446,7 +1505,7 @@ a {
 						</div>
 				</c:if>
 				<c:if test="${i%4 ne 0}">
-					<div class="al-nor6">
+					<div class="al-nor6 clk">
 						<input type="hidden" class="nor_aucNum" id="nor_aucNum_${aucList[i].num}" value="${aucList[i].num}">
 						<div class="al-img" id="al_nor_img_${i}">이미지</div>
 						<div class="al-title">${aucList[i].title}</div>
@@ -1472,8 +1531,8 @@ a {
 			<c:forEach begin="0" end="${aucList.size()-1}" step="1" var="i">
 				<div class="al-list-wrap">
 					<input type="hidden" class="nor_aucNum_list" id="nor_aucNum_list_${aucList[i].num}" value="${aucList[i].num}">
-					<div class="al-list-img" id="al_nor_img_list_${i}"></div>
-					<div class="al-list-title al-font">${aucList[i].title}</div>
+					<div class="al-list-img cpt" id="al_nor_img_list_${i}"></div>
+					<div class="al-list-title al-font"><span class="cpt">${aucList[i].title}</span></div>
 					<div class="al-list-minP al-font">${aucList[i].min_price}</div>
 					<div class="al-list-maxP al-font">${aucList[i].max_price}</div>
 					<div class="al-list-buyer al-font">${aucList[i].buyer}<c:if test="${aucList[i].buyer eq '' || aucList[i].buyer eq null  }">&nbsp;</c:if></div>
@@ -1488,7 +1547,14 @@ a {
 			<c:if test="${aucList.size() ne 0}">
 				<c:if test="${curPage ne 1}"><a href="#" class="al-nor-firstPage">[처음]</a></c:if>
 				<c:if test="${pageResult.curBlock>1}"><a href="#" class="al-nor-prePage">[이전]</a></c:if>
-				<c:forEach begin="${pageResult.startNum}" end="${pageResult.lastNum}" step="1" var="i"><a href="#" class="al-nor-page">${i}</a>&nbsp;&nbsp;</c:forEach>
+				<c:forEach begin="${pageResult.startNum}" end="${pageResult.lastNum}" step="1" var="i">
+					<c:if test="${curPage eq i }">
+						<a href="#" class="al-nor-page" style="font-weight: bold;">${i}</a>&nbsp;&nbsp;
+					</c:if>
+					<c:if test="${curPage ne i }">
+						<a href="#" class="al-nor-page">${i}</a>&nbsp;&nbsp;
+					</c:if>
+				</c:forEach>
 				<c:if test="${pageResult.curBlock < pageResult.totalBlock}"><a href="#" class="al-nor-nextPage">[다음]</a></c:if>
 				<c:if test="${curPage!=pageResult.totalPage}"><a href="#" class="al-nor-lastPage">[마지막]</a></c:if>
 			</c:if>
@@ -1497,6 +1563,5 @@ a {
 	
 	<div class="al-footer">footer</div>
 </div>
-<button id="tt">test</button>
 </body>
 </html>

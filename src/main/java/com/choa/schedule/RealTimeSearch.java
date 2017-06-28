@@ -20,7 +20,7 @@ public class RealTimeSearch {
 					.build();
 			Trigger trigger= newTrigger()
 					.withIdentity("trigger1", "group1")
-					.withSchedule(cronSchedule("0/5 * * * * ?"))
+					.withSchedule(cronSchedule("0 0/1 * * * ?"))
 					.build();
 			scheduler.scheduleJob(job,trigger);
 			Thread.sleep(1000);

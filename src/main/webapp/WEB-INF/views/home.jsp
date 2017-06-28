@@ -31,6 +31,7 @@
 </form>
 
 <a href="./auction/category">카테고리</a>
+<a href="./auction/totalList">통합페이지</a>
 <a href="./auction/test1">테스트11</a>
 <a href="./auction/test2">테스트22</a>
 <a href="./auction/test3">테스트33</a>

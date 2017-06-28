@@ -9,6 +9,12 @@
     
     <resultMap type="com.choa.auction.AuctionDTO" id="auctionlist"></resultMap>
    	<resultMap type="java.util.Map" id="myMap"></resultMap>
+   		<select id="total_list" parameterType="map" statementType="CALLABLE">
+   			{ call total_list(#{search, mode=IN},#{category, mode=IN},#{lastNum, mode=IN},
+   			#{totalCount, mode=OUT, jdbcType=INTEGER, javaTpye=int, resultMap=myMap},
+   			#{list, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=auctionlist},
+   			) }
+   		</select>
    		<select id="getRank" resultType="com.choa.auction.RankDTO">
    			select * from rank
    		</select>
