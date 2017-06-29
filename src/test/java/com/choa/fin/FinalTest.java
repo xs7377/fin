@@ -20,7 +20,7 @@ public class FinalTest extends AbstractTest {
 	private AuctionDAO auctionDAO;
 	@Test
 	public void test() {
-		for(int i=0;i<50;i++){
+		for(int i=0;i<60;i++){
 			AuctionDTO auctionDTO=new AuctionDTO();
 			
 			auctionDTO.setCategory("도서,도서,도서");

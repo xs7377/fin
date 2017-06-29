@@ -14,19 +14,86 @@ var curPage=1;
 var txt='';
 var search='';
 $(function(){
+	// ====================================hover 처리
+	
+	$(".go-ctg").hover(function(){
+		$(this).children('span').addClass('hover');
+	},function(){
+		$(this).children('span').removeClass('hover');
+	});
+	$(".go-ctg").on("click",function(){
+		var test=$.makeArray($('.go-ctg').map(function(){
+			return $(this).attr('id');
+		}));
+		alert(test[0]);
+		alert(test[1]);
+	});
 	// ====================================토탈페이지 더보기
+	$("#moreBtn").on("click",function(){
+		var ic='${totalCount}';
+		if(ic%8==0){
+			page=parseInt(ic/8);
+		}else{
+			page=parseInt(ic/8+1);			
+		}
+		search=$("#search_result").text();
+		startNum=curPage*8+1;
+		lastNum=(curPage+1)*8;
+		curPage++;
+		if(curPage>=page){
+			$("#moreBtn").remove();
+		}
+		$.ajax({
+			url:"./listChoice",
+			type:'post',
+			data:{
+				search:search,
+				category:"",
+				startNum:startNum,
+				lastNum:lastNum
+			},
+			success:function(data){
+				var i=0;
+				var ht='';
+				$(data).each(function(){
+					ht+=album(this,i);
+					i++;
+				});
+				$('.t-auc-con').append(
+					ht		
+				);
+				var tl_aucNum_array=$.makeArray($(".tl_aucNum").map(function(){
+					return $(this).attr("id");
+				}));
+				for(var i=0;i<tl_aucNum_array.length;i++){
+					var str=tl_aucNum_array[i];
+					str=str.substring(str.lastIndexOf("_")+1);
+					var img='tl_img_'+str;
+					$.ajax({
+						url:"./selectThum",
+						type:"post",
+						async: false,
+						data:{
+							num:str
+						},
+						success:function(data){
+							$("#"+img).html(
+								data		
+							);
+						}
+					});
+				}
+			}
+		});
+	});
 	// ====================================초이스페이지 더보기
 	$("body").on("click","#more_auc",function(){
 		startNum=curPage*8+1;
 		lastNum=(curPage+1)*8;
-		alert(curPage);
-		alert(txt);
-		alert(search);
 		curPage++;
 		if(curPage>=page){
 			$("#more_auc").remove();
 		}
-		alert("ajax 들어가기전");
 		$.ajax({
 			url:"./listChoice",
 			type:'post',
@@ -46,11 +113,33 @@ $(function(){
 				$('.t-auc-con').append(
 					ht		
 				);
+				var tl_aucNum_array=$.makeArray($(".tl_aucNum").map(function(){
+					return $(this).attr("id");
+				}));
+				for(var i=0;i<tl_aucNum_array.length;i++){
+					var str=tl_aucNum_array[i];
+					str=str.substring(str.lastIndexOf("_")+1);
+					var img='tl_img_'+str;
+					$.ajax({
+						url:"./selectThum",
+						type:"post",
+						async: false,
+						data:{
+							num:str
+						},
+						success:function(data){
+							$("#"+img).html(
+								data		
+							);
+						}
+					});
+				}
 			}
 		});
 	});
 	// ==================================== 갯수 검색
 	$(".go-ctg").on("click",function(){
+		$("#moreBtn").remove();
 		$("#more_auc").remove();
 		startNum=1;
 		lastNum=8;
@@ -58,11 +147,10 @@ $(function(){
 		curPage=1;
 		var ic=$(this).attr("id");
 		ic=ic.substring(ic.lastIndexOf("_")+1);
-		alert(ic);
 		if(ic%8==0){
-			page=ic/8;
+			page=parseInt(ic/8);
 		}else{
-			page=ic/8+1;			
+			page=parseInt(ic/8+1);			
 		}
 		if(page>1 && ic>8){
 			$("#t_paging").html(
@@ -71,7 +159,7 @@ $(function(){
 		}
 		
 		
-		txt=$(this).children('span').text();
+		txt=$(this).children('.ctg_name').text();
 		search='${search}';
 		$.ajax({
 			url:'./listChoice',
@@ -110,6 +198,27 @@ $(function(){
 							$("#"+img).html(
 								data		
 							);
+							var tl_aucNum_array=$.makeArray($(".tl_aucNum").map(function(){
+								return $(this).attr("id");
+							}));
+							for(var i=0;i<tl_aucNum_array.length;i++){
+								var str=tl_aucNum_array[i];
+								str=str.substring(str.lastIndexOf("_")+1);
+								var img='tl_img_'+str;
+								$.ajax({
+									url:"./selectThum",
+									type:"post",
+									async: false,
+									data:{
+										num:str
+									},
+									success:function(data){
+										$("#"+img).html(
+											data		
+										);
+									}
+								});
+							}
 						}
 					});
 				}
@@ -119,14 +228,14 @@ $(function(){
 		
 		
 	});
-	// ==================================== 이미지처리
+	// ==================================== 첫토탈페이지 이미지처리
 	var tl_aucNum_array=$.makeArray($(".tl_aucNum").map(function(){
 		return $(this).attr("id");
 	}));
 	for(var i=0;i<tl_aucNum_array.length;i++){
 		var str=tl_aucNum_array[i];
 		str=str.substring(str.lastIndexOf("_")+1);
-		var img='tl_img_'+i;
+		var img='tl_img_'+str;
 		$.ajax({
 			url:"./selectThum",
 			type:"post",
@@ -143,14 +252,14 @@ $(function(){
 	}
 	
 });
-function album(data,i){
+function album(data){
 	if(data.buyer==null || data.buyer==''){
 		data.buyer='';
 	}
 	var result='';
 	result+='<div class="items">';
 	result+='<input type="hidden" class="tl_aucNum" id="tl_aucNum_'+data.num+'" value="'+data.num+'">'
-	result+='<div class="tl-img" id="tl_img_'+i+'">이미지</div>'
+	result+='<div class="tl-img" id="tl_img_'+data.num+'">이미지</div>'
 	result+='<div class="tl-title">'+data.title+'</div>'
 	result+='<div class="tl-minP"><span class="tl-index">최소 입찰가</span>'+data.min_price+'</div>';
 	result+='<div class="tl-maxP"><span class="tl-index">즉시 낙찰가</span>'+data.max_price+'</div>';
@@ -169,6 +278,12 @@ function album(data,i){
 	word-break:break-all;
 	border-collapse: collapse;
 	font-family: NanumGothic;
+}
+.hover{
+	text-decoration: underline;
+}
+.click{
+	font-weight: bold;
 }
 .t-container{
 	width: 1500px;
@@ -298,11 +413,11 @@ function album(data,i){
 		<div class="t-board-con"></div>
 		<div class="t-paging"></div>
 		<div class="t-con-title">
-			<span style="font-weight: bold;">${search }</span>에 대한 검색결과(${totalCount})<br>
+			<span style="font-weight: bold;" id="search_result">${search }</span>에 대한 검색결과(${totalCount})<br>
 			<c:forEach begin="0" end="6" step="1" var="i">
 				<c:if test="${listCount[i] ne 0 }">
 					<span id="go_ctg_${listCount[i] }" class="go-ctg" style="cursor: pointer;">
-						<span>${ctg[i]}</span> (${listCount[i]})
+						<span class="ctg_name">${ctg[i]}</span><span>(${listCount[i]})</span>
 					</span>
 				</c:if>
 			</c:forEach>
@@ -311,7 +426,7 @@ function album(data,i){
 			<c:forEach begin="0" end="${totalList.size()-1}" step="1" var="i">
 				<div class="items">
 					<input type="hidden" class="tl_aucNum" id="tl_aucNum_${totalList[i].num}" value="${totalList[i].num}">
-					<div class="tl-img" id="tl_img_${i}">이미지</div>
+					<div class="tl-img" id="tl_img_${totalList[i].num}">이미지</div>
 					<div class="tl-title">${totalList[i].title }</div>
 					<div class="tl-minP"><span class="tl-index">최소 입찰가</span>${totalList[i].min_price }</div>
 					<div class="tl-maxP"><span class="tl-index">즉시 낙찰가</span>${totalList[i].max_price }</div>
@@ -325,6 +440,9 @@ function album(data,i){
 			</c:forEach>
 		</div>
 		<div class="t-paging" id="t_paging">
+			<c:if test="${totalCount >8}">
+				<button id="moreBtn">토탈더보기</button>
+			</c:if>
 		</div>
 		<div class="t-footer"></div>
 	</div>
