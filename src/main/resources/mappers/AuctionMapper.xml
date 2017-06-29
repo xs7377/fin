@@ -9,11 +9,14 @@
     
     <resultMap type="com.choa.auction.AuctionDTO" id="auctionlist"></resultMap>
    	<resultMap type="java.util.Map" id="myMap"></resultMap>
+   		<select id="listChoice" parameterType="map" resultType="auctionDTO">
+   			select * from (select rownum r, C.* from (select * from auction where category like '%'||#{category}||'%' and ( title like '%'||#{search}||'%' or contents like '%'||#{search}||'%' ) order by num desc) C) where r between #{startNum} and #{lastNum}
+   		</select>
    		<select id="category_count" parameterType="map" resultType="INTEGER">
    			select count(num) from auction where category like '%'||#{ctg}||'%' and (title like '%'||#{search}||'%' or contents like '%'||#{search}||'%') order by num desc
    		</select>
    		<select id="total_list" parameterType="map" statementType="CALLABLE">
-   			{ call total_list(#{search, mode=IN},#{category, mode=IN},#{lastNum, mode=IN},
+   			{ call total_list(#{search, mode=IN},#{category, mode=IN},#{startNum, mode=IN},#{lastNum, mode=IN},
    			#{totalCount, mode=OUT, jdbcType=INTEGER, javaType=int, resultMap=myMap},
    			#{list, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=auctionlist}
    			) }

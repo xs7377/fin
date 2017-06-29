@@ -20,8 +20,11 @@ public class AuctionService {
 	
 	@Inject
 	private AuctionDAO auctionDAO;
-	public Map<String, Object> totalList(String search, String category, int lastNum)throws Exception{
-		return auctionDAO.total_list(search, category, lastNum);
+	public List<AuctionDTO> listChoice(String search, String category, int startNum, int lastNum)throws Exception{
+		return auctionDAO.listChoice(search, category, startNum, lastNum);
+	}
+	public Map<String, Object> totalList(String search, String category,int startNum, int lastNum)throws Exception{
+		return auctionDAO.total_list(search, category,startNum, lastNum);
 	}
 	public List<Object> getRankMove(List<RankDTO> rank, List<SearchDTO> search)throws Exception{
 		List<Object> rankMove=new ArrayList<Object>();

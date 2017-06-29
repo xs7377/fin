@@ -26,18 +26,24 @@ public class AuctionDAO {
 	private SqlSession sqlSession;
 	private String NAME_SPACE="AuctionMapper.";
 	
-	
-	public Map<String, Object> total_list(String search, String category, int lastNum)throws Exception{
+	public List<AuctionDTO> listChoice(String search, String category, int startNum, int lastNum)throws Exception{
 		Map<String, Object> map=new HashMap<String, Object>();
 		map.put("search", search);
 		map.put("category", category);
+		map.put("startNum", startNum);
+		map.put("lastNum", lastNum);
+		return sqlSession.selectList(NAME_SPACE+"listChoice", map);
+	}
+	public Map<String, Object> total_list(String search, String category,int startNum, int lastNum)throws Exception{
+		Map<String, Object> map=new HashMap<String, Object>();
+		map.put("search", search);
+		map.put("category", category);
+		map.put("startNum", startNum);
 		map.put("lastNum", lastNum);
 		sqlSession.selectList(NAME_SPACE+"total_list", map);
 		String [] ctg= {"패션","잡화","스포츠/레저/자동차","유아","가구/생활/건강","디지털/가전/컴퓨터","도서"};
 		for(int i=0;i<ctg.length;i++){
-			System.out.println(ctg.length);
 			map.put("ctg", ctg[i]);
-			System.out.println("list_count"+i);
 			map.put("list_count"+i,sqlSession.selectOne(NAME_SPACE+"category_count", map));
 		}
 		return map;

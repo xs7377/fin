@@ -32,21 +32,34 @@ import com.choa.util.PageResult;
 public class AuctionController {
 	@Inject
 	private AuctionService auctionService;
+	// ============================== totalList- ajax ==========================================
+	@ResponseBody
+	@RequestMapping(value="/listChoice", method=RequestMethod.POST)
+	public List<AuctionDTO> listChoice(String search, String category, int startNum, int lastNum )throws Exception{
+		System.out.println(search);
+		System.out.println(category);
+		System.out.println(startNum);
+		System.out.println(lastNum);
+		List<AuctionDTO> l=auctionService.listChoice(search, category, startNum, lastNum);
+		System.out.println(l.size());
+		return l;
+	}
 	// ============================== totalList ==========================================
-	@RequestMapping(value="/totalList/{search}", method=RequestMethod.GET)
-	public String totalList(@PathVariable(value="search") String search)throws Exception{
+	@RequestMapping(value="/totalList", method=RequestMethod.POST)
+	public ModelAndView totalList(String search, int startNum,int lastNum, ModelAndView mv)throws Exception{
 		System.out.println("===================totalList");
-		Map<String, Object> map= auctionService.totalList(search, "", 5);
+		Map<String, Object> map= auctionService.totalList(search, "",startNum, lastNum);
 		List<AuctionDTO> list=(List<AuctionDTO>)map.get("list");
-		System.out.println(list.size());
-		System.out.println(map.get("totalCount"));
+		List<Integer> listCount=new ArrayList<Integer>();
 		for(int i=0;i<7;i++){
-			System.out.println(map.get("list_count"+i));
+			listCount.add((Integer)map.get("list_count"+i));
 		}
+		String [] ctg= {"패션","잡화","스포츠/레저/자동차","유아","가구/생활/건강","디지털/가전/컴퓨터","도서"};
 		
-		
-		
-		return "auction/totalList";
+		mv.addObject("totalCount", map.get("totalCount")).addObject("totalList",map.get("list")).addObject("listCount", listCount);
+		mv.addObject("search", search).addObject("ctg", ctg);
+		mv.setViewName("auction/totalList");
+		return mv;
 	}
 	// ============================== Home ==========================================
 	@RequestMapping(value="/home", method=RequestMethod.POST)
@@ -56,7 +69,7 @@ public class AuctionController {
 	// ============================== 썸네일조회 ==========================================
 	@RequestMapping(value="/selectThum", method=RequestMethod.POST)
 	public String selectThum(int num, Model model)throws Exception{
-		//System.out.println("섬네일 @ "+num);
+		System.out.println("섬네일 @ "+num);
 		model.addAttribute("thumList", auctionService.thumbnail(num));
 		return "auction/thumResult";
 	}

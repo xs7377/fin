@@ -44,7 +44,29 @@ $(function() {
 		$(".rank-search").on("click",function(){
 			var sr=$(this).text();
 			alert(sr);
-			location.href="./totalList/"+sr;
+			var form=document.createElement("form");
+			form.method="post";
+			form.action="./totalList";
+			var e1=document.createElement("input");
+			var e2=document.createElement("input");
+			var e3=document.createElement("input");
+			
+			e1.name="search";
+			e2.name="startNum";
+			e3.name="lastNum";
+			
+			e1.value=sr;
+			e2.value=1;
+			e3.value=8;
+			
+			e1.type="hidden";
+			e2.type="hidden";
+			e3.type="hidden";
+			document.body.appendChild(form);
+			form.appendChild(e1);
+			form.appendChild(e2);
+			form.appendChild(e3);
+			form.submit();
 		});
 		//=======================================검색어순위변동================================
 		for(var i=0;i<=9;i++){
@@ -667,8 +689,8 @@ a {
 	display: box;
 	vertical-align:top;
 	-webkit-box-orient:vertical;
-	-webkit-line-clamp:3
-
+	-webkit-line-clamp:3;
+	line-height: 22px;
 }
 .al-minP{
 	padding-left:2px;
@@ -1031,6 +1053,8 @@ a {
 .font-eft{
 	text-shadow: 1px 1px 1px rgb(220,220,220);
 	box-shadow: 5px 5px 5px rgb(180,180,180);
+	border-left: 1px solid #bcbcbc;
+	border-bottom: 1px solid #bcbcbc;
 }
 .font-eft2{
 	text-decoration: underline;
