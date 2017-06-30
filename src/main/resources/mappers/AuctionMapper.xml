@@ -8,6 +8,8 @@
     <mapper namespace="AuctionMapper">
     
     <resultMap type="com.choa.auction.AuctionDTO" id="auctionlist"></resultMap>
+    <resultMap type="com.choa.auction.CategoryDTO" id="categorylist"></resultMap>
+    <resultMap type="com.choa.upload.UploadDTO" id="uploadlist"></resultMap>
    	<resultMap type="java.util.Map" id="myMap"></resultMap>
    		<select id="listChoice" parameterType="map" resultType="auctionDTO">
    			select * from (select rownum r, C.* from (select * from auction where category like '%'||#{category}||'%' and ( title like '%'||#{search}||'%' or contents like '%'||#{search}||'%' ) order by num desc) C) where r between #{startNum} and #{lastNum}
@@ -87,7 +89,37 @@
     	<select id="category" parameterType="java.lang.Integer" resultType="categoryDTO">
     		select * from category where pnum=#{pnum} order by num asc
     	</select>
-    	
-
-    	
+    	<select id="tender_info" parameterType="java.lang.Integer" resultType="auctionDTO">
+			select * from auction where num=#{num}
+		</select>
+		<update id="tender" parameterType="map" statementType="CALLABLE">
+			{ call auction_tender(#{buyer, mode=IN},#{t_price, mode=IN},#{period, mode=IN},#{num, mode=IN},
+			#{result, mode=OUT, javaType=int, jdbcType=INTEGER, resultMap=myMap}) }
+		</update>
+		<insert id="likes" parameterType="map" statementType="CALLABLE">
+			{ call likesIO(#{kind, mode=IN},#{pNum, mode=IN},#{m_id, mode=IN},
+			#{result, mode=OUT, javaType=int, jdbcType=INTEGER, resultMap=myMap}) }
+		</insert>
+		<update id="likesUpdate" parameterType="map">
+				update auction set 
+			<if test="result==1">
+				likes=likes+1 
+			</if>
+			<if test="result==0">
+				likes=likes-1 
+			</if>
+			where num=#{pNum}
+		</update>
+		<select id="category_search" parameterType="map" statementType="CALLABLE">
+			{ call category_search(#{cate1, mode=IN}, #{cate2, mode=IN},
+			#{cate, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=categorylist }) }
+		</select>
+		<select id="auctionAll_list" statementType="CALLABLE">
+			{ call auctionAll_list(#{row.startRow, mode=IN},#{row.lastRow, mode=IN},#{category, mode=IN},#{num, mode=IN},
+			#{total, mode=OUT, jdbcType=INTEGER, javaType=int, resultMap=myMap},
+			#{list, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=auctionlist}) }
+		</select>
+		<update id="auctionBid" parameterType="java.lang.Integer">
+			update auction set kind='buy' where num=#{num}
+		</update>
     </mapper>

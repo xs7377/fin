@@ -512,7 +512,6 @@ function movePage(curPage, perPage, pri_curPage, category, search, kind, ctgNum,
 	height:40px;
 	width: 1114px;
 	padding: 10px;
-	margin-bottom: 20px;
 	border-top: 1px solid #bcbcbc;
 }
 .al-nor6{
@@ -556,8 +555,6 @@ function movePage(curPage, perPage, pri_curPage, category, search, kind, ctgNum,
 }
 .al-footer{
 	clear: both;
-	padding: 20px;
-    border: 1px solid #bcbcbc;
 }
 #al_pri_wrap_list{
 	float: right;
@@ -1455,7 +1452,7 @@ a {
 			<c:forEach begin="0" end="${pri_aucList.size()-1}" step="1" var="i">
 				<div class="al-nor${i+1} clk">
 					<input type="hidden" class="pri_aucNum" id="pri_aucNum_${pri_aucList[i].num}" value="${pri_aucList[i].num}">
-					<div class="al-img" id="al_pri_img_${i}">이미지</div>
+					<div class="al-img" id="al_pri_img_${i}"></div>
 					<div class="al-title">${pri_aucList[i].title}</div>
 					<div class="al-minP"><span class="al-index">최소 입찰가</span>${pri_aucList[i].min_price}</div>
 					<div class="al-maxP"><span class="al-index">즉시 낙찰가</span>${pri_aucList[i].max_price}</div>
@@ -1468,7 +1465,7 @@ a {
 			</div>
 			<div id="al_pri_wrap_list">
 				<div class="al-list-wrap-index">
-					<div class="al-list-img-index al-index-font">이미지</div>
+					<div class="al-list-img-index al-index-font"></div>
 					<div class="al-list-title-index al-index-font">제목</div>
 					<div class="al-list-minP-index al-index-font">최소 입찰가</div>
 					<div class="al-list-maxP-index al-index-font">즉시 낙찰가</div>
@@ -1520,7 +1517,7 @@ a {
 				<c:if test="${i%4 eq 0}">
 					<div class="al-nor5 clk">
 						<input type="hidden" class="nor_aucNum" id="nor_aucNum_${aucList[i].num}" value="${aucList[i].num}">
-						<div class="al-img" id="al_nor_img_${i}">이미지</div>
+						<div class="al-img" id="al_nor_img_${i}"></div>
 						<div class="al-title">${aucList[i].title}</div>
 						<div class="al-minP"><span class="al-index">최소 입찰가</span>${aucList[i].min_price}</div>
 						<div class="al-maxP"><span class="al-index">즉시 입찰가</span>${aucList[i].max_price}</div>
@@ -1532,7 +1529,7 @@ a {
 				<c:if test="${i%4 ne 0}">
 					<div class="al-nor6 clk">
 						<input type="hidden" class="nor_aucNum" id="nor_aucNum_${aucList[i].num}" value="${aucList[i].num}">
-						<div class="al-img" id="al_nor_img_${i}">이미지</div>
+						<div class="al-img" id="al_nor_img_${i}"></div>
 						<div class="al-title">${aucList[i].title}</div>
 						<div class="al-minP"><span class="al-index">최소 입찰가</span>${aucList[i].min_price}</div>
 						<div class="al-maxP"><span class="al-index">즉시 입찰가</span>${aucList[i].max_price}</div>
@@ -1545,7 +1542,7 @@ a {
 			</div>
 			<div id="al_nor_wrap_list">
 				<div class="al-list-wrap-index">
-					<div class="al-list-img-index al-index-font">이미지</div>
+					<div class="al-list-img-index al-index-font"></div>
 					<div class="al-list-title-index al-index-font">제목</div>
 					<div class="al-list-minP-index al-index-font">최소 입찰가</div>
 					<div class="al-list-maxP-index al-index-font">즉시 낙찰가</div>
@@ -1586,7 +1583,7 @@ a {
 		</div> 
 	</div>
 	
-	<div class="al-footer">footer</div>
+	<div class="al-footer"></div>
 </div>
 </body>
 </html>

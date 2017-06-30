@@ -25,8 +25,10 @@ public class UploadDAO {
 		return sqlSession.delete(NAME_SPACE+"imgDelete", fName);
 	}
 	
-	
 	public void noImage(UploadDTO uploadDTO){
 		sqlSession.insert(NAME_SPACE+"noImage", uploadDTO);
+	}
+	public UploadDTO listImage(int pNum){
+		return sqlSession.selectOne(NAME_SPACE+"listImage", pNum);
 	}
 }

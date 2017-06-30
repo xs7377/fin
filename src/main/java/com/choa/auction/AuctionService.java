@@ -2,15 +2,20 @@ package com.choa.auction;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.choa.reply.ReplyDTO;
 import com.choa.upload.UploadDTO;
 import com.choa.util.FileUploader;
 import com.choa.util.RowMaker;
@@ -119,8 +124,76 @@ public class AuctionService {
 	public int update(AuctionDTO auctionDTO, List<UploadDTO> imgs, List<String> del) throws Exception{
 		return auctionDAO.update(auctionDTO, imgs, del);
 	}
+	public ReplyDTO reply(ReplyDTO replyDTO) throws Exception{
+		return auctionDAO.reply(replyDTO);
+	}
+	public List<ReplyDTO> reply_view(int pNum,int lastRow){
+		return auctionDAO.reply_view(pNum,lastRow);
+	}
 	
+	public AuctionDTO tenderInfo(int num) throws Exception{
+		return auctionDAO.tenderInfo(num);
+	}
 	
+	public int tender(int num, String id, int t_price){
+		return auctionDAO.auctionTender(num, id, t_price);
+	}
+	
+	public List<UploadDTO> auctionImage(UploadDTO uploadDTO) throws Exception{
+		return auctionDAO.auctionImage(uploadDTO);
+	}
+	
+	public int auctionLikes(int pNum, String m_id) throws Exception{
+		return auctionDAO.auctionLikes(pNum, m_id);
+	}
+	
+	public List<List<CategoryDTO>> category_search(String[] cate) throws Exception{
+		return auctionDAO.category_search(cate);
+	}
+	
+	public Map<String, Object> auctionAll_list(int curPage, String category, int num)throws Exception{
+		return auctionDAO.auctionAll_list(curPage,category,num);
+	}
+	
+	public Map<String, Object> viewList(int curPage, String num) throws Exception{
+		String[] number = num.split(",");
+		Map<String, Object> list = new HashMap<String, Object>();
+		List<AuctionDTO> auction = new ArrayList<AuctionDTO>();
+		List<UploadDTO> upload = new ArrayList<UploadDTO>();
+		int start = number.length-(4*curPage);
+		int last = number.length-(4*(curPage-1));
+		if(start<0){
+			start=0;
+		}
+		for (int i=start; i<last; i++) {
+			Map<String, Object> view = auctionDAO.view(Integer.parseInt(number[i]));
+			System.out.println(view.size());
+			if(view.size()>0){
+				auction.add((AuctionDTO)view.get("auctionDTO"));
+				upload.add(((List<UploadDTO>)view.get("imgList")).get(0));
+			}
+		}
+		list.put("size", number.length);
+		list.put("auction", auction);
+		list.put("upload", upload);
+		return list;
+	}
+
+	public void viewList(HttpServletRequest request, HttpServletResponse response, int num){
+		auctionDAO.viewList(request, response, num);
+	}
+	
+	public List<UploadDTO> listImage(List<AuctionDTO> auctionDTO) throws Exception{
+		List<UploadDTO> ar = new ArrayList<UploadDTO>();
+		for(int i=0; i<auctionDTO.size(); i++){
+			ar.add(auctionDAO.listImage(auctionDTO.get(i).getNum()));
+		}
+		return ar;
+	}
+	
+	public void auctionBid(int num) throws Exception{
+		auctionDAO.auctionBid(num);
+	}
 
 	
 }

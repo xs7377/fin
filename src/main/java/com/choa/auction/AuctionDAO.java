@@ -1,15 +1,22 @@
 package com.choa.auction;
 
 import java.awt.Image;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.ibatis.session.SqlSession;
+import javax.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.choa.reply.ReplyDAO;
+import com.choa.reply.ReplyDTO;
 import com.choa.upload.UploadDAO;
 import com.choa.upload.UploadDTO;
 import com.choa.util.PageMaker;
@@ -21,7 +28,8 @@ public class AuctionDAO {
 	
 	@Autowired
 	private UploadDAO uploadDAO;
-	
+	@Autowired 
+	private ReplyDAO replyDAO;
 	@Autowired
 	private SqlSession sqlSession;
 	private String NAME_SPACE="AuctionMapper.";
@@ -74,6 +82,9 @@ public class AuctionDAO {
 		return sqlSession.selectList(NAME_SPACE+"category",pnum);
 	}
 	
+	public void auctionBid(int num) throws Exception{
+		sqlSession.update(NAME_SPACE+"auctionBid", num);
+	}
 	public int update(AuctionDTO auctionDTO, List<UploadDTO> imgs, List<String> del) throws Exception{
 		System.out.println(auctionDTO.getNum());
 		System.out.println(auctionDTO.getM_id());
@@ -199,8 +210,125 @@ public class AuctionDAO {
 	public List<AuctionDTO> likeTop3(String cate)throws Exception{
 		return sqlSession.selectList(NAME_SPACE+"likeTop3", cate);
 	}
-	public void reply(Map<String, Object> map){
-		sqlSession.insert(NAME_SPACE+"reply", map);
+	public ReplyDTO reply(ReplyDTO replyDTO){
+		replyDTO.setKind("auction");
+		return this.replyDAO.reply(replyDTO);
 	}
+	public List<ReplyDTO> reply_view(int pNum, int lastRow){
+		ReplyDTO replyDTO = new ReplyDTO();
+		replyDTO.setKind("auction");
+		replyDTO.setpNum(pNum);
+		return this.replyDAO.reply_view(lastRow,replyDTO);
+	}
+	public AuctionDTO tenderInfo(int num) throws Exception{
+		return sqlSession.selectOne(NAME_SPACE+"tender_info", num);
+	}
+	public int auctionTender(int num, String buyer, int t_price){
+		Map<String, Object> map = new HashMap<String, Object>();
+		Calendar cal = Calendar.getInstance();
+		String period = cal.get(cal.YEAR)+"-"+(cal.get(cal.MONTH)+1)+"-"+cal.get(cal.DAY_OF_MONTH)+","+cal.get(cal.HOUR_OF_DAY)+":"+cal.get(cal.MINUTE);
+		map.put("num", num);
+		map.put("buyer", buyer);
+		map.put("period", period);
+		map.put("t_price", t_price);
+		sqlSession.update(NAME_SPACE+"tender", map);
+		
+		return (Integer)map.get("result");
+	}
+	public int auctionLikes(int pNum, String m_id) throws Exception{
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("kind", "auction");
+		map.put("pNum", pNum);
+		map.put("m_id", m_id);
+		sqlSession.insert(NAME_SPACE+"likes", map);	
+		int result = (Integer)map.get("result");
+		map.put("result", result);
+		sqlSession.update(NAME_SPACE+"likesUpdate", map);
+		
+		return result;
+	}
+	public List<UploadDTO> auctionImage(UploadDTO uploadDTO) throws Exception{
+		uploadDTO.setKind("auction");
+		return this.uploadDAO.imgView(uploadDTO);
+	}
+	public List<List<CategoryDTO>> category_search(String[] cate){
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("cate1", cate[0]);
+		map.put("cate2", cate[1]);
+		sqlSession.selectOne(NAME_SPACE+"category_search", map);
+		List<CategoryDTO> ar = (List<CategoryDTO>)map.get("cate");
 	
+		return this.category_set(ar);
+	}
+	public UploadDTO listImage(int pNum) throws Exception{
+		return uploadDAO.listImage(pNum);
+	}
+	public Map<String, Object> auctionAll_list(int curPage, String category, int num)throws Exception{
+		RowMaker rowMaker =new RowMaker();
+		rowMaker.makeRow(curPage, 4);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("row", rowMaker);
+		map.put("category", category);
+		map.put("num", num);
+		sqlSession.selectOne(NAME_SPACE+"auctionAll_list", map);
+		
+		return map;
+	}
+	public Map<String, Object> viewList(int curPage, int num){
+		RowMaker rowMaker =new RowMaker();
+		rowMaker.makeRow(curPage, 4);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("row", rowMaker);
+		map.put("category", "%");
+		map.put("num", num);
+		sqlSession.selectOne(NAME_SPACE+"auctionAll_list", map);
+		return map;
+	}
+	public List<List<CategoryDTO>> category_set(List<CategoryDTO> ar){
+		List<CategoryDTO> cate1 = new ArrayList<CategoryDTO>();
+		List<CategoryDTO> cate2 = new ArrayList<CategoryDTO>();
+		List<CategoryDTO> cate3 = new ArrayList<CategoryDTO>();
+		
+		for (CategoryDTO categoryDTO : ar) {
+			if(categoryDTO.getpNum()==0){
+				cate1.add(categoryDTO);
+			}else if(categoryDTO.getNum()<=132){
+				cate2.add(categoryDTO);
+			}else if(categoryDTO.getNum()<=1573){
+				cate3.add(categoryDTO);
+			}
+		}
+		List<List<CategoryDTO>> cateList = new ArrayList<List<CategoryDTO>>();
+		cateList.add(cate1);
+		cateList.add(cate2);
+		cateList.add(cate3);
+		
+		return cateList;
+	}
+	public void viewList(HttpServletRequest request, HttpServletResponse response, int num){
+		Cookie [] co = request.getCookies();
+		String view="";
+		String[] size = {};
+		boolean check=true;
+		if(co!=null){
+			for (Cookie c : co) {
+				if(c.getName().equals("viewList")){
+					size = c.getValue().split(",");
+					for(int i=0; i<size.length; i++){
+						if(!size[i].equals(num+"")){
+							view += size[i]+",";
+		}}}}
+			view += num;
+		}else{
+			view += num;
+		}
+		
+		System.out.println(view);
+		if(size.length>=19){
+			view = view.substring(view.indexOf(",", 1)+1);
+		}
+		Cookie cookie = new Cookie("viewList", view);
+		cookie.setPath("/");
+		response.addCookie(cookie);
+	}
 }

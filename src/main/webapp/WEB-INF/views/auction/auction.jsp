@@ -407,12 +407,9 @@ input[type="number"]::-webkit-inner-spin-button {
 .a-subcon{
 	float: right;
 	width:1114px;
-	margin-bottom:20px;
 }
 .a-footer{
 	clear: both;
-	padding: 20px;
-    border: 1px solid #bcbcbc;
 }
 .a-tb-title{
 	padding-top: 7px;

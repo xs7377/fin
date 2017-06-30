@@ -10,5 +10,6 @@
     		<typeAlias alias="map" type="java.util.Map"/>
     		<typeAlias alias="categoryDTO" type="com.choa.auction.CategoryDTO"/>
     		<typeAlias alias="uploadDTO" type="com.choa.upload.UploadDTO"/>
+    		<typeAlias alias="replyDTO" type="com.choa.reply.ReplyDTO"/>
     	</typeAliases>
     </configuration>

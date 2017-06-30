@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -24,6 +27,7 @@ import com.choa.auction.AuctionService;
 import com.choa.auction.CategoryDTO;
 import com.choa.auction.RankDTO;
 import com.choa.auction.SearchDTO;
+import com.choa.reply.ReplyDTO;
 import com.choa.upload.UploadDTO;
 import com.choa.util.PageResult;
 
@@ -32,6 +36,123 @@ import com.choa.util.PageResult;
 public class AuctionController {
 	@Inject
 	private AuctionService auctionService;
+	
+	// =========================================== auction view, reply 추가분 =========================
+	@RequestMapping(value="auctionView/{num}")
+	public ModelAndView auctionView(@PathVariable(value="num")int num, ModelAndView modelAndView, HttpServletRequest request, HttpServletResponse response) throws Exception{
+		System.out.println(num);
+		Map<String, Object> map = auctionService.view(num);
+		modelAndView.setViewName("auction/auctionView");
+		AuctionDTO auctionDTO = (AuctionDTO)map.get("auctionDTO");
+		modelAndView.addObject("auctionDTO", auctionDTO);
+		modelAndView.addObject("thum", (List<UploadDTO>)map.get("imgList"));
+		modelAndView.addObject("bidder", (Integer)map.get("bidder"));
+		auctionService.viewList(request, response, num);
+		return modelAndView;
+	}
+	@RequestMapping(value="auctionReply", method=RequestMethod.POST)
+	@ResponseBody
+	public ReplyDTO reply(ReplyDTO replyDTO) throws Exception{
+		String contents = replyDTO.getContents();
+		replyDTO.setContents(contents);
+		return auctionService.reply(replyDTO);
+	}
+	
+	@RequestMapping(value="replyView")
+	@ResponseBody
+	public List<ReplyDTO> replyView(int pNum,int lastRow){
+		List<ReplyDTO> ar = auctionService.reply_view(pNum,lastRow);
+		
+		return ar;
+	}
+	
+	@RequestMapping(value="auction_tender/{num}/{kind}", method=RequestMethod.GET)
+	public ModelAndView auction_tender(@PathVariable(value="num")int num, @PathVariable(value="kind") String kind, ModelAndView modelAndView) throws Exception{
+		modelAndView.addObject("tender_info", this.auctionService.tenderInfo(num));
+		modelAndView.setViewName("auction/auction_tender");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="auction_tender", method=RequestMethod.POST)
+	@ResponseBody
+	public int auction_tender(int num, int price, String id){
+		return auctionService.tender(num, id, price);
+		
+	}
+	
+	
+	@RequestMapping(value="auctionImage", method=RequestMethod.POST)
+	public ModelAndView auctionImage(UploadDTO uploadDTO, ModelAndView modelAndView) throws Exception{
+		List<UploadDTO> ar = auctionService.auctionImage(uploadDTO);
+		modelAndView.setViewName("auction/img_view");
+		modelAndView.addObject("img", ar);
+		
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="auctionLike", method=RequestMethod.POST)
+	@ResponseBody
+	public int auctionLikes(int pNum, String m_id) throws Exception{
+		return auctionService.auctionLikes(pNum, m_id);
+	}
+	
+	
+	@RequestMapping(value="categoryDrop")
+	public void categoryDrop(){
+	}
+	
+	@RequestMapping(value="category_search", method=RequestMethod.POST)
+	public ModelAndView category_search(String category, ModelAndView modelAndView)throws Exception{
+			String[] cate = category.split(",");
+			modelAndView.setViewName("auction/categoryDrop");
+			modelAndView.addObject("cateList", auctionService.category_search(cate));
+			modelAndView.addObject("cateTitle", cate);
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="relateList", method=RequestMethod.POST)
+	public ModelAndView relateList(int curPage, String category,int num, ModelAndView modelAndView) throws Exception{
+		Map<String, Object> map = auctionService.auctionAll_list(curPage,category,num);
+		List<AuctionDTO> ar = (List<AuctionDTO>)map.get("list");
+		modelAndView.addObject("images", auctionService.listImage(ar));
+		modelAndView.addObject("relate", ar);
+		modelAndView.addObject("count", (Integer)map.get("total"));
+		modelAndView.addObject("curPage", curPage);
+		modelAndView.addObject("number", num);
+		modelAndView.setViewName("auction/relatedProduct");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="viewList")
+	public ModelAndView viewList(int curPage, HttpServletRequest request, ModelAndView modelAndView) throws Exception{
+		Cookie[] co = request.getCookies();
+		System.out.println(co.length);
+		modelAndView.setViewName("auction/cookieList");
+		for(int i=0; i<co.length; i++){
+			if(co[i].getName().equals("viewList")){
+				System.out.println(co[i].getValue());
+				Map<String, Object> map = auctionService.viewList(curPage, co[i].getValue());
+				modelAndView.addObject("list", map.get("auction"));
+				modelAndView.addObject("images", map.get("upload"));
+				modelAndView.addObject("curPage", curPage);
+				modelAndView.addObject("count", map.get("size"));
+			}
+		}
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="auctionBid")
+	@ResponseBody
+	public String auctionBid(int num) throws Exception{
+		auctionService.auctionBid(num);
+		return "y";
+	}
+	
+	
+	@RequestMapping(value="auctionPay")
+	public void auctionPay(){
+		
+	}
 	// ============================== totalList- ajax ==========================================
 	@ResponseBody
 	@RequestMapping(value="/listChoice", method=RequestMethod.POST)

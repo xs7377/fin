@@ -20,5 +20,7 @@
     	<insert id="noImage" parameterType="uploadDTO" statementType="CALLABLE">
     		{ call noimage(#{pNum, mode=IN},#{kind, mode=IN}) }
     	</insert>
-    	
+    	<select id="listImage" parameterType="java.lang.Integer" resultType="uploadDTO">
+    		select * from image where pnum=#{pNum} and num=(select max(num) from image where pNum=#{pNum})
+    	</select>
     </mapper>

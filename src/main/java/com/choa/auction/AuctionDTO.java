@@ -18,6 +18,7 @@ private int min_price;
 private int max_price;
 private String period;
 private String buyer;
+private String kind;
 public int getNum() {
 	return num;
 }
@@ -101,6 +102,12 @@ public String getPrimeum() {
 }
 public void setPrimeum(String primeum) {
 	this.primeum = primeum;
+}
+public String getKind() {
+	return kind;
+}
+public void setKind(String kind) {
+	this.kind = kind;
 }
 
 	

@@ -36,5 +36,12 @@
 <a href="./auction/test2">테스트22</a>
 <a href="./auction/test3">테스트33</a>
 <a href="./auction/test4">테스트44</a>
+<br><br><br>
+<a href="./auction/auctionView/38">view</a>
+<a href="./test">test</a>
+<a href="./auction/viewList?curPage=1">cookie</a>
+<a href="./auction/auctionPay">pay</a>
+    <a href="./auction/categoryDrop">category</a>
+
 </body>
 </html>

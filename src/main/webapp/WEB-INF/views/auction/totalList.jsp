@@ -22,11 +22,13 @@ $(function(){
 		$(this).children('span').removeClass('hover');
 	});
 	$(".go-ctg").on("click",function(){
-		var test=$.makeArray($('.go-ctg').map(function(){
-			return $(this).attr('id');
+		var ga=$.makeArray($('.go-ctg').map(function(){
+			return $(this).attr('class');
 		}));
-		alert(test[0]);
-		alert(test[1]);
+		for(var i=0;i<ga.length;i++){
+			$('.'+ga[i]).removeClass('click');
+		}
+		$(this).addClass('click');
 	});
 	// ====================================토탈페이지 더보기
 	$("#moreBtn").on("click",function(){
@@ -37,6 +39,7 @@ $(function(){
 			page=parseInt(ic/8+1);			
 		}
 		search=$("#search_result").text();
+		search=search.substring(2,search.lastIndexOf("'")-1);
 		startNum=curPage*8+1;
 		lastNum=(curPage+1)*8;
 		curPage++;
@@ -186,7 +189,7 @@ $(function(){
 				for(var i=0;i<tl_aucNum_array.length;i++){
 					var str=tl_aucNum_array[i];
 					str=str.substring(str.lastIndexOf("_")+1);
-					var img='tl_img_'+i;
+					var img='tl_img_'+str;
 					$.ajax({
 						url:"./selectThum",
 						type:"post",
@@ -198,27 +201,6 @@ $(function(){
 							$("#"+img).html(
 								data		
 							);
-							var tl_aucNum_array=$.makeArray($(".tl_aucNum").map(function(){
-								return $(this).attr("id");
-							}));
-							for(var i=0;i<tl_aucNum_array.length;i++){
-								var str=tl_aucNum_array[i];
-								str=str.substring(str.lastIndexOf("_")+1);
-								var img='tl_img_'+str;
-								$.ajax({
-									url:"./selectThum",
-									type:"post",
-									async: false,
-									data:{
-										num:str
-									},
-									success:function(data){
-										$("#"+img).html(
-											data		
-										);
-									}
-								});
-							}
 						}
 					});
 				}
@@ -257,7 +239,7 @@ function album(data){
 		data.buyer='';
 	}
 	var result='';
-	result+='<div class="items">';
+	result+='<div class="items clk">';
 	result+='<input type="hidden" class="tl_aucNum" id="tl_aucNum_'+data.num+'" value="'+data.num+'">'
 	result+='<div class="tl-img" id="tl_img_'+data.num+'">이미지</div>'
 	result+='<div class="tl-title">'+data.title+'</div>'
@@ -268,6 +250,9 @@ function album(data){
 	result+='<div class="tl-seller"><span class="tl-index">판매자</span>'+data.m_id+'</div>';
 	result+='</div>';
 	return result;
+}
+function reload(){
+	window.location.reload();	
 }
 </script>
 <title>Insert title here</title>
@@ -281,14 +266,17 @@ function album(data){
 }
 .hover{
 	text-decoration: underline;
+	color: red;
 }
 .click{
 	font-weight: bold;
+	color: red;
 }
 .t-container{
 	width: 1500px;
 	margin: 10px auto;
-	padding: 20px;
+	padding: 20px 20px 10px 20px;
+	
 	border: 1px solid #bcbcbc;
 	background-color: white;
 	
@@ -303,9 +291,8 @@ function album(data){
 }
 .t-con-title{
 	width: 1160px;
-	height:70px;
 	margin: 10px auto;
-	border: 1px solid #bcbcbc;
+	border: 2px solid black;
 	float: left;
 	margin-left: 150px;
 	padding: 10px 20px;
@@ -317,24 +304,23 @@ function album(data){
 	border: 1px solid #bcbcbc;
 	float: left;
 	margin-left: 150px;
+	text-align: center;
 }
 .t-auc-con{
 	width: 1160px;
 	margin: 10px auto;
-	border: 1px solid #bcbcbc;
+	border-top: 1px solid #bcbcbc;
+	border-bottom: 1px solid #bcbcbc;
 	padding: 10px;
 	float: left;
 	margin-left: 150px;
 }
 .t-footer{
 	clear: both;
-	padding: 20px;
-    border: 1px solid #bcbcbc;
 }
 .items{
 	width:263.5px;
 	height: 370px;
-	border: 1px solid black;
 	float: left;
 	margin: 10px;
 }
@@ -405,6 +391,33 @@ function album(data){
 	color: rgb(160,160,160);
 	font-weight: bold;
 }
+.font-eft{
+	text-shadow: 1px 1px 1px rgb(220,220,220);
+	box-shadow: 5px 5px 5px rgb(180,180,180);
+	border-left: 1px solid #bcbcbc;
+	border-bottom: 1px solid #bcbcbc;
+}
+.clk:hover{
+	text-shadow: 1px 1px 1px rgb(220,220,220);
+	box-shadow: 5px 5px 5px rgb(180,180,180);
+	border-left: 1px solid #bcbcbc;
+	border-bottom: 1px solid #bcbcbc;
+}
+.clk{
+	cursor: pointer;
+}
+#search_result:hover{
+	color: red;
+	text-decoration: underline;
+}
+#moreBtn{
+	color: blue;
+	text-decoration: underline;
+}
+#moreBtn:hover{
+	color: red;
+	text-decoration: underline;
+}
 </style>
 </head>
 <body>
@@ -413,18 +426,19 @@ function album(data){
 		<div class="t-board-con"></div>
 		<div class="t-paging"></div>
 		<div class="t-con-title">
-			<span style="font-weight: bold;" id="search_result">${search }</span>에 대한 검색결과(${totalCount})<br>
+			<span style="font-weight: bold;font-size: 20px;color:red;cursor: pointer;" id="search_result" onclick="reload()">' ${search } '</span>
+			<span style="font-size: 20px;display: inline-block;text-indent: 20px;">에 대한 물품 검색결과(${totalCount})</span><br>
 			<c:forEach begin="0" end="6" step="1" var="i">
 				<c:if test="${listCount[i] ne 0 }">
 					<span id="go_ctg_${listCount[i] }" class="go-ctg" style="cursor: pointer;">
-						<span class="ctg_name">${ctg[i]}</span><span>(${listCount[i]})</span>
+						<span class="ctg_name" style="line-height: 35px;">${ctg[i]}</span><span>(${listCount[i]})</span>
 					</span>
 				</c:if>
 			</c:forEach>
 		</div>
 		<div class="t-auc-con">
 			<c:forEach begin="0" end="${totalList.size()-1}" step="1" var="i">
-				<div class="items">
+				<div class="items clk">
 					<input type="hidden" class="tl_aucNum" id="tl_aucNum_${totalList[i].num}" value="${totalList[i].num}">
 					<div class="tl-img" id="tl_img_${totalList[i].num}">이미지</div>
 					<div class="tl-title">${totalList[i].title }</div>
@@ -439,9 +453,9 @@ function album(data){
 				</div>
 			</c:forEach>
 		</div>
-		<div class="t-paging" id="t_paging">
+		<div class="t-paging" id="t_paging" style="border: none;">
 			<c:if test="${totalCount >8}">
-				<button id="moreBtn">토탈더보기</button>
+				<span id="moreBtn" style="cursor: pointer;font-size: 20px;display: inline-block;width: 100%;height: 100%;">더보기</span>
 			</c:if>
 		</div>
 		<div class="t-footer"></div>
