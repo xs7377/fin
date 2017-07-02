@@ -157,7 +157,7 @@ $(function(){
 		}
 		if(page>1 && ic>8){
 			$("#t_paging").html(
-				'<button id="more_auc">더보기</button>'		
+				'<span id="more_auc" class="more-btn">더보기</span>'		
 			);
 		}
 		
@@ -418,6 +418,20 @@ function reload(){
 	color: red;
 	text-decoration: underline;
 }
+#more_auc{
+	color: blue;
+	text-decoration: underline;
+}
+#more_auc:hover{
+	color: red;
+	text-decoration: underline;
+}
+.more-btn{
+	cursor: pointer;
+	font-size: 20px;
+	display: inline-block;
+	height: 100%;
+}
 </style>
 </head>
 <body>
@@ -455,7 +469,7 @@ function reload(){
 		</div>
 		<div class="t-paging" id="t_paging" style="border: none;">
 			<c:if test="${totalCount >8}">
-				<span id="moreBtn" style="cursor: pointer;font-size: 20px;display: inline-block;width: 100%;height: 100%;">더보기</span>
+				<span id="moreBtn"  class="more-btn">더보기</span>
 			</c:if>
 		</div>
 		<div class="t-footer"></div>
