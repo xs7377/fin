@@ -1,0 +1,77 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+footer {
+	height: 300px;
+	margin-top: 60px;
+	border-top: 1px dotted #a6a6a6;
+}
+
+.footer_wrap{
+	width: 1300px;
+	height: 220px;
+	margin: 0 auto;
+	padding-top: 20px;
+}
+
+.info{
+	width: 600px;
+	float: left; 
+	font-size: 0.75em;
+	color: #595959;
+} 
+
+
+#info_2{
+	width: 232px; 
+	float: right; 
+	color: #595959;
+}
+
+.info_2_inner{
+	font-size: 0.75em; 
+	float: right;
+} 
+
+#ph{   
+	font-size: 1.8em;
+	font-weight: bolder; 
+	float: right;
+} 
+
+#kkiri{
+	font-weight: bolder; 
+	font-size: 1.2em;
+}
+</style>
+</head>
+<body>
+
+
+<footer>
+	<div class="footer_wrap">
+		<div class="info">
+			<p>주식회사 트레이드마크 | 사업자 등록번호: 123-456-7890 | 대표자: 트레이드마크</p>
+			<p>통신판매업신고번호: 제2017-서울역삼-0123호</p>
+			<p>주소: 서울시 강남구 역삼동 KH정보교육원</p>
+			<p>개인정보보호책임자: 트레이드마크 | 호스팅서비스 제공자 TRADEMARK Internet.Inc</p>
+			<p>공정거래위원회 사업자 정보 공개</p>
+			<br><br>
+			<p style="color:#179f96; font-weight: bolder;">Copyright TRADEMARK All rights reserved.</p>
+		</div>
+		
+	<div id="info_2">  
+	<p id="ph">010-1234-5678</p>
+	<p class="info_2_inner">카카오톡ID: <span id="kkiri">TRADEMARK</span></p>
+	</div>
+
+	</div>
+</footer>
+
+</body>
+</html>

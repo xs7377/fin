@@ -19,6 +19,13 @@ private int max_price;
 private String period;
 private String buyer;
 private String kind;
+private int price;
+public int getPrice() {
+	return price;
+}
+public void setPrice(int price) {
+	this.price = price;
+}
 public int getNum() {
 	return num;
 }

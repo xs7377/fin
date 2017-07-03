@@ -1,0 +1,212 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+<style type="text/css">
+  .scrollup {
+        position: fixed;
+        bottom: 0px;
+        right: 0px;
+        z-index: 99999;
+        text-align: right;
+        padding-right: 10px;
+       	border: 3px solid red;
+       	width: 300px;
+       	
+    }
+    #chat{
+    	width: 250px;
+    }
+    .chat{
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .chat li{
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+        border-bottom: 1px dotted #B3A9A9;
+    }
+
+    .chat li.left .chat-body{
+    margin-left: 60px;
+   }
+    .chat li.right .chat-body{margin-right: 60px;}
+
+
+    .chat li .chat-body p
+    {
+        margin: 0;
+        color: #777777;
+    }
+
+    .panel .slidedown .glyphicon, .chat .glyphicon
+    {
+        margin-right: 5px;
+    }
+
+    .panel-body
+    {
+        overflow-y: scroll;
+        height: 350px;
+        
+    }
+
+
+    ::-webkit-scrollbar-track
+    {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        background-color: #F5F5F5;
+    }
+
+    ::-webkit-scrollbar
+    {
+        width: 12px;
+        background-color: #F5F5F5;
+    }
+
+    ::-webkit-scrollbar-thumb
+    {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+        background-color: #555;
+    }
+</style>
+
+<script type="text/javascript">
+    var chat = {};
+    
+    var cID='${member.id}';
+    
+    chat.socket = null;
+    chat.connect = (function(host) {
+        if ('WebSocket' in window) {
+        	
+        	//여기 들어옴
+            chat.socket = new WebSocket(host);
+        } else if ('MozWebSocket' in window) {
+        	//mozila
+            chat.socket = new MozWebSocket(host);
+        } else {
+        	//다른 웹
+            chatContent.append('Error: WebSocket is not supported by this browser.', 'left');
+            return;
+        }
+
+        chat.socket.onopen = function () {
+        	
+            chatContent.append('Info: WebSocket connection opened.', 'left');
+            document.getElementById('chat').onkeydown = function(event) {
+                if (event.keyCode == 13) {
+                    chat.sendMessage();
+                }
+            };
+        };
+
+        chat.socket.onclose = function () {
+        	alert("실패");
+        	//여기들어오고 왜냐면 실패해서 
+            document.getElementById('chat').onkeydown = null;
+            chatContent.append('Info: WebSocket closed.', 'left');
+        };
+
+        chat.socket.onmessage = function (message) {
+        	
+            chatContent.append(message.data, 'right');
+        };
+    });
+    
+    //1번
+    chat.initialize = function() {
+    	
+        if (window.location.protocol == 'http:') {
+            console.log(window.location.host);
+		    
+        	chat.connect('ws://192.168.20.57:80/fin/boradcasting/'+cID);
+        } else {
+        	
+            chat.connect('wss://' + window.location.host + '/chating/${member.id}');
+        }
+    };
+
+    
+    chat.sendMessage = (function() {
+        var message = document.getElementById('chat').value;
+        if (message != '') {
+            chat.socket.send(message);
+            document.getElementById('chat').value = '';
+        }
+    });
+    
+    var chatContent = {};
+    chatContent.append = (function(message,addClassNm){
+        var chatContainer = document.getElementById('chat_li');
+        var li = document.createElement('li');
+        var span = document.createElement('span');
+        span.style.wordWrap = 'break-word';
+
+
+        console.log("msg : "+message);
+        span.innerHTML = message;
+		
+		
+        span.className = "pull-"+addClassNm
+        li.appendChild(span);
+        li.className = "clearfix ";
+        li.className = li.className +" "+addClassNm;
+        chatContainer.appendChild(li);
+
+        document.getElementById('chat_body').scrollTop = document.getElementById('chat_body').scrollHeight;
+
+        while (chatContainer.childNodes.length > 25) {
+            chatContainer.removeChild(chatContainer.firstChild);
+        }
+    });
+
+    chat.initialize();
+
+    function chkMyMsg(msgJson){
+
+    }
+</script>
+
+<div >
+    <p>
+	</p>
+    <div id="console-container">
+        <div id="console"></div>
+    </div>
+</div>
+
+
+<div class="scrollup span4" >
+    <div class="row-fluid">
+        <div class="box dark" >
+            <header>
+               
+                <div class="toolTip" style="border: 3px solid green; width: 300px;" >
+ <a class="btn btn-primary btn-small" data-toggle="collapse" data-parent="#accordion"
+                       href="#collapseOne" style="margin-top: 5px; margin-right: 2px; width: 200px; ">
+                       	채팅
+                    </a>
+                </div>
+            </header>
+            <div class="body collapse" id="collapseOne" style="border: 3px solid blue; width: 300px;">
+                <div class="panel-body" id="chat_body" >
+                    <ul id="chat_li" class="chat"></ul>
+                </div>
+                
+                <div>
+                	<div class="input-group">
+                        <input type="text" placeholder="type and press enter to chat" id="chat" >
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

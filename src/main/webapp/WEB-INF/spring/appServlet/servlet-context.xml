@@ -22,9 +22,6 @@
 	</beans:bean>
 	
 	<context:component-scan base-package="com.choa.fin"/>
-	<context:component-scan base-package="com.choa.auction" ></context:component-scan>
-	<context:component-scan base-package="com.choa.upload"></context:component-scan>
-	<context:component-scan base-package="com.choa.reply"></context:component-scan>
 	
 	
 </beans:beans>
