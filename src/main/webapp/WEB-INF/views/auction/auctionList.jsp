@@ -84,7 +84,8 @@ $(function() {
 				$("#rank_move_"+i).addClass('green');
 			}
 			if(rm==0){
-				$("#rank_move_"+i).html('');
+				$("#rank_move_"+i).html('-');
+				$("#rank_move_"+i).addClass('gray');
 			}
 		}	
 	// =======================================카테고리 제목 클릭================================
@@ -1036,6 +1037,10 @@ a {
 .green{
 	color: green;
 	font-weight: bold;
+}
+.gray{
+	color: rgb(140,140,140);
+	margin-right: 4.5px;
 }
 .udl {
 	text-decoration: underline;

@@ -50,6 +50,11 @@ public class AuctionService {
 				}
 			}
 		}
+		/* 
+		System.out.println("이전랭크"+"\t"+"현재랭크"+"\t"+"순위변동");
+		for(int i=0;i<rank.size();i++){
+			System.out.println(rank.get(i).getRank()+"."+rank.get(i).getSearch()+"\t"+(i+1)+"."+search.get(i).getSearch()+"\t"+rankMove.get(i));
+		}*/
 		return rankMove;
 	}
 	public List<RankDTO> getRank()throws Exception{
@@ -194,6 +199,8 @@ public class AuctionService {
 	public void auctionBid(int num) throws Exception{
 		auctionDAO.auctionBid(num);
 	}
-
+	public void auction() throws Exception{
+		auctionDAO.auction();
+	}
 	
 }

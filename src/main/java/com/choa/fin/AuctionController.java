@@ -190,7 +190,7 @@ public class AuctionController {
 	// ============================== 썸네일조회 ==========================================
 	@RequestMapping(value="/selectThum", method=RequestMethod.POST)
 	public String selectThum(int num, Model model)throws Exception{
-		System.out.println("섬네일 @ "+num);
+		//System.out.println("섬네일 @ "+num);
 		model.addAttribute("thumList", auctionService.thumbnail(num));
 		return "auction/thumResult";
 	}
@@ -241,7 +241,6 @@ public class AuctionController {
 		
 		// getRankMove
 		List<Object> rankMove=auctionService.getRankMove(rank, searchTop10);
-		
 		//일반등록상품 페이징 : pageResult, 프리미엄등록상품 페이징 : pri_pageResult
 		//일반등록상품 리스트 : aucList,    프리미엄등록상품 리스트 : pri_aucList
 		//일반등록상품 현재페이지 : curPage, 프리미엄등록상품 현재페이지 : pri_curPage

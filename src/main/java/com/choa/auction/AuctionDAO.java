@@ -1,6 +1,7 @@
 package com.choa.auction;
 
 import java.awt.Image;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -330,5 +331,24 @@ public class AuctionDAO {
 		Cookie cookie = new Cookie("viewList", view);
 		cookie.setPath("/");
 		response.addCookie(cookie);
+	}
+	public void auction() throws Exception{
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d,HH:mm");
+		String period = sdf.format(cal.getTime());
+		List<AuctionDTO> ar = sqlSession.selectList(NAME_SPACE+"auction_timer");
+		if(!ar.isEmpty()){
+			for (AuctionDTO auctionDTO : ar) {
+				if(auctionDTO.getPeriod().equals(period)){
+					if(auctionDTO.getBuyer()==null){
+						auctionDTO.setKind("cancel");
+						sqlSession.update(NAME_SPACE+"auctionEnd", auctionDTO);
+					}else{
+						auctionDTO.setKind("buy");
+						sqlSession.update(NAME_SPACE+"auctionEnd", auctionDTO);
+					}
+				}
+			}
+		}
 	}
 }

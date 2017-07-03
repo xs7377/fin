@@ -451,21 +451,26 @@ function reload(){
 			</c:forEach>
 		</div>
 		<div class="t-auc-con">
-			<c:forEach begin="0" end="${totalList.size()-1}" step="1" var="i">
-				<div class="items clk">
-					<input type="hidden" class="tl_aucNum" id="tl_aucNum_${totalList[i].num}" value="${totalList[i].num}">
-					<div class="tl-img" id="tl_img_${totalList[i].num}">이미지</div>
-					<div class="tl-title">${totalList[i].title }</div>
-					<div class="tl-minP"><span class="tl-index">최소 입찰가</span>${totalList[i].min_price }</div>
-					<div class="tl-maxP"><span class="tl-index">즉시 낙찰가</span>${totalList[i].max_price }</div>
-					<div class="tl-buyer"><span class="tl-index">현재 입찰가</span>
-						<c:if test="${totalList[i].buyer eq null || totalList[i].buyer eq '' }">&nbsp;</c:if>
-						<c:if test="${totalList[i].buyer ne null || totalList[i].buyer ne '' }">${totalList[i].buyer}</c:if>
+			<c:if test="${totalList.size() gt 0}">
+				<c:forEach begin="0" end="${totalList.size()-1}" step="1" var="i">
+					<div class="items clk">
+						<input type="hidden" class="tl_aucNum" id="tl_aucNum_${totalList[i].num}" value="${totalList[i].num}">
+						<div class="tl-img" id="tl_img_${totalList[i].num}">이미지</div>
+						<div class="tl-title">${totalList[i].title }</div>
+						<div class="tl-minP"><span class="tl-index">최소 입찰가</span>${totalList[i].min_price }</div>
+						<div class="tl-maxP"><span class="tl-index">즉시 낙찰가</span>${totalList[i].max_price }</div>
+						<div class="tl-buyer"><span class="tl-index">현재 입찰가</span>
+							<c:if test="${totalList[i].buyer eq null || totalList[i].buyer eq '' }">&nbsp;</c:if>
+							<c:if test="${totalList[i].buyer ne null || totalList[i].buyer ne '' }">${totalList[i].buyer}</c:if>
+						</div>
+						<div class="tl-period"><span class="tl-index">경매 기간</span>${totalList[i].period }</div>
+						<div class="tl-seller"><span class="tl-index">판매자</span>${totalList[i].m_id }</div>
 					</div>
-					<div class="tl-period"><span class="tl-index">경매 기간</span>${totalList[i].period }</div>
-					<div class="tl-seller"><span class="tl-index">판매자</span>${totalList[i].m_id }</div>
-				</div>
-			</c:forEach>
+				</c:forEach>
+			</c:if>
+			<c:if test="${totalList.size() le 0 || totalList eq null}">
+				검색조건에 일치하는 결과가 없습니다
+			</c:if>
 		</div>
 		<div class="t-paging" id="t_paging" style="border: none;">
 			<c:if test="${totalCount >8}">

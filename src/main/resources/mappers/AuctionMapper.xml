@@ -27,7 +27,7 @@
    			select * from rank
    		</select>
 		<insert id="setRank" parameterType="com.choa.auction.RankDTO">
-			insert into rank values(#{rank}, #{search})
+			update rank set search=#{search} where rank=#{rank}
 		</insert>
    		<select id="getSearch" resultType="com.choa.auction.SearchDTO">
    			select search from (select rownum r, S.* from (select * from search order by count desc) S) where r between 1 and 10
@@ -121,5 +121,11 @@
 		</select>
 		<update id="auctionBid" parameterType="java.lang.Integer">
 			update auction set kind='buy' where num=#{num}
+		</update>
+				<select id="auction_timer" resultType="auctionDTO">
+			select * from auction
+		</select>
+		<update id="auctionEnd" parameterType="auctionDTO">
+			update auction set kind=#{kind} where num=#{num}	
 		</update>
     </mapper>
