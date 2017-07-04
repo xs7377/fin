@@ -259,8 +259,8 @@ public class AuctionController {
 	@RequestMapping(value="/category",method=RequestMethod.GET)
 	public void categoryAll(Model model)throws Exception{
 		String [] icon={"fa fa-diamond","fa fa-gift","fa fa-car","fa fa-weixin","fa fa-heartbeat","fa fa-desktop","fa fa-book"};
-		
 		model.addAttribute("li",auctionService.ctgAllList()).addAttribute("icon", icon);
+		
 	}
 	// ============================== 카테고리 조회(pnum 글번호) ==========================================
 	@ResponseBody

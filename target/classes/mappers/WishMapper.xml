@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    <mapper namespace="WishMapper">
+    <resultMap type="java.util.HashMap" id="wishMap"/>
+    	<!--  
+    		1. 글 쓰 기
+    		2. 리 스 트
+    		3.	 수 정
+    		4. 	삭 제
+    		5. 	답 글
+    		6. 카 테 고 리 에  따 른 작 성
+   		-->
+   		
+   	<!-- 총 갯수 -->
+   	<select id="wishCount" resultType="int">
+   	select count(num) from wish
+   	</select>	
+   		
+   		
+   		
+   	<!--리스트 완  -->
+   	<select id="wishList" parameterType="java.util.Map" resultType="com.choa.wish.WishDTO">
+   	select * from
+   	(select rownum r, t.* from
+   	(select * from wish 
+   	<if test="kinds=='title'">
+    	where title like '%'||#{search}||'%' and category=#{category} and kind=#{kind} 
+   </if>
+    <if test="kinds=='contents'">
+    	where contents like '%'||#{search}||'%' and category=#{category} and kind=#{kind} 
+    </if>
+    <if test="kinds=='writer'">
+    	where m_id like '%'||#{search}||'%' and category=#{category} and kind=#{kind} 
+    </if>
+   	
+   	order by ref desc, step asc) t)
+   	where r between #{startRow} and #{lastRow}
+   	</select>
+   	
+   	<!-- view 완-->
+   	<select id="wishView" parameterType="int" resultType="com.choa.wish.WishDTO">
+   	select * from wish where num=#{num}
+   </select>
+   	
+   		
+    <!-- 글 쓰 기 완-->
+    <insert id="wishWrite" parameterType="com.choa.wish.WishDTO">
+    	insert into wish
+    	values(NVL((select max(num) from wish),0)+1,#{m_id},#{title},#{contents},sysdate, 0,NVL((select max(num) from wish),0)+1,0,0,0,#{category},#{kind})
+    </insert>
+    <!-- 수 정  완-->
+    <update id="wishMod" parameterType="com.choa.wish.WishDTO">
+    update wish 
+    set title=#{title}, contents=#{contents}
+    where num=#{num}
+    </update>
+    <!--삭제 완-->
+    <delete id="wishDel" parameterType="int">
+    delete wish where num=#{num}
+    </delete>
+    
+    
+    <!--답글 완 -->
+    
+    <insert id="wishReply"  statementType="CALLABLE" parameterType="java.util.Map" >
+    
+    { call wish_Reply(#{wish.num, mode=IN},
+     #{wish.m_id , mode=IN}, 
+     #{wish.title, mode=IN},
+     #{wish.contents, mode=IN},
+     #{result, javaType=int, mode=OUT, jdbcType=INTEGER, resultMap=wishMap}) 
+   	}
+    </insert>
+    
+    
+    </mapper>

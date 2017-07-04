@@ -16,7 +16,9 @@
 	line-height: 0;
 }
 .dropdown:hover .dropdown-content {
-    display: block;
+    display:block;
+    width: 50px;
+    height: 20px;
 }
 .dropdown-content {
     display: none;
@@ -127,7 +129,7 @@ function sendCtg(ctg, ctgNum){
 
 
 <body style="background-color: white">
-<div class="dropdown">
+<div class="dropdown" style="width: 50px;height: 20px;">
   <button class="dropbtn">Dropdown</button>
   <div class="dropdown-content">
     
@@ -135,7 +137,7 @@ function sendCtg(ctg, ctgNum){
 	<div class="content">
 		<ul class="vertical-nav white red" style="width: 232px">
 			<c:forEach begin="0" end="6" step="1" var="i">
-				<li><a href="#" class="link_ctg1" id="pnum_${i}"><i class="${icon[i]}"></i>${li[i].name}</a>
+				<li><a href="#" class="link_ctg1" id="pnum_${i}"><i class="${icon[i]}" ></i>${li[i].name}</a>
 				<c:if test="${li[i].name eq '패션'}">
 					<ul class="sli"> 
 						<c:forEach begin="7" end="8" step="1" var="j">
@@ -421,8 +423,6 @@ function sendCtg(ctg, ctgNum){
 				</c:if>
 				</li>
 			</c:forEach>
-				
-			
 		</ul>
 	</div>
 	<div class="clear"></div>
@@ -430,324 +430,5 @@ function sendCtg(ctg, ctgNum){
   </div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<%-- 
-<div class="kePublic">
-<div class="content">
-	<ul class="vertical-nav white red" style="width: 232px">
-		<c:forEach begin="0" end="6" step="1" var="i">
-			<li><a href=""><i class="${icon[i]}"></i>${li[i].name}</a>
-			<c:if test="${li[i].name eq '패션'}">
-				<ul class="sli"> 
-					<c:forEach begin="7" end="8" step="1" var="j">
-						<li><a href="#">${li[j].name }</a>
-							<c:if test="${li[j].name eq '여성의류'}">
-								<ul>
-									<c:forEach begin="39" end="54" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '남성의류' }">
-								<ul>
-									<c:forEach begin="55" end="67" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-						
-						</li>
-					</c:forEach>
-				</ul>
-			</c:if>
-			<c:if test="${li[i].name eq '잡화'}">
-				<ul class="sli">
-					<c:forEach begin="9" end="12" step="1" var="j">
-						<li><a href="#">${li[j].name}</a>
-							<c:if test="${li[j].name eq '신발' }">
-								<ul>
-									<c:forEach begin="68" end="83" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							
-							<c:if test="${li[j].name eq '가방' }">
-								<ul>
-									<c:forEach begin="84" end="88" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '쥬얼리' }">
-								<ul>
-									<c:forEach begin="89" end="94" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '아이웨어' }">
-								<ul>
-									<c:forEach begin="95" end="98" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-						</li>
-					</c:forEach>
-				</ul>
-			</c:if>
-			<c:if test="${li[i].name eq '스포츠/레저/자동차'}">
-				<ul class="sli">
-					<c:forEach begin="13" end="19" step="1" var="j">
-						<li><a href="#">${li[j].name }</a>
-							<c:if test="${li[j].name eq '휘트니스' }">
-								<ul>
-									<c:forEach begin="99" end="101" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '골프' }">
-								<ul>
-									<c:forEach begin="102" end="110" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '등산/아웃도어' }">
-								<ul>
-									<c:forEach begin="111" end="118" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '캠핑' }">
-								<ul>
-									<c:forEach begin="119" end="124" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '낚시' }">
-								<ul>
-									<c:forEach begin="125" end="131" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '자전거' }">
-								<ul>
-									<c:forEach begin="132" end="133" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '자동차용품' }">
-								<ul>
-									<c:forEach begin="134" end="135" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-						</li>
-					</c:forEach>
-				</ul>
-			</c:if>
-			
-			<c:if test="${li[i].name eq '유아'}">
-				<ul class="sli">
-					<c:forEach begin="20" end="23" step="1" var="j">
-						<li><a href="#">${li[j].name }</a>
-							<c:if test="${li[j].name eq '출산/유아용품' }">
-								<ul>
-									<c:forEach begin="136" end="143" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '유아동의류' }">
-								<ul>
-									<c:forEach begin="144" end="147" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '유아동잡화' }">
-								<ul>
-									<c:forEach begin="148" end="156" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '장난감' }">
-								<ul>
-									<c:forEach begin="157" end="158" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-						</li>
-					</c:forEach>
-				</ul>
-			</c:if>
-			<c:if test="${li[i].name eq '가구/생활/건강'}">
-				<ul class="sli">
-					<c:forEach begin="24" end="26" step="1" var="j">
-						<li><a href="#">${li[j].name }</a>
-							<c:if test="${li[j].name eq '가구' }">
-								<ul>
-									<c:forEach begin="159" end="170" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '생활' }">
-								<ul>
-									<c:forEach begin="171" end="174" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '커튼' }">
-								<ul>
-									<c:forEach begin="175" end="176" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-						</li>
-					</c:forEach>
-				</ul>
-			</c:if>
-			<c:if test="${li[i].name eq '디지털/가전/컴퓨터'}">
-				<ul class="sli">
-					<c:forEach begin="27" end="37" step="1" var="j">
-						<li><a href="#">${li[j].name }</a>
-							<c:if test="${li[j].name eq '대형가전' }">
-								<ul>
-									<c:forEach begin="177" end="181" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '주방가전' }">
-								<ul>
-									<c:forEach begin="182" end="195" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '계절가전' }">
-								<ul>
-									<c:forEach begin="196" end="200" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '생활가전' }">
-								<ul>
-									<c:forEach begin="201" end="203" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '카메라' }">
-								<ul>
-									<c:forEach begin="204" end="211" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '게임' }">
-								<ul>
-									<c:forEach begin="212" end="215" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '휴대폰' }">
-								<ul>
-									<c:forEach begin="216" end="222" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '태블릿' }">
-								<ul>
-									<c:forEach begin="223" end="229" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '음향기기' }">
-								<ul>
-									<c:forEach begin="230" end="237" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '노트북/PC' }">
-								<ul>
-									<c:forEach begin="238" end="240" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-							<c:if test="${li[j].name eq '모니터/프린터' }">
-								<ul>
-									<c:forEach begin="241" end="247" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-						</li>
-					</c:forEach>
-				</ul>
-			</c:if>
-			<c:if test="${li[i].name eq '도서'}">
-				<ul class="sli">
-					<c:forEach begin="38" end="38" step="1" var="j">
-						<li><a href="#">${li[j].name }</a>
-							<c:if test="${li[j].name eq '도서' }">
-								<ul>
-									<c:forEach begin="248" end="249" step="1" var="k">
-										<li><a href="#">${li[k].name }</a></li>
-									</c:forEach>
-								</ul>
-							</c:if>
-						</li>
-					</c:forEach>
-				</ul>
-			</c:if>
-			</li>
-		</c:forEach>
-			
-		
-	</ul>
-</div>
-<!--效果html结束-->
-<div class="clear"></div>
-</div> --%>
 </body>
 </html>

@@ -41,7 +41,7 @@
 <a href="./test">test</a>
 <a href="./auction/viewList?curPage=1">cookie</a>
 <a href="./auction/auctionPay">pay</a>
-    <a href="./auction/categoryDrop">category</a>
-
+<a href="./auction/categoryDrop">category</a>
+<a href="./index">index</a>
 </body>
 </html>

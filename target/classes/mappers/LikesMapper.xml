@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    <mapper namespace="LikesMapper">
+    	<!-- <resultMap type="com.momo.freeBoard.FreeBoardDTO" id="freeList"></resultMap> -->
+    	<!--return 값이 result면 굳이 freeboard 쓸 필요 없음.  -->
+    	<resultMap type="java.util.HashMap" id="LikesMap"></resultMap>
+    	
+    	<!--좋아요 눌렀는지 안 눌렀는지 확인하고 추가 및 삭제  -->
+    	<insert id="likes" statementType="CALLABLE" parameterType="java.util.Map">
+    	
+    	{ call likesIo(#{likes.kind , mode=IN}, #{likes.pnum, mode=IN}, #{likes.m_id, mode=IN}, #{result, javaType=int, mode=OUT, jdbcType=INTEGER, resultMap=LikesMap}) }
+    	</insert>
+    	
+    	
+    	<!--view 접속했을 때 좋아요 누른 상태인지 아닌지 확인.  -->
+    	<select id="likesCheck" parameterType="com.choa.likes.LikesDTO" resultType="com.choa.likes.LikesDTO">
+    	 select * from likes 
+    	 where kind =#{kind} and pnum=#{pnum} and m_id=#{m_id}
+    	</select>
+		
+		<select id="likesCount" parameterType="com.choa.likes.LikesDTO" resultType="int">
+		select NVL(count(num), 0) from likes 
+		where kind=#{kind} and pnum=#{pnum}
+		
+		</select>
+		
+		    	
+   		<delete id="likesDelete" parameterType="com.choa.likes.LikesDTO">
+   		delete likes where kind =#{kind} and pnum=#{pnum} and m_id=#{m_id} 
+   		</delete> 	
+    	
+    	
+    </mapper>

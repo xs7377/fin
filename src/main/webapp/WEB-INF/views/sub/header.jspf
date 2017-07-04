@@ -3,26 +3,577 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link href="${pageContext.servletContext.contextPath}/resources/jquery-side-icon-dropdown-menu/css/font-awesome.css" rel="stylesheet">
+<script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/jquery-side-icon-dropdown-menu/js/jquery-1.10.1.min.js"></script>
+<script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/jquery-side-icon-dropdown-menu/js/google-maps.js"></script>
+<script>$(document).ready(function(){$(".vertical-nav").verticalnav({speed: 200,align: "left"});});</script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<style type="text/css">
-.header_wrap{
-	height: 150px;
+<script type="text/javascript">
+$(function(){
+	$(".link_ctg1").on("click",function(){
+		var str=$(this).attr("id");
+		str=str.split("_");
+		var ctgNum=str[1];
+		var name1="pnum_"+str[1];
+		name1=$("#"+name1).text();
+		var search_ctg=name1;
+		$("#cate").val(
+			search_ctg		
+		);
+		sendCtg(search_ctg, ctgNum);
+	});
+	$(".link_ctg2").on("click",function(){
+		var str=$(this).attr("id");
+		str=str.split("_");
+		var ctgNum=str[1]+"_"+str[2];
+		var name1="pnum_"+str[1];
+		var name2=name1+"_"+str[2];
+		name1=$("#"+name1).text();
+		name2=$("#"+name2).text();
+		var search_ctg=name1+","+name2;
+		sendCtg(search_ctg, ctgNum);
+	});
+	$(".link_ctg3").on("click",function(){
+		var str=$(this).attr("id");
+		str=str.split("_");
+		var ctgNum=str[1]+"_"+str[2]+"_"+str[3];
+		var name1="pnum_"+str[1];
+		var name2=name1+"_"+str[2];
+		var name3=name2+"_"+str[3];
+		name1=$("#"+name1).text();
+		name2=$("#"+name2).text();
+		name3=$("#"+name3).text();
+		var search_ctg=name1+","+name2+","+name3;
+		sendCtg(search_ctg, ctgNum);
+	});
+});
+
+function sendCtg(ctg, ctgNum){
+	var form=document.createElement("form");
+	form.method="post";
+	form.action="./auctionList";
+	var e1=document.createElement("input");
+	var e2=document.createElement("input");
+	var e3=document.createElement("input");
+	var e4=document.createElement("input");
+	var e5=document.createElement("input");
+	var e6=document.createElement("input");
+	var e7=document.createElement("input");
+	var e8=document.createElement("input");
+	var e9=document.createElement("input");
+	
+	e1.name="curPage";
+	e2.name="perPage";
+	e3.name="category";
+	e4.name="kind";
+	e5.name="search";
+	e6.name="ctgNum";
+	e7.name="pri_curPage";
+	e8.name="view_kind";
+	e9.name="isSearch";
+	
+	e1.value=1;
+	e2.value=8;
+	e3.value=ctg;
+	e4.value="titleContents";
+	e5.value="";
+	e6.value=ctgNum;
+	e7.value=1;
+	e8.value="album";
+	e9.value="n";
+	
+	e1.type="hidden";
+	e2.type="hidden";
+	e3.type="hidden";
+	e4.type="hidden";
+	e5.type="hidden";
+	e6.type="hidden";
+	e7.type="hidden";
+	e8.type="hidden";
+	e9.type="hidden";
+	document.body.appendChild(form);
+	form.appendChild(e1);
+	form.appendChild(e2);
+	form.appendChild(e3);
+	form.appendChild(e4);
+	form.appendChild(e5);
+	form.appendChild(e6);
+	form.appendChild(e7);
+	form.appendChild(e8);
+	form.appendChild(e9);
+	form.submit();
 }
-a{
+</script>
+<style type="text/css">
+.sli li{
+	line-height: 0;
+}
+.sli{
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+    width: 50px;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+
+.header_wrap{
+	box-sizing: border-box;
+	height: 135px;
+}
+.user >a{
 	text-decoration: none;
 	font-weight: bolder;
 	color: #333333;
 	font-family:Georgia;
 	display: inline-block;
-	margin-right: 20px;
+	margin-left: 20px;
+}
+.user{
+box-sizing: border-box;
+	width: 100%;
+	height: 25px;
+	padding-left: 20px;
+	padding-right: 20px;
+	float: left;
+	text-align: right;
+	font-size: 14px;
+}
+.logo{
+box-sizing: border-box;
+	width: 100%;
+	height: 20px;
+	padding-left: 20px;
+	padding-right: 20px;
+	float: left;
+	text-align: center;
+}
+.menu{
+	box-sizing: border-box;
+	width: 100%;
+	height: 50px;
+	padding-left: 20px;
+	padding-right: 20px;
+	float: left;
+	text-align:center;
+	padding-top: 12px;
+	border-bottom: 1px solid #bcbcbc;
+	border-top: 1px solid #bcbcbc;
+}
+.submenu{
+	box-sizing: border-box;
+	width: 100%;
+	height: 40px;
+	padding-left: 20px;
+	padding-right: 20px;
+	float: left;
+	text-align: right;	
+	padding-top: 1.5px;
+}
+.ds{
+	width: 150px; 
+	height: 30px;
+	display: inline-block;
+	margin-left: 30px;
+	margin-right: 30px;
+	text-align: center;
+	font-size: 18px;
+}
+.subn{
+	display: inline-block;
+	width: 150px;
+	height: 25px;
+}
+.vertical-nav > li{
+	line-height: 5px;
+}
+li>a:hover{
+	font-weight: bold;
+}
+.nsp{
+	color: #bcbcbc;
+	display: inline-block;
+	text-align: center;"
+}
+@media ( max-width: 1500px ) {
+  .user, .menu, .submenu, .logo{
+  width:1500px; }
 }
 </style> 
 </head> 
-<body>
+<body style="background-color: white;">
 <div class="header_wrap">
+	<div class="user">
+		<c:if test="${member eq null}"> 
+			<a href="/fin/member/memberAgree">JOIN</a>
+			<a href="/fin/member/memberLogin">LOGIN</a> 
+		</c:if>
+		
+		<c:if test="${member ne null}">
+			<a href="/fin/member/memberMypage?id=${member.id}">MYPAGE</a>
+			<a href="/fin/member/memberLogout" >LOGOUT</a>
+		</c:if>
+	</div>
+	<div class="logo">
+		<a href="/fin"><img alt="" src="/fin/resources/img/sub/로고.png" class="logo-img" ></a>
+	</div>
+	<div class="submenu">
+		<input type="text" style="width: 240px;height: 30px;margin-right: 40px;">
+	</div>
+	<span style="cursor: pointer;position: absolute;margin-left: -46px;margin-top: 48px;"><img alt="" src="${pageContext.servletContext.contextPath}/resources/imgs/sr.png"></span>
+<div class="menu">
+<div class="dropdown ds">
+ 	 <a href="#" class="dropbtn subn">Category</a>
+	 <div class="dropdown-content" style="margin-left: -10px;">
+	 <div class="kePublic">
+	 <div class="content">
+		<ul class="vertical-nav white red" style="width: 180px;">
+			<c:forEach begin="0" end="6" step="1" var="i">
+				<li style="line-height: 10px;"><a href="#" class="link_ctg1" id="pnum_${i}">${li[i].name}</a>
+				<c:if test="${li[i].name eq '패션'}">
+					<ul class="sli"> 
+						<c:forEach begin="7" end="8" step="1" var="j">
+							<li><a href="#" class="link_ctg2" id="pnum_${i}_${j}">${li[j].name }</a>
+								<c:if test="${li[j].name eq '여성의류'}">
+									<ul>
+										<c:forEach begin="39" end="54" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '남성의류' }">
+									<ul>
+										<c:forEach begin="55" end="67" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+							
+							</li>
+						</c:forEach>
+					</ul>
+				</c:if>
+				<c:if test="${li[i].name eq '잡화'}">
+					<ul class="sli">
+						<c:forEach begin="9" end="12" step="1" var="j">
+							<li><a href="#" class="link_ctg2" id="pnum_${i}_${j}">${li[j].name}</a>
+								<c:if test="${li[j].name eq '신발' }">
+									<ul>
+										<c:forEach begin="68" end="83" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								
+								<c:if test="${li[j].name eq '가방' }">
+									<ul>
+										<c:forEach begin="84" end="88" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '쥬얼리' }">
+									<ul>
+										<c:forEach begin="89" end="94" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '아이웨어' }">
+									<ul>
+										<c:forEach begin="95" end="98" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+							</li>
+						</c:forEach>
+					</ul>
+				</c:if>
+				<c:if test="${li[i].name eq '스포츠/레저/자동차'}">
+					<ul class="sli">
+						<c:forEach begin="13" end="19" step="1" var="j">
+							<li><a href="#" class="link_ctg2" id="pnum_${i}_${j}">${li[j].name }</a>
+								<c:if test="${li[j].name eq '휘트니스' }">
+									<ul>
+										<c:forEach begin="99" end="101" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '골프' }">
+									<ul>
+										<c:forEach begin="102" end="110" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '등산/아웃도어' }">
+									<ul>
+										<c:forEach begin="111" end="118" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '캠핑' }">
+									<ul>
+										<c:forEach begin="119" end="124" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '낚시' }">
+									<ul>
+										<c:forEach begin="125" end="131" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '자전거' }">
+									<ul>
+										<c:forEach begin="132" end="133" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '자동차용품' }">
+									<ul>
+										<c:forEach begin="134" end="135" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+							</li>
+						</c:forEach>
+					</ul>
+				</c:if>
+				
+				<c:if test="${li[i].name eq '유아'}">
+					<ul class="sli">
+						<c:forEach begin="20" end="23" step="1" var="j">
+							<li><a href="#" class="link_ctg2" id="pnum_${i}_${j}">${li[j].name }</a>
+								<c:if test="${li[j].name eq '출산/유아용품' }">
+									<ul>
+										<c:forEach begin="136" end="143" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '유아동의류' }">
+									<ul>
+										<c:forEach begin="144" end="147" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '유아동잡화' }">
+									<ul>
+										<c:forEach begin="148" end="156" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '장난감' }">
+									<ul>
+										<c:forEach begin="157" end="158" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+							</li>
+						</c:forEach>
+					</ul>
+				</c:if>
+				<c:if test="${li[i].name eq '가구/생활/건강'}">
+					<ul class="sli">
+						<c:forEach begin="24" end="26" step="1" var="j">
+							<li><a href="#" class="link_ctg2" id="pnum_${i}_${j}">${li[j].name }</a>
+								<c:if test="${li[j].name eq '가구' }">
+									<ul>
+										<c:forEach begin="159" end="170" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '생활' }">
+									<ul>
+										<c:forEach begin="171" end="174" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '커튼' }">
+									<ul>
+										<c:forEach begin="175" end="176" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+							</li>
+						</c:forEach>
+					</ul>
+				</c:if>
+				<c:if test="${li[i].name eq '디지털/가전/컴퓨터'}">
+					<ul class="sli">
+						<c:forEach begin="27" end="37" step="1" var="j">
+							<li><a href="#" class="link_ctg2" id="pnum_${i}_${j}">${li[j].name }</a>
+								<c:if test="${li[j].name eq '대형가전' }">
+									<ul>
+										<c:forEach begin="177" end="181" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '주방가전' }">
+									<ul>
+										<c:forEach begin="182" end="195" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '계절가전' }">
+									<ul>
+										<c:forEach begin="196" end="200" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '생활가전' }">
+									<ul>
+										<c:forEach begin="201" end="203" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '카메라' }">
+									<ul>
+										<c:forEach begin="204" end="211" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '게임' }">
+									<ul>
+										<c:forEach begin="212" end="215" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '휴대폰' }">
+									<ul>
+										<c:forEach begin="216" end="222" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '태블릿' }">
+									<ul>
+										<c:forEach begin="223" end="229" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '음향기기' }">
+									<ul>
+										<c:forEach begin="230" end="237" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '노트북/PC' }">
+									<ul>
+										<c:forEach begin="238" end="240" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+								<c:if test="${li[j].name eq '모니터/프린터' }">
+									<ul>
+										<c:forEach begin="241" end="247" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+							</li>
+						</c:forEach>
+					</ul>
+				</c:if>
+				<c:if test="${li[i].name eq '도서'}">
+					<ul class="sli">
+						<c:forEach begin="38" end="38" step="1" var="j">
+							<li><a href="#" class="link_ctg2" id="pnum_${i}_${j}">${li[j].name }</a>
+								<c:if test="${li[j].name eq '도서' }">
+									<ul>
+										<c:forEach begin="248" end="249" step="1" var="k">
+											<li><a href="#" class="link_ctg3" id="pnum_${i}_${j}_${k}">${li[k].name }</a></li>
+										</c:forEach>
+									</ul>
+								</c:if>
+							</li>
+						</c:forEach>
+					</ul>
+				</c:if>
+				</li>
+			</c:forEach>
+		</ul>
+	</div>
+	<div class="clear"></div>
+	</div>
+ </div>
+</div>
+<span class="nsp">|</span>
+<div class="dropdown ds">
+	<a href="#" class="dropbtn subn">Sell</a>
+</div>
+<span class="nsp">|</span>
+<div class="dropdown ds">
+	<a href="#" class="dropbtn subn">Buy</a>
+</div>
+<span class="nsp">|</span>
+<div class="dropdown ds">
+	<a href="#" class="dropbtn subn">Notice</a>
+</div>
+<span class="nsp">|</span>
+<div class="dropdown ds">
+	<a href="#" class="dropbtn subn">Freeboard</a>
+</div>
+<span class="nsp">|</span>
+<div class="dropdown ds">
+	<a href="#" class="dropbtn subn">QnA</a>
+</div>
+</div> 
+</div>
 
-<section style="width: 1300px; margin: 0 auto; height: 150px;"> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%-- 
+<section style="width: 1300px; margin: 0 auto; height: 150px;">
 <a href="/fin"><img alt="" src="/fin/resources/img/sub/로고.png" style="margin-top: 60px; margin-right: 100px;
 vertical-align: text-bottom; margin-bottom: 0px;"></a>
 
@@ -46,6 +597,6 @@ vertical-align: text-bottom; margin-bottom: 0px;"></a>
 </c:if>
 </div>
 </section>
-</div>
+ --%>
 </body>
 </html>

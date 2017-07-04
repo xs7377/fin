@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    <mapper namespace="ReportMapper">
+    <!-- 신고 -->
+    <insert id="report" parameterType="com.choa.report.ReportDTO">
+    insert into report
+    values(NVL((select max(num) from report),0)+1, #{kind}, #{pnum}, #{from_id}, #{to_id}, #{contents}, sysdate, 0)
+  	</insert>
+    
+    <select id="reportView" parameterType="int" resultType="com.choa.report.ReportDTO">
+    select * from report where num=#{num}
+    </select>
+    
+    
+    <!--check 설정 -->
+    <update id="reportRead" parameterType="int">
+    update report set check_num=1 where num=#{num}
+    </update>
+    
+    <!-- 신고 글 번호 삭제 -->
+    <delete id="reportDelete" parameterType="int">
+    delete report where num=#{num}
+   	</delete>
+     
+     <!-- 쪽지 리스트 -->
+     <select id="reportList" parameterType="java.util.Map" resultType="com.choa.report.ReportDTO">
+     select * from
+     (select rownum r, t.* from
+     (select * from report order by num desc) t)
+     where r between #{startRow} and #{lastRow}
+    </select>
+    
+    <!--연속으로 신고 못하게 reg_date 가지고오기.한 사람이 한사람만 신고 가능하게 하는게 더 낫겠지? -->
+    <!-- max reg_date 되나? -->
+    <select id="reportCheck" parameterType="com.choa.report.ReportDTO" resultType="com.choa.report.ReportDTO">
+    select * from report 
+    where kind=#{kind} and pnum=#{pnum} and from_id=#{from_id} and to_id=#{to_id}
+    
+    </select>
+    
+    
+    <!-- 몇 회 신고 당했는지 -->
+    <select id="reportCount" parameterType="String" resultType="int">
+    <!--우선 check가 1인걸 뽑든가 , to_id가 우선 몇개인지 찾고 그 후에 check1인걸 뽑든가.-->
+    select count(num) from (select * from report where check_num=1)
+    where to_id=#{to_id}
+    </select>
+    <!--Rollback  -->
+    <update id="reportRollback" parameterType="int">
+ 	 update report set check_num=0 where num=#{num}
+    
+    </update>
+    
+    
+    <!-- 계정삭제 이건 나중에 한번에 삭제 해야하니까.-->
+    
+    
+    
+    
+    </mapper>

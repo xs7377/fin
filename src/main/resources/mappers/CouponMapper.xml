@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    <mapper namespace="CouponMapper">
+    
+    <insert id="couponInsert" parameterType="com.choa.coupon.CouponDTO">
+   		insert into coupon values(NVL((select max(num) from coupon)+1, 1), 
+   		#{m_id}, #{name}, #{contents}, #{kind}, '사용가능', #{end_date}, #{grade})
+    </insert>
+    
+    <select id="couponSelect" parameterType="java.util.Map" resultType="com.choa.coupon.CouponDTO">
+    	select * from coupon where m_id = #{id} and name = #{name} 
+    </select>
+    
+    <select id="couponSelectPercent" parameterType="String" resultType="com.choa.coupon.CouponDTO">
+    	select name from coupon where m_id=#{id} and available ='사용가능' and kind = '퍼센트' and grade=#{grade}
+    </select>
+    
+    <select id="couponSelectPoint" parameterType="String" resultType="com.choa.coupon.CouponDTO">
+    	select name from coupon where m_id=#{id} and available ='사용가능' and kind = '포인트' and grade=#{grade}
+    </select>
+    
+    <delete id="couponDelete" parameterType="String" >
+      <![CDATA[ delete coupon where m_id = #{id} and end_date < sysdate ]]>
+    </delete>
+    
+    <select id="countSell" parameterType="java.util.Map" resultType="int">
+     <![CDATA[ select count(num) from auction where m_id = #{id} and kind='buy' and #{startDate} < reg_date and reg_date < #{lastDate}]]>
+    </select>
+  
+	<select id="countBuy" parameterType="java.util.Map" resultType="int">
+	<![CDATA[ select count(num) from auction where buyer like '%' || #{id} || '%' and kind='buy' and #{startDate} < reg_date 
+	and reg_date < #{lastDate} ]]>
+	</select>  
+ 
+    <select id="sellMoney" parameterType="java.util.Map" resultType="com.choa.coupon.CouponDTO">
+    <![CDATA[  select buyer from auction where m_id = #{id} and kind='buy' and #{startDate} < reg_date and reg_date < #{lastDate} ]]>
+    </select>
+   
+   	<select id="buyMoney" parameterType="java.util.Map" resultType="com.choa.coupon.CouponDTO">
+   	 <![CDATA[ select buyer from auction where buyer like '%' || #{id} || '%' and kind='buy' and #{startDate} < reg_date 
+   	 and reg_date < #{lastDate} ]]>
+   	</select>
+    </mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    <mapper namespace="AttendMapper">
+    <resultMap type="java.util.HashMap" id="myMap2"></resultMap>
+    <!--처음 출첵하는 건지  -->	
+    
+    <update id="attendCheck" statementType="CALLABLE" parameterType="java.util.Map">
+   
+   { call attendCheck(#{m_id , mode=IN}, #{result, javaType=int, mode=OUT, jdbcType=INTEGER, resultMap=myMap2}) } 
+    
+    </update>
+    
+    <!-- CLEAR 자정되면 전체적으로-->
+    <update id="attendClear">
+    update attend set today=0
+    where today=1
+   	</update>
+    
+    <!--중복 체크  -->
+    <select id="attendCut" parameterType="String" resultType="int">
+    select today from attend where m_id=#{m_id}
+    </select>
+    <!-- 15일되면 자동으로  update로 today =1 로 하고 total 0 으로  -->
+	<update id="attendReset" parameterType="String">
+	update attend set today=1, total=1 where m_id=#{m_id}  
+	</update>
+
+	
+	<!-- 탈퇴했을 때-->
+	<delete id="attendDel" parameterType="String">
+	delete attend where m_id=#{m_id}
+	</delete>
+
+
+    
+    </mapper>

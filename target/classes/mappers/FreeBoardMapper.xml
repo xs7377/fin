@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    <mapper namespace="FreeBoardMapper">
+    	<select id="freeBoardList" parameterType="java.util.Map" resultType="com.choa.freeBoard.FreeBoardDTO">
+    		select * from 
+    		(select rownum r, t.* from 
+    		(select * from freeboard  
+    		<if test="kinds=='title'">
+    			where title like '%'||#{search}||'%'
+    		</if>
+    		<if test="kinds=='contents'">
+    			where contents like '%'||#{search}||'%'
+    		</if>
+    		<if test="kinds=='writer'">
+    			where m_id like '%'||#{search}||'%'
+    		</if>
+    		 order by ref desc, step asc) t)
+    		 where r between #{row.startRow} and #{row.lastRow}
+    	</select>
+    	
+    	<insert id="freeBoardWrite" parameterType="com.choa.freeBoard.FreeBoardDTO">
+    		insert into freeboard values(free_seq.nextval, #{m_id}, #{title},#{contents},sysdate,0,free_seq.currval,0,0,0,'freeBoard')
+    	</insert>
+    	
+    	<update id="freeBoardUpdate" parameterType="com.choa.freeBoard.FreeBoardDTO">
+    		update freeboard set title=#{title}, contents=#{contents} where num=#{num}
+    	</update>
+    	
+    	<delete id="freeBoardDelete" parameterType="java.lang.Integer">
+    		delete from freeboard where num=#{num}
+    	</delete>
+    	
+    	<insert id="freeBoardReply" parameterType="com.choa.freeBoard.FreeBoardDTO">
+    		insert into freeboard values(free_seq.nextval,#{m_id}, #{title},#{contents},sysdate,0,#{ref},#{step},#{depth}, 0,'freeBoard')
+    	</insert>
+    	
+    	<update id="hitPlus" parameterType="java.lang.Integer">
+    		update freeboard set hit=hit+1 where num=#{num}
+    	</update>
+    	
+    	<update id="hitMinus" parameterType="java.lang.Integer">
+    		update freeboard set hit=hit-1 where num=#{num}
+    	</update>
+    	
+    	<select id="totalCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+    		select count(num) from freeboard 
+    		<if test="kinds=='title'">
+    			where title like '%'||#{search}||'%'
+    		</if>
+    		<if test="kinds=='contents'">
+    			where contents like '%'||#{search}||'%'
+    		</if>
+    		<if test="kinds=='writer'">
+    			where m_id like '%'||#{search}||'%'
+    		</if>
+    	</select>
+    	
+    	<update id="stepUpdate" parameterType="com.choa.freeBoard.FreeBoardDTO">
+    		update freeboard set step=step+1 where ref=#{ref} and step>#{step}
+    	</update>
+    	
+    	<select id="freeBoardView" resultType="com.choa.freeBoard.FreeBoardDTO" parameterType="java.lang.Integer">
+    		select * from freeboard where num=#{num}
+    	</select>
+    	
+    </mapper>

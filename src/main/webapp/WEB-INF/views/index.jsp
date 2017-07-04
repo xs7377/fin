@@ -6,9 +6,6 @@
 <head>
 <title>Home</title>
 <style type="text/css">
-*{
-	 box-sizing: border-box;
-}
 .home_wrap{
 	height:1150px;
 }
@@ -36,7 +33,6 @@
 .bottom_font2 {
 	font-size: 0.8em;
 	color: #4d4d4d;
-	line-height: 50%;
 }
  
 .next {
@@ -80,7 +76,7 @@ a {
 	<section class="home_wrap"> 
 	
 <div style="width: 100%; height: 545px;">
-<div style=" position: absolute; width: 50%;height: 545px;">
+<div style="width: 50%;height: 545px;float: left;">
 <img src="/fin/resources/img/sub/homeimg.JPG" width="100%;" height="100%;"></div>
 <div style=" background-color:rgba(213, 234, 236, 1); width: 50%; height: 545px; float: right;">
 <div style=" padding-top: 60px; padding-left: 150px; position: absolute;">

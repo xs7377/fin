@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    <mapper namespace="MessageMapper">
+     <resultMap type="java.util.HashMap" id="readMap"/>
+     <resultMap type="java.util.HashMap" id="reportMap"/>
+    <!--
+    1.쪽지보내기  
+    2.쪽지삭제
+    3.읽었는지 안 읽었는지
+    4.report에서 신고접수되면 바로 from 과 to에게 알림 쪽지가게.
+    num , from_id , to _id, title, contents, read , reg_date
+     -->
+     <!-- 쪽지리스트(보낸, 받은) 완-->
+     <select id="messageSendList" parameterType="java.util.Map" resultType="com.choa.message.MessageDTO">
+     select * from
+     (select rownum r, t.* from
+     (select * from message where from_id=#{from_id} order by num desc) t)
+     where r between #{startRow} and #{lastRow}
+    </select>
+     
+     <!--받은리스으  완-->
+     <select id="messageReciveList" parameterType="java.util.Map" resultType="com.choa.message.MessageDTO">
+     select * from
+     (select rownum r, t.* from
+     (select * from message where to_id=#{to_id} order by num desc ) t)
+     where r between #{startRow} and #{lastRow}
+    </select>
+     
+    <!--쪽지보내기(이상무) -->
+   	<insert id="messageSend" parameterType="com.choa.message.MessageDTO">
+    insert into message
+    values(NVL((select max(num) from message),0)+1, #{from_id}, #{to_id}, #{title},#{contents},0,sysdate)
+   	</insert>
+    
+    <!--쪽지삭제 (이상무) -->
+    <delete id="messageDelete" parameterType="int" >
+    delete message
+    where num=#{num}
+   	</delete>
+    
+   
+
+   
+    <select id="messageView" parameterType="int" resultType="com.choa.message.MessageDTO">
+    	select * from message where num=#{num}
+   	</select>
+   	<update id="messageRead" parameterType="int">
+   		update message set read=1 where num=#{num}	
+   	</update>
+    
+  
+    <!-- 신고 받으면 바로  -->
+ 	
+ 	<!--신고  -->
+    <insert id="messageReport" statementType="CALLABLE" parameterType="java.util.Map">
+   	{ call messageReport(#{from_id ,mode=IN},#{to_id ,mode=IN},#{toMsg, mode=IN} ,#{result, javaType=int, mode=OUT, jdbcType=INTEGER, resultMap=reportMap }) }
+   	</insert>
+    
+    
+    
+    </mapper>
