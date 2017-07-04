@@ -18,7 +18,6 @@
 		});
 		
 	});
-	<!--============================ 롤링 이벤트 -->
 		function rolling(options) {
 			var self = this;
 			this.object = document.getElementById(options.rollId);

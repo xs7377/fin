@@ -46,7 +46,7 @@ $(function() {
 			alert(sr);
 			var form=document.createElement("form");
 			form.method="post";
-			form.action="./totalList";
+			form.action="./totalList";z
 			var e1=document.createElement("input");
 			var e2=document.createElement("input");
 			var e3=document.createElement("input");
@@ -1424,7 +1424,10 @@ a {
 			<c:forEach begin="0" end="9" step="1" var="i">
 				<div class="al-top10-rank"><span style="display: inline-block; width: 30px; font-weight: bold;color: rgba(56, 56, 56, 0.8);">${i+1}.</span>
 					<a id="rank_search_${i}" class="rank-search" style="color: black">${searchTop10[i].search}</a>
-					<span id="rank_move_${i}" style="float: right;font-size:14px">${rankMove[i]}</span>
+					<span id="rank_move_${i}" style="float: right;font-size:14px">
+						<c:if test="${rankMove[i] eq 0 }">-</c:if>
+						<c:if test="${rankMove[i] ne 0 }">${rankMove[i]}</c:if>
+					</span>
 				</div>
 			</c:forEach>
 			</div>

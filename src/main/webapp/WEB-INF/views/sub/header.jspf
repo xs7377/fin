@@ -12,6 +12,38 @@
 <title>Insert title here</title>
 <script type="text/javascript">
 $(function(){
+	//=======================================검색어순위변동================================
+	for(var i=0;i<=9;i++){
+		var rm=$("#rank_move_"+i).text();
+		if(rm*1<0){
+			$("#rank_move_"+i).html(rm*-1);
+			$("#rank_move_"+i).append('<span style="display:inline-block;text-indent: 5px;font-size:14px;padding-top:2px;">↑</span>');
+			$("#rank_move_"+i).addClass('blue');
+		}
+		if(rm*1>0){
+			$("#rank_move_"+i).append('<span style="display:inline-block;text-indent: 5px;font-size:14px;padding-top:2px;">↓</span>');
+			$("#rank_move_"+i).addClass('red');
+		}
+		if(rm=='new'){
+			$("#rank_move_"+i).addClass('green');
+		}
+		if(rm==0){
+			$("#rank_move_"+i).html('-');
+			$("#rank_move_"+i).addClass('gray');
+		}
+	}	
+	// ===================== 실시간검색어 롤링
+	$("#rollText1").mouseenter(function(){
+			$(this).hide();		
+			$("#test").show();
+		});
+		$("#test").mouseleave(function(){
+			$("#rollText1").show();
+			$("#test").hide();
+		});
+	// ===================== 카테고리 hover
+		
+	// ===================== 카테고리 클릭처리
 	$(".link_ctg1").on("click",function(){
 		var str=$(this).attr("id");
 		str=str.split("_");
@@ -49,7 +81,7 @@ $(function(){
 		sendCtg(search_ctg, ctgNum);
 	});
 });
-
+//=====================카테고리 이동
 function sendCtg(ctg, ctgNum){
 	var form=document.createElement("form");
 	form.method="post";
@@ -105,8 +137,42 @@ function sendCtg(ctg, ctgNum){
 	form.appendChild(e9);
 	form.submit();
 }
+function rolling(options) {
+	var self = this;
+	this.object = document.getElementById(options.rollId);
+	//this.object.onmouseover = function() { self.stop(); };
+	//this.object.onmouseout = function() { self.play(); };
+	this.delay = options.delay || 1000;
+	this.speed = options.speed || 50;
+	this.step = options.step || 1;
+	this.mover = options.mover || false;
+	this.elChildHeight = options.childHeight;
+	this.elHeight = this.object.offsetHeight;
+	this.elPosition = 0;
+	this.object.appendChild(this.object.cloneNode(true));
+	this.control = setTimeout(function() {self.play()}, this.delay);
+}
+rolling.prototype = {
+	play:function() {
+		var self = this, time;
+		this.elPosition = this.elPosition>(this.mover?this.elHeight:0) ? this.elPosition-this.elHeight : this.elPosition+1;
+		this.object.style.top = (this.mover ? -this.elPosition : this.elPosition) + "px";
+		this.control = setTimeout(function() {self.play()}, this.elPosition%(this.elChildHeight*this.step)==0?this.delay:this.speed);
+	},
+	stop:function() {
+		clearTimeout(this.control);
+	}
+}
+var roll1 = null, roll2 = null;
+window.onload = function() {
+	roll1 =  new rolling({rollId: "rollText1", delay: 2000, speed: 10, step: 1, mover: true, childHeight: 34});
+}
 </script>
 <style type="text/css">
+@font-face {
+	font-family: 'NanumGothic'; 
+	src: url(../resources/font/NanumGothic.ttf) format('truetype'); }
+
 .sli li{
 	line-height: 0;
 }
@@ -165,7 +231,7 @@ box-sizing: border-box;
 	padding-right: 20px;
 	float: left;
 	text-align:center;
-	padding-top: 12px;
+	padding-top: 9px;
 	border-bottom: 1px solid #bcbcbc;
 	border-top: 1px solid #bcbcbc;
 }
@@ -180,7 +246,7 @@ box-sizing: border-box;
 	padding-top: 1.5px;
 }
 .ds{
-	width: 150px; 
+	width: 120px; 
 	height: 30px;
 	display: inline-block;
 	margin-left: 30px;
@@ -190,8 +256,8 @@ box-sizing: border-box;
 }
 .subn{
 	display: inline-block;
-	width: 150px;
-	height: 25px;
+	width: 120px;
+	height: 36px;
 }
 .vertical-nav > li{
 	line-height: 5px;
@@ -204,9 +270,44 @@ li>a:hover{
 	display: inline-block;
 	text-align: center;"
 }
+.inspn{
+	display:inline-block;
+	width:120px;
+	height: 25px;
+	font-family: NanumGothic;
+	color: #333;
+}
+.inspn:hover{
+	font-weight: bold; 
+}
+.al-top10-rank{
+	padding-top:4px;
+	padding-left:18px;
+	padding-right:30px;
+	height: 30px;
+	width: 170px;
+	overflow:hidden; 
+	text-overflow:ellipsis; 
+	white-space:nowrap;
+}
+.rank-search{
+	cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 @media ( max-width: 1500px ) {
   .user, .menu, .submenu, .logo{
-  width:1500px; }
+  width:100%; }
 }
 </style> 
 </head> 
@@ -227,13 +328,41 @@ li>a:hover{
 		<a href="/fin"><img alt="" src="/fin/resources/img/sub/로고.png" class="logo-img" ></a>
 	</div>
 	<div class="submenu">
+	<span style="float: left;display: inline-block;padding-top: 4px;font-size: 14px;color: #00ab33;font-weight: bold;">인기검색어</span>
+	<div class="dropdown ds" style="overflow:hidden; width: 205px; height: 30px;float: left;margin-left: 1px;">
+		<div id="rollText1" style="position:relative; top:0;">
+			<c:forEach begin="0" end="9" step="1" var="i">
+				<div class="al-top10-rank"><span style="display: inline-block; width: 20px; font-weight: bold;color: #00ab33">${i+1}.</span>
+					<a id="rank_search_${i}" class="rank-search" style="color: black">${searchTop10[i].search}</a>
+					<span id="rank_move_${i}" style="float: right;font-size:14px;display: inline-block;height: 20px;padding-top: 4.5px;">
+						<c:if test="${rankMove[i] eq 0 }">-</c:if>
+						<c:if test="${rankMove[i] ne 0 }">${rankMove[i]}</c:if>
+					</span>
+				</div>
+			</c:forEach>
+		</div>
+		<div id="test" hidden="" style="border: 1px solid #bcbcbc;width:205px;;position: absolute;background-color: white;">
+		<c:forEach begin="0" end="9" step="1" var="i">
+				<div class="al-top10-rank"><span style="display: inline-block; width: 20px; font-weight: bold;color: rgba(56, 56, 56, 0.8);">${i+1}.</span>
+					<a id="rank_search_${i}" class="rank-search" style="color: black">${searchTop10[i].search}</a>
+					<span id="rank_move_${i}" style="float: right;font-size:14px;display: inline-block;height: 20px;padding-top: 4.5px;"">
+						<c:if test="${rankMove[i] eq 0 }">-</c:if>
+						<c:if test="${rankMove[i] ne 0 }">${rankMove[i]}</c:if>
+					</span>
+				</div>
+		</c:forEach>
+		</div>
+</div>
 		<input type="text" style="width: 240px;height: 30px;margin-right: 40px;">
 	</div>
 	<span style="cursor: pointer;position: absolute;margin-left: -46px;margin-top: 48px;"><img alt="" src="${pageContext.servletContext.contextPath}/resources/imgs/sr.png"></span>
 <div class="menu">
+<table style="margin: 0 auto;">
+<tr>
+<td>
 <div class="dropdown ds">
- 	 <a href="#" class="dropbtn subn">Category</a>
-	 <div class="dropdown-content" style="margin-left: -10px;">
+ 	 <a href="#" class="dropbtn subn"><span class="inspn">Category</span></a>
+	 <div class="dropdown-content" style="margin-left: -20px;">
 	 <div class="kePublic">
 	 <div class="content">
 		<ul class="vertical-nav white red" style="width: 180px;">
@@ -530,26 +659,49 @@ li>a:hover{
 	</div>
  </div>
 </div>
+</td>
+<td>
 <span class="nsp">|</span>
+</td>
+<td>
 <div class="dropdown ds">
-	<a href="#" class="dropbtn subn">Sell</a>
+	<a href="#" class="dropbtn subn"><span class="inspn">Sell</span></a>
 </div>
+</td>
+<td>
 <span class="nsp">|</span>
+</td>
+<td>
 <div class="dropdown ds">
-	<a href="#" class="dropbtn subn">Buy</a>
+	<a href="#" class="dropbtn subn"><span class="inspn">Buy</span></a>
 </div>
+</td>
+<td>
 <span class="nsp">|</span>
+</td>
+<td>
 <div class="dropdown ds">
-	<a href="#" class="dropbtn subn">Notice</a>
+	<a href="#" class="dropbtn subn"><span class="inspn">Notice</span></a>
 </div>
+</td>
+<td>
 <span class="nsp">|</span>
+</td>
+<td>
 <div class="dropdown ds">
-	<a href="#" class="dropbtn subn">Freeboard</a>
+	<a href="#" class="dropbtn subn"><span class="inspn">Freeboard</span></a>
 </div>
+</td>
+<td>
 <span class="nsp">|</span>
+</td>
+<td>
 <div class="dropdown ds">
-	<a href="#" class="dropbtn subn">QnA</a>
+	<a href="#" class="dropbtn subn"><span class="inspn">QnA</span></a>
 </div>
+</td>
+</tr>
+</table>
 </div> 
 </div>
 
