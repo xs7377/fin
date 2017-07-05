@@ -556,7 +556,7 @@ input[type="number"]::-webkit-inner-spin-button {
 </style>
 <title>Insert title here</title>
 </head>
-<body style="background-color: gray;">
+<body style="background-image: url('${pageContext.servletContext.contextPath}/resources/auction-img/dot.jpg');">
 <%@ include file="../sub/header.jspf"%>
 <div class="a-container">
 	<div class="a-sideNav-title"> 
