@@ -43,10 +43,9 @@ $(function() {
 		//=======================================검색어link================================
 		$(".rank-search").on("click",function(){
 			var sr=$(this).text();
-			alert(sr);
 			var form=document.createElement("form");
 			form.method="post";
-			form.action="./totalList";z
+			form.action="./totalList";
 			var e1=document.createElement("input");
 			var e2=document.createElement("input");
 			var e3=document.createElement("input");
@@ -73,11 +72,11 @@ $(function() {
 			var rm=$("#rank_move_"+i).text();
 			if(rm*1<0){
 				$("#rank_move_"+i).html(rm*-1);
-				$("#rank_move_"+i).append('<span style="display:inline-block;text-indent: 5px;font-size:14px;padding-top:2px;">↑</span>');
+				$("#rank_move_"+i).append('<span style="display:inline-block;text-indent: 5px;font-size:14px;padding-top:2px;float:right;">↑</span>');
 				$("#rank_move_"+i).addClass('blue');
 			}
 			if(rm*1>0){
-				$("#rank_move_"+i).append('<span style="display:inline-block;text-indent: 5px;font-size:14px;padding-top:2px;">↓</span>');
+				$("#rank_move_"+i).append('<span style="display:inline-block;text-indent: 5px;font-size:14px;padding-top:2px;float:right;">↓</span>');
 				$("#rank_move_"+i).addClass('red');
 			}
 			if(rm=='new'){
@@ -430,9 +429,8 @@ function movePage(curPage, perPage, pri_curPage, category, search, kind, ctgNum,
 }
 .al-container{
 	width:1500px;
-	margin: 20px auto;
+	margin: 0 auto;
 	padding: 20px;
-	border: 1px solid #bcbcbc;
 	background-color: white;
 }
 .al-subcon{
@@ -1067,10 +1065,11 @@ a {
 }
 </style>
 </head>
-<body style="background-color: rgb(240,240,240)">
+<body style="background-image: url('${pageContext.servletContext.contextPath}/resources/auction-img/dot.jpg');">
+<%@ include file="../sub/header.jspf"%>
 <div class="al-container">
 	<div class="al-sideNav scroll scroll1">
-		<h2 style="line-height: 0;text-indent: 10px;text-shadow: 1px 1px 1px rgb(190,190,190);cursor: pointer;" id="go_ctg2">${ctgName1}</h2>
+		<h2 style="line-height: 0;text-indent: 10px;text-shadow: 1px 1px 1px rgb(190,190,190);cursor: pointer;fon" id="go_ctg2">${ctgName1}</h2>
 		<ul id="accordion" class="accordion">
 			<c:if test="${ctgNum1==0}">
 				<c:forEach begin="7" end="8" step="1" var="j">
@@ -1423,11 +1422,8 @@ a {
 			<div style="border:  1px solid #bcbcbc;box-shadow: 5px 5px 5px lightgray;padding-bottom: 3px;">
 			<c:forEach begin="0" end="9" step="1" var="i">
 				<div class="al-top10-rank"><span style="display: inline-block; width: 30px; font-weight: bold;color: rgba(56, 56, 56, 0.8);">${i+1}.</span>
-					<a id="rank_search_${i}" class="rank-search" style="color: black">${searchTop10[i].search}</a>
-					<span id="rank_move_${i}" style="float: right;font-size:14px">
-						<c:if test="${rankMove[i] eq 0 }">-</c:if>
-						<c:if test="${rankMove[i] ne 0 }">${rankMove[i]}</c:if>
-					</span>
+					<a id="rank_search_${i}" class="rank-search" style="color: black;">${searchTop10[i].search}</a>
+					<span id="rank_move_${i}" style="float: right;font-size:14px">${rankMove[i]}</span>
 				</div>
 			</c:forEach>
 			</div>

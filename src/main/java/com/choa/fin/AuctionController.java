@@ -153,6 +153,11 @@ public class AuctionController {
 	public void auctionPay(){
 		
 	}
+	// ============================== 검색어 카운트 ====================================
+	@RequestMapping(value="/searchCount", method=RequestMethod.POST)
+	public void searchCount(String search)throws Exception{
+		auctionService.setSearch(search);
+	}
 	// ============================== totalList- ajax ==========================================
 	@ResponseBody
 	@RequestMapping(value="/listChoice", method=RequestMethod.POST)
@@ -381,7 +386,18 @@ public class AuctionController {
 	}
 	// ============================== 글쓰기폼 ==========================================
 	@RequestMapping(value="/auctionWriteFrm", method=RequestMethod.POST)
-	public ModelAndView auctionWrite(ModelAndView mv)throws Exception{
+	public ModelAndView auctionWrite(ModelAndView mv, Model model)throws Exception{
+		// getRank
+		List<RankDTO> rank=auctionService.getRank();
+		// getSearch (searchTop10)
+		List<SearchDTO> searchTop10=auctionService.getSearch();
+		// getRankMove
+		List<Object> rankMove=auctionService.getRankMove(rank, searchTop10);
+		model.addAttribute("li",auctionService.ctgAllList());
+		model.addAttribute("searchTop10", searchTop10);
+		model.addAttribute("rankMove", rankMove);
+
+		
 		mv.addObject("kind", "Write");
 		mv.setViewName("auction/auction");
 		return mv;

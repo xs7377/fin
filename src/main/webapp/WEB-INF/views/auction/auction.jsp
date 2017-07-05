@@ -308,9 +308,9 @@
 			var reader=new FileReader();
 			reader.onload= function(e){
 				 $('#status1').append(
-						 	'<table style="float:left;" id="file_result_'+preCount+'">'+
+						 	'<table class="auctb" style="float:left;" id="file_result_'+preCount+'">'+
 			                '<tr><td style="padding: 0; padding-right: 7px;border:none;"><img id="file_img_'+preCount+'" src="'+e.target.result+'" width="100px" height="100px" style="border:1px solid #bcbcbc"></td></tr>'+
-			                '<tr><td style="text-align: center;padding: 0; padding-right: 7px;border:none;"><input type="button" value="삭제" onclick="delete_file('+preCount+')"></td></tr>'+
+			                '<tr><td style="text-align: center;padding: 0; padding-right: 7px;border:none;"><input type="button" value="삭제" style="width:50px;" onclick="delete_file('+preCount+')"></td></tr>'+
 			                '</table>'); 
 				 j++;
 				 preCount++;
@@ -344,10 +344,10 @@
 	border-collapse: collapse;
 	font-family: NanumGothic;
 }
-table{
+.auctb{
 	border-collapse: collapse;
 }
-td{
+.auctb td{
 	padding: 7px 15px;
 	border-bottom: 1px solid #d6d6d6;
 	border-top: 1px solid #d6d6d6;
@@ -371,9 +371,10 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 .a-container{
 	width: 1500px;
-	margin: 20px auto;
+	margin: 0 auto;
 	padding: 20px;
-	border: 1px solid #bcbcbc;
+	border-left: 1px solid #bcbcbc;
+	border-right: 1px solid #bcbcbc;
 	background-color: white;
 }
 .a-sideNav-title{
@@ -548,15 +549,19 @@ input[type="number"]::-webkit-inner-spin-button {
    -ms-transition: background .5s ease, color .3s;
    transition: background .5s ease, color .3s;
 }
-
+.isPri, .isReply{
+	margin-left: 10px;
+	margin-right: 10px;
+}
 </style>
 <title>Insert title here</title>
 </head>
-<body  style="background-color: rgb(240,240,240)">
+<body style="background-color: gray;">
+<%@ include file="../sub/header.jspf"%>
 <div class="a-container">
 	<div class="a-sideNav-title"> 
 			<div style="width: 200px; height: 35px;box-shadow: 5px 5px 5px lightgray;margin:0 auto;background-color: #ffe7c3;border-radius: 6px;">
-				<img alt="" src="../resources/auction-img/w.png" width="22px" height="22px" style="margin-top: 7px;position: absolute;"><span style="margin-left: 30px; display: inline-block; margin-top: 10px;font-weight: bold;">물품판매 등록 전 알아두기</span>
+				<img alt="" src="../resources/auction-img/w.png" width="22px" height="22px" style="margin-top: 7px;float: left;margin-left: 7px;"><span style="margin-left: 35px; display: inline-block;float:left; margin-top: -18px;font-weight: bold;">물품판매 등록 전 알아두기</span>
 			</div>
 	</div>
 	<div class="a-subcon-title">
@@ -581,7 +586,7 @@ input[type="number"]::-webkit-inner-spin-button {
 		<div class="a-tb-title"><i><img alt="" src="../resources/auction-img/i.png" width="22px" height="22px" style=""></i><span style="position: absolute;padding-top: 3px;text-indent: 7px;">물품정보</span></div>
 		<form action="./auction${kind}" id="wFrm" method="post">
 			<div id="hd"></div>
-			<table style="width: 1114px;">
+			<table class="auctb" style="width: 1114px;">
 				<tr>
 					<td class="a-td1 a-td-bc a-td-top">카테고리</td><td class="a-td1-con a-td-top" colspan="3">
 						<div id="ctry">
@@ -649,7 +654,7 @@ input[type="number"]::-webkit-inner-spin-button {
 		
 		
 		
-		<table style="width: 1114px;margin-bottom: 10px;">
+		<table class="auctb" style="width: 1114px;margin-bottom: 10px;">
 				<tr>
 					<td class="a-td1 a-td-bc" style="border-top: none;">섬네일</td><td class="a-td1-con" colspan="3" style="border-top: none;">
 						<form action="" enctype="multipart/form-data" method="post" id="fileForm">
@@ -661,15 +666,15 @@ input[type="number"]::-webkit-inner-spin-button {
 					<td class="a-td3 a-td-bc a-td-bot">섬네일 미리보기</td><td class="a-td3-con a-td-bot" colspan="3">
 						<div id="status1">
 							<c:forEach items="${img}" var="i">
-								<table style="float: left;"><tr><td style="padding: 0; padding-right: 7px;border: none;"><img alt="" src="../resources/upload/${i.fName}" width="100px;" height="100px;" style="border: 1px solid #bcbcbc;"></td></tr>
-								<tr><td style="text-align: center; height: 15px;padding: 0;padding-right: 7px;border: none;"><input type="button" id="${i.fName}" class="orgImg" value="삭제"></td></tr></table>
+								<table class="auctb" style="float: left;"><tr><td style="padding: 0; padding-right: 7px;border: none;"><img alt="" src="../resources/upload/${i.fName}" width="100px;" height="100px;" style="border: 1px solid #bcbcbc;"></td></tr>
+								<tr><td style="text-align: center; height: 15px;padding: 0;padding-right: 7px;border: none;"><input style="width:50px;" type="button" id="${i.fName}" class="orgImg" value="삭제"></td></tr></table>
 							</c:forEach>
 						</div>
 					</td>
 				</tr>
 		</table>
 		<div class="a-tb-title"><i><img alt="" src="../resources/auction-img/p.jpg" width="22px" height="22px" style=""></i><span style="position: absolute;padding-top: 3px;text-indent: 7px;">개인정보</span></div>
-		<table style="width: 1114px;margin-bottom: 10px;">
+		<table class="auctb" style="width: 1114px;margin-bottom: 10px;">
 			<tr>
 				<td class="a-td4 a-td-bc a-td-top">이름</td><td class="a-td4-con a-td-top"></td><td class="a-td4 a-td-bc a-td-top">연락처</td><td class="a-td4-con a-td-top"></td>
 			</tr>
@@ -679,7 +684,7 @@ input[type="number"]::-webkit-inner-spin-button {
 		</table>
 		
 		
-		<table style="width: 1114px;margin-bottom: 10px;">
+		<table class="auctb" style="width: 1114px;margin-bottom: 10px;">
 			<tr>
 				<td class="a-btn">
 					<input type="button" id="aucWBtn" value="등록하기" style="margin-right: 30px;" class="a-wBtn">

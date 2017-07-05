@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <html>
 <head>
@@ -71,7 +72,7 @@ a {
 	}
 </script>
 </head>
-<body>
+<body style="background-color: white;">
 <%@ include file="./sub/header.jspf"%>
 	<section class="home_wrap"> 
 	
