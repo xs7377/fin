@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE>
 <html>
 <head>
@@ -17,6 +18,8 @@
 	var min_price = "${auctionDTO.min_price}";
 	var akind = "${auctionDTO.kind}";
 	var like_count = "${auctionDTO.likes}";
+	var seller = "${auctionDTO.m_id}";
+	var client = "${member.id}";
 	var lastRow = 10;
 	$(function(){
 		$(document).ready(function(){
@@ -30,12 +33,15 @@
 			if(t_price!=''){
 				t_price=t_price.split(",");
 				if(akind=='buy'){
-					$(".real_tprice").html("낙찰가  "+t_price[1]);
+					$("#price_title").html("낙찰가");
+					$(".real_tprice").append(t_price[1]+"원");
 				}else{
-					$(".real_tprice").html("현재가  "+t_price[1]);
+					$("#price_title").html("현재가");
+					$(".real_tprice").append(t_price[1]+"원");
 				}
 			}else{
-				$(".real_tprice").html("현재가  "+min_price);
+				$("#price_title").html("현재가");
+				$(".real_tprice").append(+min_price+"원");
 			}
 			
 			
@@ -194,7 +200,9 @@
 		});
 		
 		$(".auction_tender_btn").click(function(){
-			if(check){
+			if(client==seller){
+				alert("본인의 물품입니다.");
+			}else if(check){
 				var num = '${auctionDTO.num}';
 				$("#modal_title").html("입찰하기")
 				$("body").css("overflow","hidden");
@@ -210,7 +218,9 @@
 		});
 		
 		$(".auction_buy_btn").click(function(){
-			if(check){
+			if(client==seller){
+				alert("본인의 물품입니다.");
+			}else if(check){
 				var num = '${auctionDTO.num}';
 				$("#modal_title").html("즉시구매")
 				$("body").css("overflow","hidden");
@@ -243,7 +253,7 @@
 			var m_id = 'xs7377';
 			var img = $(this).children("img");
 			$.ajax({
-				url:"auctionLike",
+				url:"../auctionLike",
 				type:"post",
 				data:{
 					pNum:number,
@@ -266,6 +276,7 @@
 		$('.modal').click(function () {  
 			$("#myModal").css("display","none");
 			$("body").css("overflow","auto");
+			$("#tender_modal_frame").attr("src","");
 		});
 		
 		$("body").on("focus",".reply_contents",function(){
@@ -431,19 +442,9 @@ var x = setInterval(function() {
     if (distance < 0) {
         clearInterval(x);
         var num = "${auctionDTO.num}";
-        $.ajax({
-        	url:"../auctionBid",
-        	type:"post",
-        	data:{
-        		num:num
-        	},success:function(data){
-        		if(data=='y'){
-        			$(".demo").html("경매 종료");
-			        $(".demo").css("color","#e61722");
-			        check=false;
-        		}
-        	}
-        });
+		$(".demo").html("경매 종료");
+		$(".demo").css("color","#e61722");
+		check=false;
     }
     // If the count down is over, write some text 
 
@@ -457,7 +458,12 @@ var x = setInterval(function() {
 	word-wrap: break-word;
 	word-break:break-all;
 }
-
+.text_normal{
+	font-weight: normal;
+}
+.price_text{
+	text-align: right;
+}
 #tender_modal_frame{
 	width: 100%;
 	overflow: hidden;
@@ -546,7 +552,7 @@ var x = setInterval(function() {
 }
 
 .auction_likes{
-	margin-left: 160px;
+	margin-left: 200px;
 }
 
 /* auctionView reply  */
@@ -730,6 +736,39 @@ var x = setInterval(function() {
   opacity: 0.7;
 }
 
+#seller_dropdown{
+	cursor: pointer;
+}
+
+.seller_id{
+	width: 100%;
+	font-size: 1.7em;
+	font-weight: bold;
+	margin-top: 15px;
+}
+
+.seller-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    margin-left: 70px;
+}
+
+.seller-content a {
+    color: black;
+    padding: 12px 10px;
+    text-decoration: none;
+    display: block;
+}
+
+.seller-content a:hover {background-color: #f1f1f1}
+
+#seller_dropdown:hover .seller-content {
+    display: block;
+}
 /* sell_bar End */
 
 /* tender_bar */
@@ -750,8 +789,6 @@ var x = setInterval(function() {
 }
 
 .product_text{
-	text-align: left;
-	padding-left: 15px;
 	border-bottom: 1px solid #c0c0c0;
 	padding-bottom: 15px;
 	color: #333333;
@@ -850,7 +887,10 @@ var x = setInterval(function() {
 	width: 100%;
 	margin-top: 20px;
 }
-
+#modal_title{
+	font-size: 1.3em;
+	padding-left: 20px;
+}
 #auctionView_related{
 	width: 1000px;
 	height: 400px;
@@ -872,9 +912,9 @@ var x = setInterval(function() {
 
 /* The Close Button */
 .close {
-    color: white;
+    color: #ca3038;
     float: right;
-    font-size: 28px;
+    font-size: 25px;
     font-weight: bold;
 }
 
@@ -886,16 +926,16 @@ var x = setInterval(function() {
 }
 
 .modal-header {
-    padding: 2px 16px;
-    background-color: #5cb85c;
-    color: white;
+    padding: 2px 2px;
+    color: #ca3038;
+    font-size: 1em;
 }
 
-.modal-body {padding: 2px 16px;}
+.modal-body {padding: 2px 16px;
+}
 
 .modal-footer {
-    padding: 2px 16px;
-    background-color: #5cb85c;
+	height:25px;
     color: white;
 }
 .card {
@@ -923,7 +963,6 @@ var x = setInterval(function() {
   color: black;
   text-align: center;
   cursor: pointer;
-  font-size: 18px;
 }
 
 
@@ -984,6 +1023,21 @@ var x = setInterval(function() {
 .auction_tender_btn:hover, a:hover {
   opacity: 0.7;
 }
+
+
+
+
+/* review 게시판 */
+#review_board{
+	width: 100%;
+	height: auto;
+	overflow: hidden;
+	min-height: 400px;
+	background-color: white;
+	margin: 30px auto;
+}
+
+/* review 게시판 */
 </style>
 </head>
 <body id="auctionView_body">
@@ -1001,9 +1055,9 @@ var x = setInterval(function() {
 			</div>
 			<div id="auctionView_product">
 				<div id="auction_product_info">
-					<p class="product_text"><span>시작가  </span>${auctionDTO.min_price }원</p>
-					<h3 class="product_text">즉시 구매가  ${auctionDTO.max_price }</h3>
-					<h3 class="product_text real_tprice"></h3>
+					<h3 class="product_text real_tprice"><span id="price_title" class="text_normal"></span><span style="padding-left: 110px;"></span></h3>
+					<p class="product_text"><span class="text_normal">시작가</span><span style="padding-left: 110px;">${auctionDTO.min_price }원</span></p>
+					<h3 class="product_text"><span class="text_normal">즉시 구매가</span><span style="padding-left: 50px;">${auctionDTO.max_price }원</span></h3>
 					<h2 class="product_text demo"></h2>
 					<h3 class="product_text auctionView_period"></h3>
 				</div>
@@ -1049,7 +1103,7 @@ var x = setInterval(function() {
 	
 	<div id="auctionView_related">
 	</div>
-	
+<c:if test="${auctionDTO.reply eq 'y' }">
 	<div id="auctionView_reply_wrap">
 		<div id="auction_reply_box">
 				<div class="auctionView_reply_write">
@@ -1061,16 +1115,26 @@ var x = setInterval(function() {
 				</div>
 		</div>
 	</div>
+</c:if>	
 </div>	
 <div id="auctionSeller_info">
 			<div id="auctionView_seller">
 				<div class="card">
 				  <img id="" src="${pageContext.servletContext.contextPath }/resources/upload/noImage.png" alt="John" style="width:100%; height: 200px;">
 				  <div class="seller_container">
-				    <h1>${auctionDTO.m_id }</h1>
+				  	<div id="seller_dropdown">
+					    <div class="seller_id">${auctionDTO.m_id }</div>
+					    <div class="seller-content">
+							<a href="#">Link 1</a>
+							<a href="#">Link 2</a>
+							<a href="#">Link 3</a>
+						</div>
+				  	</div>
 				   <p><button id="select_btn">판매자 물품보기</button></p>
 				  </div>
 				</div>
+				
+				<div id="review_board"></div>
 			</div>
 </div>
 
@@ -1090,7 +1154,6 @@ var x = setInterval(function() {
 
     </div>
     <div class="modal-footer">
-      <h3>Modal Footer</h3>
     </div>
   </div>
 

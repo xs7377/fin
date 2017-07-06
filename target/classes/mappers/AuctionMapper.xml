@@ -122,10 +122,11 @@
 		<update id="auctionBid" parameterType="java.lang.Integer">
 			update auction set kind='buy' where num=#{num}
 		</update>
-				<select id="auction_timer" resultType="auctionDTO">
-			select * from auction
+		<select id="auction_timer" parameterType="String" resultType="auctionDTO">
+			select * from auction where period=#{period}
 		</select>
-		<update id="auctionEnd" parameterType="auctionDTO">
-			update auction set kind=#{kind} where num=#{num}	
+		<update id="auctionEnd" parameterType="map">
+			{ call auction_end(#{auction.num, mode=IN},#{kind, mode=IN}) }
 		</update>
+
     </mapper>

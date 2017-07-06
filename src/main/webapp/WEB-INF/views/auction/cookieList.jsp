@@ -114,12 +114,39 @@
 	background-color: black;
 	color: white;
 }
+
+#list_wrap #cookie_box {
+    position: absolute;
+    transition: 0.3s;
+    left:-600px;
+    width: 600px;
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+    border-radius: 0 5px 5px 0;
+    height: auto;
+    overflow: hidden;
+    background-color: gray;
+   	padding: 20px 0;
+   	padding-right: 50px;
+}
+
+#list_wrap #cookie_box:hover {
+    left: 0;
+}
+
+#list_wrap {
+    top: 20px;
+    background-color: #4CAF50;
+    float:right;
+}
+
 </style>
 </head>
 <body>
 <div id="list_wrap">
+<div id="cookie_box">
 <c:if test="${count>0}">
-<div>
 <div class="card_wrap">
 <c:forEach var="j" begin="0" end="${list.size()-1 }" step="1">
 		<div id="pNum_${list[(count-1)-j].num }" class="list_select_btn">
@@ -135,7 +162,6 @@
 		  </div>
 		</div>
 </c:forEach>
-</div>
 </div>
 <div id="listBtn_wrap">
 <a id="list_prev" class="card_prev">&#10094;</a>
@@ -156,7 +182,6 @@
 		$(".list_select_btn").click(function(){
 			var num = $(this).attr("id");
 			num = num.split("_");
-			alert(num);
 			location.href = "${pageContext.servletContext.contextPath }/auction/auctionView/"+num[1];
 		});
 		
@@ -175,7 +200,6 @@
 			}else{
 				curPage=1;
 			}
-			alert(curPage);
 			list_list(category,curPage,number);
 		});
 		function list_list(p){
@@ -195,6 +219,7 @@
 <c:if test="${count==0 || count eq null }">
 	<div><img alt="" src="${pageContext.servletContext.contextPath }/resources/imgs/nolist.png" style="padding-left:9%; width:90%; height: 100%; border-radius: 10px;"> </div>
 </c:if>
+</div>
 </div>
 </body>
 </html>

@@ -7,16 +7,15 @@
 <title>Insert title here</title>
 <style type="text/css">
 footer {
-	height: 300px;
-	margin-top: 60px;
 	border-top: 1px dotted #a6a6a6;
 }
 
 .footer_wrap{
 	width: 1300px;
-	height: 220px;
 	margin: 0 auto;
 	padding-top: 20px;
+	padding-bottom: 20px;
+	height: 180px;
 }
 
 .info{
@@ -54,6 +53,7 @@ footer {
 
 
 <footer>
+	<div style="">
 	<div class="footer_wrap">
 		<div class="info">
 			<p>주식회사 트레이드마크 | 사업자 등록번호: 123-456-7890 | 대표자: 트레이드마크</p>
@@ -69,7 +69,7 @@ footer {
 	<p id="ph">010-1234-5678</p>
 	<p class="info_2_inner">카카오톡ID: <span id="kkiri">TRADEMARK</span></p>
 	</div>
-
+	</div>
 	</div>
 </footer>
 

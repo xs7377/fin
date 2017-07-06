@@ -9,17 +9,19 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
 <script type="text/javascript">
 	$(function(){
-		var cliend_id = "";
-		var tender_price = "${tender_info.buyer}";
-		var min_price = "${tender_info.min_price}";
-		var max_price = '${tender_info.max_price}';
-		var period = '${tender_info.period}';
+		var client_id ="";
+		var seller_id = "${auction_info.m_id}";
+		var tender_price = "${auction_info.buyer}";
+		var min_price = "${auction_info.min_price}";
+		var max_price = '${auction_info.max_price}';
+		var period = '${auction_info.period}';
 		var kind = "${kind}";
+		var num = "${auction_info.num}";
 		$(document).ready(function(){
 			var date = period.split(",");
-			$(".tender_date").html(date[0]+" "+date[1]);
+			$("#timeEnd").html(date[0]+" "+date[1]);
 			tender_price = tender_price.split(",");
-			cliend_id = tender_price[0];
+			client_id = tender_price[0];
 			min_price = min_price*1;
 			max_price = max_price*1;
 			if(tender_price!=''){
@@ -36,7 +38,7 @@
 			var check_pri=true;
 			var m_id = "xs7377";
 			var check_id=true;
-			var form = $("#auction_tender").serialize();
+			var text = "";
 			var price = $("#tender_price").val();
 			if(tender_price!=''){
 				min_price = tender_price[1]*1+500;
@@ -44,33 +46,38 @@
 			if(price%500>0){
 				check_pri=false;
 				alert("금액의 최소단위는 500원입니다.");
-			}else if(price==''){
+			}else if(price=='' && kind!="buy"){
 				check_pri=false;
 				alert("가격을 입력해주세요.");
 			}
 			
 			
-			if(cliend_id==m_id){
+			if(client_id==m_id){
 				check_id = false;
+				text = "중복입찰을 할 수 없습니다.";
+			}else if(seller_id==m_id){
+				check_id = false;
+				text = "경매에 참여할 수 없습니다.";
 			}
 			
-			if(check_pri && price<min_price || price>=max_price){
+			if(check_pri && kind!="buy" && price<min_price || price>=max_price){
 				check_pri=false;
 				alert("금액을 다시 입력해주세요.");
 			}
 			if(kind=="buy"){
-				alert(kind);
 				parent.$("#tender_modal_frame").css("height","650px");
 				parent.$(".modal-content").css("width","750px");
-				parent.$(".modal").css("padding-top","0");
-				location.href="${pageContext.servletContext.contextPath }/auction/auctionPay";	
+				parent.$(".modal").css("padding-top","50px");
+				location.replace("${pageContext.servletContext.contextPath }/auction/auctionPay/"+num);	
 			}else if(check_id){
 				if(check_pri){
 					$.ajax({
-						url:"./auction_tender",
+						url:"${pageContext.servletContext.contextPath }/auction/auction_tender",
 						type:"post",
-						data:form,
-						success:function(data){
+						data:{
+							price:price,
+							num:num
+						},success:function(data){
 							if(data=='1'){
 								if(kind=='buy'){
 									parent.location.reload();
@@ -92,7 +99,7 @@
 				}
 			}else{
 				if(kind=="tender" && check_pri){
-					alert("중복입찰은 할 수 없습니다.")
+					alert(text);
 					$('#myModal', parent.document).trigger("click");
 				}
 			}
@@ -102,7 +109,8 @@
 </script>
 <style type="text/css">
 	.tender_wrap{
-		width: 900px;
+		width: 850px;
+		margin: 0 auto;
 	}
 	#tender_price{
 		width: 150px;
@@ -118,16 +126,24 @@
     margin: 0;
 }
 #tender_table{
-	width: 900px;
+	width: 850px;
 }
 .tender_price_info{
 	font-size: 0.8em;
 	margin-left: 25px;
 }
-.tender_title{
-	width: 200px;
+#tender_thead>td{
+	border-bottom: 1px solid #ca3038;
+	border-top: 1px solid #ca3038;
 }
 
+#tender_thead{
+	font-size: 0.8em;
+	text-align: center;
+	font-weight: bolder;
+	color: #ca3038;
+	height: 25px;
+}
 #tender_btn {
   border: none;
   border-radius: 5px;
@@ -135,7 +151,7 @@
   display: inline-block;
   padding: 5px;
   color: white;
-  background-color:  #ca3038;
+  background-color: #ca3038;
   text-align: center;
   cursor: pointer;
   width: 100%;
@@ -157,56 +173,94 @@
 #tender_btn:hover, a:hover {
   opacity: 0.7;
 }
+
+.product_it{
+	width: 250px;
+}
+.coupon{
+	width: 80px;
+	text-align: center;
+}
+.price{
+	width: 80px;
+	text-align: center;
+}
+.seller{
+	width: 70px;
+	text-align: center;
+}
+.time{
+	width: 100px;	
+	text-align: center;
+}
+.tender_title{
+	font-size: 18px;
+	font-family: sans-serif;
+	color: #ca3038;
+}
+
+.product_title{
+	display: inline-block;
+	width: 150px;
+	height: 35px;
+	white-space:nowrap; 
+	overflow:hidden;
+	text-overflow: ellipsis;
+	margin-bottom: 40px;
+	color: #ca3038;
+}
 	
 </style>
 </head>
 <body>
 <form id="auction_tender">
-<c:if test="${kind eq 'tender' }">
 <div class="tender_wrap">
 	<table id="tender_table">
-			<tr>
-				<td class="tender_title">물품</td>
-				<td class="tender_title">마감시간</td>
-				<td class="tender_title">현재가</td>
-				<td class="tender_title">최대 입찰가</td>
-			</tr>
-			<tr>
-				<td class="info_text" style="display: inline-block;">${tender_info.title }</td>
-				<td class="tender_date info_text"></td>
-				<td id="n_price" class="info_text">${tender_info.max_price-1000 }</td>
-				<td>${tender_info.max_price-1000 }</td>
-			</tr>
-	</table>
-<%-- 	<p class="tender_title">물 품</p>
-	<p class="info_text">${tender_info.title }</p>
-	<p class="tender_title">경매 마감 </p>
-	<p class="demo"></p>
-	<p class="tender_date info_text"></p>
-	<p class="tender_title">현재가</p>
-	<p id="n_price" class="info_text">${tender_info.max_price-1000 }</p>
-	<p class="tender_title">최대 입찰가</p>
-	<p class="info_text">${tender_info.max_price-1000 }</p> --%>
-	<input type="hidden" value="xs7377" name="id">
-	<input type="hidden" value="${tender_info.num }" name="num">
+			<thead>
+				<tr id="tender_thead">
+					<td class="product_it">물품 정보</td>
+					<td class="price">즉시 구매가</td>
+					<td class="price">현재입찰가</td>
+					<td class="seller">판매자</td>
+					<td class="time">마감시간</td>
+				</tr>
+			</thead>
+			<tbody id="product_tbody">
+				<tr style="height: 50px;">
+					<td class="product_it">
+						<div style="vertical-align: middle;">
+							<img alt="상품" src="${pageContext.servletContext.contextPath }/resources/upload/${imgs[0].fName}" style="width: 70px; height: 70px; padding: 5px 5px;">
+							<span class="product_title">${auction_info.title}</span>
+						</div>
+					</td>
+					<td class="price tender_title">
+						${auction_info.max_price}
+					</td>
+					<td id="n_price" class="price tender_title">
+					</td>
+					<td class="seller tender_title tender_title">
+						${auction_info.m_id }
+					</td>
+					<td id="timeEnd" class="time tender_title">
+					</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td style="border-top:1px solid #ca3038; height: 20px;" colspan="6"></td>
+				</tr>
+			</tfoot>
+		</table>
+<c:if test="${kind eq 'tender' }">
 	<p class="tender_title">입찰가</p>
 	<p><input id="tender_price" name="price" type="number" max="${tender_info.max_price-1000 }"><span class="tender_price_info"></span></p>
 	<input type="button" id="tender_btn" value="입찰하기">
-</div>
 </c:if>
-<c:if test="${kind eq 'buy' }">
-<div class="tender_wrap">
-	<p class="tender_title">물 품</p>
-	<p class="info_text">${tender_info.title }</p>
-	<p class="tender_title">경매 마감</p>
-	<p class="tender_date info_text"></p>
-	<p class="tender_title">즉시 구매가</p>
-	<p class="info_text">${tender_info.max_price }</p>
-	<input type="hidden" value="${tender_info.num }" name="num">
-	<input type="hidden" value="xs7377" name="id">
-	<p><input type="hidden" name="price" value="${tender_info.max_price }"></p>
-	<input type="button" id="tender_btn" value="구매">
 </div>
+<c:if test="${kind eq 'buy' }">
+	<p class="info_text">${tender_info.max_price }</p>
+	<p><input id="tender_price" type="hidden" name="price" value="${tender_info.max_price }"></p>
+	<input type="button" id="tender_btn" value="구매" style="margin-top: 50px;">
 </c:if>
 </form>
 </body>

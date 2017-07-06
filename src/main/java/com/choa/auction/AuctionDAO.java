@@ -224,14 +224,16 @@ public class AuctionDAO {
 	public AuctionDTO tenderInfo(int num) throws Exception{
 		return sqlSession.selectOne(NAME_SPACE+"tender_info", num);
 	}
-	public int auctionTender(int num, String buyer, int t_price){
+	public int auctionTender(int num, String buyer, int t_price, String addr){
 		Map<String, Object> map = new HashMap<String, Object>();
 		Calendar cal = Calendar.getInstance();
-		String period = cal.get(cal.YEAR)+"-"+(cal.get(cal.MONTH)+1)+"-"+cal.get(cal.DAY_OF_MONTH)+","+cal.get(cal.HOUR_OF_DAY)+":"+cal.get(cal.MINUTE);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d,HH:mm");
+		String period = sdf.format(cal.getTime());
 		map.put("num", num);
 		map.put("buyer", buyer);
 		map.put("period", period);
 		map.put("t_price", t_price);
+		map.put("addr", addr);
 		sqlSession.update(NAME_SPACE+"tender", map);
 		
 		return (Integer)map.get("result");
@@ -336,17 +338,19 @@ public class AuctionDAO {
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d,HH:mm");
 		String period = sdf.format(cal.getTime());
-		List<AuctionDTO> ar = sqlSession.selectList(NAME_SPACE+"auction_timer");
+		System.out.println(period);
+		List<AuctionDTO> ar = sqlSession.selectList(NAME_SPACE+"auction_timer", period);
 		if(!ar.isEmpty()){
 			for (AuctionDTO auctionDTO : ar) {
-				if(auctionDTO.getPeriod().equals(period)){
-					if(auctionDTO.getBuyer()==null){
-						auctionDTO.setKind("cancel");
-						sqlSession.update(NAME_SPACE+"auctionEnd", auctionDTO);
-					}else{
-						auctionDTO.setKind("buy");
-						sqlSession.update(NAME_SPACE+"auctionEnd", auctionDTO);
-					}
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("auction", auctionDTO);
+				System.out.println(auctionDTO.getBuyer());
+				if(auctionDTO.getBuyer()==null){
+					map.put("kind", "취소");
+					sqlSession.update(NAME_SPACE+"auctionEnd", map);
+				}else{
+					map.put("kind", "구매");
+					sqlSession.update(NAME_SPACE+"auctionEnd", map);
 				}
 			}
 		}

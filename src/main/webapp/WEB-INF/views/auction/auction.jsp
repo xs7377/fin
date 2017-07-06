@@ -371,10 +371,9 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 .a-container{
 	width: 1500px;
-	margin: 0 auto;
+	margin: 20px auto;
 	padding: 20px;
-	border-left: 1px solid #bcbcbc;
-	border-right: 1px solid #bcbcbc;
+	border: 1px solid #216ed7;
 	background-color: white;
 }
 .a-sideNav-title{
@@ -702,6 +701,7 @@ input[type="number"]::-webkit-inner-spin-button {
 	</form>
 </div>
 
+<%@ include file="../sub/footer.jspf"%>
 </body>
 
 </html>

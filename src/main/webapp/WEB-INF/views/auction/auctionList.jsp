@@ -9,6 +9,17 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
 $(function() {
+	// =======================================view 페이지 링크 & hover=======================
+		$(".go-view").on("click",function(){
+			var getViewNum=$(this).attr('id');
+			getViewNum=getViewNum.substring(getViewNum.lastIndexOf("_")+1);
+			location.href="${pageContext.servletContext.contextPath}/auction/auctionView/"+getViewNum;
+		});
+		$(".go-view").hover(function(){
+			$(this).addClass('go-view-change');
+		},function(){
+			$(this).removeClass('go-view-change');	
+		});
 	// =======================================hover 밑줄처리================================
 		$(".rank-search").hover(function(){
 			$(this).addClass('udl');
@@ -429,9 +440,12 @@ function movePage(curPage, perPage, pri_curPage, category, search, kind, ctgNum,
 }
 .al-container{
 	width:1500px;
-	margin: 0 auto;
+	margin: 20px auto 0 auto;
 	padding: 20px;
 	background-color: white;
+	border-top: 2px solid #e4e4e4;
+	border-left: 2px solid #e4e4e4;
+	border-right: 2px solid #e4e4e4;
 }
 .al-subcon{
 	float: right;
@@ -795,7 +809,7 @@ a {
 .al-top3-title{
 	width: 155px;
 	height:40px;
-	padding-top:6px;
+	padding-top:10px;
 	text-align: center;
 	box-shadow: 3px 3px 3px lightgray;
 	font-weight: bold;
@@ -810,7 +824,7 @@ a {
 .al-top10-title{
 	width: 155px;
 	height:40px;
-	padding-top:6px;
+	padding-top:10px;
 	text-align: center;
 	box-shadow: 3px 3px 3px lightgray;
 	font-weight: bold;
@@ -878,7 +892,7 @@ a {
 	float:right;
 	width: 80px;
 	height:47px;
-	padding-top:18px;
+	padding-top:16px;
 }
 .al-how-img{
 	text-align:center;
@@ -1062,6 +1076,16 @@ a {
 }
 .cpt{
 	cursor: pointer;
+}
+.go-view{
+	cursor: pointer;
+}
+.go-view-change{
+	text-decoration: underline;
+	font-weight: bold;
+}
+.clk{
+	text-decoration: none;
 }
 </style>
 </head>
@@ -1304,7 +1328,7 @@ a {
 				<option value="id">아이디</option>
 			</select>
 			
-			<input type="button" value="검색" id="aSBtn" style="margin-left: 72px;">
+			<input type="button" value="검색" id="aSBtn" style="margin-left: 72px;height: 25px;">
 			</div>
 		</fieldset>
 		<div class="al-callCenter">call-center</div>
@@ -1315,9 +1339,11 @@ a {
 			<c:if test="${likeTop3.size() eq 0 }">
 			<div class="al-w1">
 				<c:forEach begin="0" end="2" step="1" var="i">
+				<div class="top3-hover">
 				<div class="al-top3-rank al-mt fc${i+1}">${i+1}.</div>
 				<div class="al-top3-img al-mt"><img alt="" src='../resources/auction-img/no.png'width="100%" height="100%"></div>
 				<div class="al-top3-contents al-mt back${i+1}"></div>
+				</div>
 				</c:forEach>
 			</div>
 			</c:if>
@@ -1327,7 +1353,7 @@ a {
 				<input type="hidden" class="likeTop3_aucNum" id="likeTop3_aucNum_${likeTop3[i].num}" value="${likeTop3[i].num}">
 				<div class="al-top3-rank al-mt fc${i+1}">${i+1}.</div>
 				<div class="al-top3-img al-mt" id="likeTop3_img_${i}"></div>
-				<div class="al-top3-contents al-mt back${i+1}">${likeTop3[i].title}</div>
+				<div class="al-top3-contents al-mt back${i+1} go-view" id="go_view_${likeTop3[i].num}">${likeTop3[i].title}</div>
 			</c:forEach>
 				<div class="al-top3-rank al-mt fc2">2.</div>
 				<div class="al-top3-img al-mt"><img alt="" src='../resources/auction-img/no.png'width="100%" height="100%"></div>
@@ -1343,11 +1369,10 @@ a {
 				<input type="hidden" class="likeTop3_aucNum" id="likeTop3_aucNum_${likeTop3[i].num}" value="${likeTop3[i].num}">
 				<div class="al-top3-rank al-mt fc${i}">${i+1}.</div>
 				<div class="al-top3-img al-mt" id="likeTop3_img_${i}"></div>
-				<div class="al-top3-contents al-mt back${i+1}">${likeTop3[i].title}</div>
+				<div class="al-top3-contents al-mt back${i+1} go-view" id="go_view_${likeTop3[i].num}">${likeTop3[i].title}</div>
 			</c:forEach>
-				<div class="al-top3-contents al-mt">test</div>
-				<div class="al-top3-rank al-mt fc3">3</div>
-				<div class="al-top3-img al-mt"></div>
+				<div class="al-top3-rank al-mt fc3">3.</div>
+				<div class="al-top3-img al-mt"><img alt="" src='../resources/auction-img/no.png'width="100%" height="100%"></div>
 				<div class="al-top3-contents al-mt">test</div>
 			</div>
 			</c:if>
@@ -1357,7 +1382,7 @@ a {
 				<input type="hidden" class="likeTop3_aucNum" id="likeTop3_aucNum_${likeTop3[i].num}" value="${likeTop3[i].num}">
 				<div class="al-top3-rank al-mt fc${i+1}">${i+1}.</div>
 				<div class="al-top3-img al-mt" id="likeTop3_img_${i}"></div>
-				<div class="al-top3-contents al-mt back${i+1}">${likeTop3[i].title}</div>
+				<div class="al-top3-contents al-mt back${i+1} go-view" id="go_view_${likeTop3[i].num}">${likeTop3[i].title}</div>
 			</c:forEach>
 			</div>
 			</c:if>
@@ -1454,7 +1479,7 @@ a {
 			<div id="al_pri_wrap_album">
 			<div class="al-subcon">
 			<c:forEach begin="0" end="${pri_aucList.size()-1}" step="1" var="i">
-				<div class="al-nor${i+1} clk">
+				<div class="al-nor${i+1} clk go-view" id="go_view_${pri_aucList[i].num}">
 					<input type="hidden" class="pri_aucNum" id="pri_aucNum_${pri_aucList[i].num}" value="${pri_aucList[i].num}">
 					<div class="al-img" id="al_pri_img_${i}"></div>
 					<div class="al-title">${pri_aucList[i].title}</div>
@@ -1478,7 +1503,7 @@ a {
 					<div class="al-list-seller-index al-index-font">판매자</div>
 				</div>
 			<c:forEach begin="0" end="${pri_aucList.size()-1}" step="1" var="i">
-				<div class="al-list-wrap">
+				<div class="al-list-wrap go-view" id="go_view_${pri_aucList[i].num}">
 					<input type="hidden" class="pri_aucNum_list" id="pri_aucNum_list_${pri_aucList[i].num}" value="${pri_aucList[i].num}">
 					<div class="al-list-img cpt" id="al_pri_img_list_${i}"></div>
 					<div class="al-list-title al-font"><span class="cpt">${pri_aucList[i].title}</span></div>
@@ -1519,7 +1544,7 @@ a {
 			<div id="al_nor_wrap_album">
 			<c:forEach begin="0" end="${aucList.size()-1}" step="1" var="i">
 				<c:if test="${i%4 eq 0}">
-					<div class="al-nor5 clk">
+					<div class="al-nor5 clk go-view" id="go_view_${aucList[i].num}">
 						<input type="hidden" class="nor_aucNum" id="nor_aucNum_${aucList[i].num}" value="${aucList[i].num}">
 						<div class="al-img" id="al_nor_img_${i}"></div>
 						<div class="al-title">${aucList[i].title}</div>
@@ -1531,7 +1556,7 @@ a {
 						</div>
 				</c:if>
 				<c:if test="${i%4 ne 0}">
-					<div class="al-nor6 clk">
+					<div class="al-nor6 clk go-view" id="go_view_${aucList[i].num}">
 						<input type="hidden" class="nor_aucNum" id="nor_aucNum_${aucList[i].num}" value="${aucList[i].num}">
 						<div class="al-img" id="al_nor_img_${i}"></div>
 						<div class="al-title">${aucList[i].title}</div>
@@ -1555,7 +1580,7 @@ a {
 					<div class="al-list-seller-index al-index-font">판매자</div>
 				</div>
 			<c:forEach begin="0" end="${aucList.size()-1}" step="1" var="i">
-				<div class="al-list-wrap">
+				<div class="al-list-wrap go-view" id="go_view_${aucList[i].num}">
 					<input type="hidden" class="nor_aucNum_list" id="nor_aucNum_list_${aucList[i].num}" value="${aucList[i].num}">
 					<div class="al-list-img cpt" id="al_nor_img_list_${i}"></div>
 					<div class="al-list-title al-font"><span class="cpt">${aucList[i].title}</span></div>
@@ -1589,5 +1614,6 @@ a {
 	
 	<div class="al-footer"></div>
 </div>
+<%@ include file="../sub/footer.jspf"%>
 </body>
 </html>

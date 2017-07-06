@@ -75,8 +75,14 @@ public class AuctionController {
 	
 	@RequestMapping(value="auction_tender", method=RequestMethod.POST)
 	@ResponseBody
-	public int auction_tender(int num, int price, String id){
-		return auctionService.tender(num, id, price);
+	public int auction_tender(int num, int price, String addr){
+		String id="xs7377";
+		System.out.println(addr);
+		if(addr=="" || addr==null){
+			addr="no";
+		}
+		System.out.println(addr);
+		return auctionService.tender(num, id, price,addr);
 		
 	}
 	
@@ -140,18 +146,20 @@ public class AuctionController {
 		}
 		return modelAndView;
 	}
-	
-	@RequestMapping(value="auctionBid")
-	@ResponseBody
-	public String auctionBid(int num) throws Exception{
-		auctionService.auctionBid(num);
-		return "y";
+	@RequestMapping(value="auctionPay/{num}")
+	public ModelAndView auctionPay(@PathVariable(value="num") int num, ModelAndView model) throws Exception{
+		Map<String, Object> map = auctionService.view(num);
+		model.setViewName("auction/auctionPay");
+		model.addObject("auction", map.get("auctionDTO")).addObject("imgs", map.get("imgList"));
+		return model;
 	}
 	
-	
-	@RequestMapping(value="auctionPay")
-	public void auctionPay(){
-		
+	@RequestMapping(value="auctionPayment/{num}")
+	public ModelAndView auctionPayment(@PathVariable(value="num")int num, String addr, ModelAndView mv) throws Exception{
+		Map<String, Object> map = auctionService.view(num);
+		mv.setViewName("/test");
+		mv.addObject("auction", map.get("auctionDTO"));
+		return mv;
 	}
 	// ============================== 검색어 카운트 ====================================
 	@RequestMapping(value="/searchCount", method=RequestMethod.POST)
@@ -353,7 +361,7 @@ public class AuctionController {
 	// ============================== 수정조회 ==========================================
 	@RequestMapping(value="/auctionMod", method=RequestMethod.POST)
 	public ModelAndView auctionModForm(ModelAndView mv, int num)throws Exception{
-		System.out.println("넘어온 글번호 : "+num);
+		System.out.println("수정할 글번호 : "+num);
 		mv.addObject("kind", "ModProcess");
 		mv.setViewName("auction/auction");
 		Map<String, Object> map=auctionService.view(num);
@@ -370,19 +378,9 @@ public class AuctionController {
 		return "redirect:/";
 	}
 	// ============================== 테스트 ==========================================
-	@RequestMapping(value="/test1",method=RequestMethod.GET)
-	public void test1(Model model)throws Exception{
-		List<SearchDTO> search=auctionService.getSearch();
-		model.addAttribute("search",search);
-	}
-	@RequestMapping(value="/test2",method=RequestMethod.GET)
-	public void test2()throws Exception{
-	}
-	@RequestMapping(value="/test3",method=RequestMethod.GET)
-	public void test3()throws Exception{
-	}
-	@RequestMapping(value="/test4",method=RequestMethod.GET)
-	public void test4()throws Exception{
+	@RequestMapping(value="/test1",method=RequestMethod.GET)	
+	public void test(){
+		
 	}
 	// ============================== 글쓰기폼 ==========================================
 	@RequestMapping(value="/auctionWriteFrm", method=RequestMethod.POST)

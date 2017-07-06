@@ -140,8 +140,8 @@ public class AuctionService {
 		return auctionDAO.tenderInfo(num);
 	}
 	
-	public int tender(int num, String id, int t_price){
-		return auctionDAO.auctionTender(num, id, t_price);
+	public int tender(int num, String id, int t_price,String addr){
+		return auctionDAO.auctionTender(num, id, t_price,addr);
 	}
 	
 	public List<UploadDTO> auctionImage(UploadDTO uploadDTO) throws Exception{

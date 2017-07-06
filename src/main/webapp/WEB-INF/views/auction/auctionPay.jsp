@@ -1,17 +1,123 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<script type="text/javascript"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+	var price = "${auction.max_price}";
+	$(function(){
+		var modal = this;
+		var hash = modal.id;
+		window.location.hash = hash;
+		var num = "${auction.num}";
+		var price = "${auction.max_price}"*1;
+		var address = "${member.addr}";
+		$(document).ready(function(){
+			var add = $(".address_mode[value='basic']");
+			price_check();
+			$(add).trigger('click');
+			
+			
+		});
+		$(".address_mode").click(function(){
+			var val = $(this).val();
+			if(val=="basic"){
+				var address = addr.split(",");
+				$("#sample6_postcode").val(address[0]); // 우편번호
+				$("#sample6_address").val(address[1]); // 주소
+				$("#sample6_address2").val(address[2]); // 상세주소
+			}
+		});
+		
+		$("body").on("change","#sel_coupon",function(){
+			var coupon = $(this).val();
+			coupon = coupon.split(",");
+			if(coupon[1]=="포인트"){
+				$("#coupon_info").html(coupon[0]);
+			}else if(coupon[1]=='퍼센트'){
+				coupon = coupon[0]*1;
+				var discount = price * (0.01*coupon);
+				$("#coupon_info").html(discount);
+			}else{
+				$("#coupon_info").html(0);
+			}
+			price_check();
+		});
+		
+		$("#point_info").change(function(){
+			var point = $(this).val()*1;
+			var real = $("#real_point").val();
+			if(real<point){
+				$(this).val(0);
+				alert("포인트가 부족합니다.");
+			}else{
+				if(point>500){
+					price_check();
+				}else{
+					$(this).val(0);
+					alert("포인트를 다시 입력해주세요.");
+				}
+			}
+		});
+		
+		$("#card_label").click(function(){
+			var btn = $(this).find("img");
+			var phone = $("#phone_label").find("img");
+			$(btn).attr("src","${pageContext.servletContext.contextPath }/resources/imgs/card_click.png");
+			$(btn).css("background-color","#ffdb43");
+			$(phone).attr("src","${pageContext.servletContext.contextPath }/resources/imgs/phone.png");
+			$(phone).css("background-color","white");
+		});
+		
+		$("#phone_label").click(function(){
+			var btn = $(this).find("img");
+			var card = $("#card_label").find("img");
+			$(btn).attr("src","${pageContext.servletContext.contextPath }/resources/imgs/phone_click.png");
+			$(btn).css("background-color","#52bb02");
+			$(card).attr("src","${pageContext.servletContext.contextPath }/resources/imgs/card.png");
+			$(card).css("background-color","white");
+		});
+		
+		$(".pay_button").click(function(){
+			var check_addr = true;
+			var addr1 = $("#sample6_address").val(); // 주소
+			var addr2 = $("#sample6_address2").val(); // 상세주소
+			var postcode = $("#sample6_postcode").val(); // 우편번호
+			if(addr1=='' || addr2=='' || postcode ==''){
+				check_addr=false;
+			}
+			if(check_addr){
+				window.open("${pageContext.servletContext.contextPath }/auction/auctionPayment/"+num,"결제하기","width=690px; height=550px;");
+			}else{
+				alert("주소를 입력해주세요.");
+			}
+		});
+		
+		function price_check(){
+			var coupon = $("#coupon_info").text();
+			var point = $("#point_info").val();
+			coupon = coupon*1+point*1;
+			alert(coupon);
+			var pay_price = price+2500-(coupon);
+			$("#pay_price").html(pay_price+"원");
+			$("#price_pay").html(pay_price+"원");
+			point = pay_price*0.02;
+			$(".pay_point").html(point);
+		}
+		
+		
+		
+		
+	});
+</script>
 <style type="text/css">
 
 #auctionPay_wrap{
 	width: 700px;
 	height: 600px;
-	border: 1px solid silver;
 }
 .product_table{
 	width: 100%;
@@ -21,11 +127,11 @@
 
 /* 물품 정보 */
 #product_thead>td{
-	border: 1px solid silver;
-	background-color: silver;
 	text-align: center;
 	font-size: 0.8em;
-	color: white;
+	color: #1e90ff;
+	border-bottom: 1px solid #1E90FF;
+	border-top: 1px solid #1E90FF;
 }
 
 .product_it{
@@ -33,50 +139,174 @@
 }
 .coupon{
 	width: 100px;
+	text-align: center;
 }
 .price{
 	width: 100px;
+	text-align: center;
 }
 .seller{
 	width: 100px;
+	text-align: center;
 }
 .tran{
 	width: 80px;	
+	text-align: center;
 }
 
-#product_tbody{
-	border-bottom: 1px solid silver;
-}
 #product_thead{
 	width: 100%;
 	height: 25px;
-	border: 1px solid silver;
+}
+.product_title{
+	display: inline-block;
+	width: 200px;
+	height: 35px;
+	white-space:nowrap; 
+	overflow:hidden;
+	text-overflow: ellipsis;
+	margin-bottom: 40px;
 }
 /* 물품 정보 */
 
 /* 가격 정보 */
 
 #product_price{
-	width: 90%;
 	height: 100px;
 	margin: 20px auto;
-	border-bottom: 1px solid black;
-	border-top: 1px solid black;
+	border-bottom: 1px solid #1E90FF;
+	border-top: 1px solid #1E90FF;
 }
 .price_table{
 	width: 100%;
 	height: auto;
 	overflow: hidden;
 	text-align: center;
-	
+	margin-top: 15px;
 }
 .point{
-	width: 100px;
+	width: 170px;
+	text-align: center;
+}
+
+.point_text{
+	font-size: 0.8em;
+	margin-top: 3px;
+	float: left;
+}
+
+#point_info::-webkit-outer-spin-button,
+#point_info::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 /* 가격 정보 */
 
 
+
+/* 주소 정보 */
+#address_info{	
+	width: 100%;
+	height: 150px;
+	float: left;
+	border-bottom: 1px solid #1E90FF;
+	border-top: 1px solid #1E90FF;
+	padding-bottom: 20px;
+}
+#address_input{
+	width: 100%;
+	margin-left: 20px;
+}
+#address_box{
+	width: 200px;
+	font-size: 0.8em;
+	top: 0;
+	margin-bottom: 20px;
+}
+/* 주소 정보 */
+
+/* 결제정보 */
+#pay_info{
+	width: 100%;
+	float: left;
+}
+#payment_mode{
+	width: 100%;
+	height: 80px;
+	float: left;
+	margin: 20px 20px;
+}
+
+
+#payment_btn_wrap{
+	width: 100%;
+	height: 300px;
+	float: left;
+	margin-left: 10px;
+	
+}
+
+.label{
+    cursor: pointer;
+}
+
+/* 결제정보 */
+
+
+/* 결제하기 */
+.pay_button {
+  border-radius: 4px;
+  background-color: #1E90FF;
+  border: none;
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 28px;
+  padding: 20px;
+  width: 200px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+  margin-top: 50px;
+}
+#price_pay{
+  border-radius: 4px;
+  border: none;
+  color: #ca3038;
+  text-align: center;
+  font-size: 25px;
+  font-weight:bolder;
+  padding: 20px 0;
+  transition: all 0.5s;
+  margin: 5px;
+  width: 200px;
+  height: 25px;
+  
+}
+.pay_button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.pay_button span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.pay_button:hover span {
+  padding-right: 25px;
+}
+
+.pay_button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
 </style>
 </head>
 <body>
@@ -94,63 +324,112 @@
 				</tr>
 			</thead>
 			<tbody id="product_tbody">
-				<tr>
-					<td>
-						<div>
-							<img alt="상품" src="" style="width: 70px; height: 70px; padding: 5px 5px;">
-							<span>물품명</span>
+				<tr style="height: 50px;">
+					<td class="product_it">
+						<div style="vertical-align: middle;">
+							<img alt="상품" src="${pageContext.servletContext.contextPath }/resources/upload/${imgs[0].fName}" style="width: 70px; height: 70px; padding: 5px 5px;">
+							<span class="product_title">${auction.title}</span>
 						</div>
 					</td>
-					<td>
-						<select style="width: 100%; height: 30px;">
-							<option>My Coupon</option>
+					<td class="coupon">
+						<select id="sel_coupon" style="width: 100%; height: 20px; font-size: 0.8em;">
+							<option value="no">Coupon</option>
+							<option value="5,퍼센트">5%</option>
 						</select>
 					</td>
-					<td>
-
+					<td class="price">
+						${auction.max_price}원
 					</td>
-					<td>
-						판매자 ID
+					<td class="seller">
+						${auction.m_id }
 					</td>
-					<td>
+					<td class="tran">
 						2500원
 					</td>
 				</tr>
 			</tbody>
+			<tfoot>
+				<tr>
+					<td style="border-top:1px solid #1e90ff;" colspan="6"></td>
+				</tr>
+			</tfoot>
 		</table>
 		<div id="product_price">
 			<table class="price_table">
 				<tr>
-					<td class="price"><h4>상품금액</h4></td>
-					<td class="tran"><h4>배송비</h4></td>
-					<td class="coupon"><h4>할인</h4></td>
-					<td class="point"><h4>포인트</h4></td>
-					<td class="payment"><h4>결제금액</h4></td>
+					<td class="price"><span>상품금액</span></td>
+					<td rowspan="2"><img alt="" src="${pageContext.servletContext.contextPath }/resources/imgs/plus.png"></td>
+					<td class="tran"><span>배송비</span></td>
+					<td rowspan="2"><img alt="" src="${pageContext.servletContext.contextPath }/resources/imgs/minus.png"></td>
+					<td class="coupon"><span>할인</span></td>
+					<td class="point"><span>포인트</span></td>
+					<td rowspan="2"><img alt="" src="${pageContext.servletContext.contextPath }/resources/imgs/equal.png"></td>
+					<td class="payment"><span>결제금액</span></td>
 				</tr>
-				<tr>
-					<td class="price"></td>
+				<tr style="margin-bottom: 20px;">
+					<td class="price">${auction.max_price }원</td>
 					<td class="tran">2500원</td>
-					<td class="coupon"></td>
-					<td class="point"></td>
-					<td class="payment"></td>
+					<td id="coupon_info" class="coupon">0</td>
+					<td class="point">
+						<span class="point_text">잔여포인트 <input type="number" id="real_point" style="width: 80px; text-align: right;" readonly="readonly" ></span>
+						<span class="point_text">사용<input type="number" id="point_info" style="width: 80px; margin-left: 42px; text-align: right;" value="0"></span>
+					</td>
+					<td id="pay_price" class="payment"></td>
 				</tr>	
 			</table>
 		</div>
-		<div id="address_info">
-			<h3>배송지 정보 입력</h3>
-				<div>
-					<input type="text" id="sample6_postcode" placeholder="우편번호">
-					<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
-					<input type="text" id="sample6_address" placeholder="주소">
-					<input type="text" id="sample6_address2" placeholder="상세주소">
+		<table style="width: 100%; height: 100%;">
+			<tr>
+				<td style="width: 70%;">
+					<div id="address_info">
+						<p>주소 정보</p>
+						<div id="address_box"><input id="address_1" type="radio" class="address_mode" name="add" value="basic"><label for="address_1">기본주소</label> &nbsp<input id="address_2" type="radio" class="address_mode" name="add" value="new"><label for="address_2">새로운 주소</label> </div>
+						<div id="address_input">
+							<input hidden="true" type="text" id="sample6_postcode" name="addr" placeholder="우편번호">
+							<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
+							<input type="text" id="sample6_address" placeholder="주소" name="addr">
+							<input type="text" id="sample6_address2" placeholder="상세주소" name="addr">
+						</div>
 				</div>
+				</td>
+				<td style="width: 100px;" rowspan="2">
+					<div id="payment_btn_wrap">
+						<div id="price_pay">
+						</div>
+						<div id="price_pay" style="font-size: 15px; color: #1E90FF;"><span class="pay_point"></span>Point 적립</div>
+						<button class="pay_button"><span>결제하기 </span></button> 
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="width: 70%;">
+					<div id="pay_info">
+					<p>결제 방법</p>
+					<div id="payment_mode">
+						<input hidden="true" class="pay_mode" type="radio"  id="phone_mode" name="payment" value="phone">
+						<input hidden="true" class="pay_mode" type="radio" id="card_mode" name="payment" value="card"> 
+						<label id="phone_label" class="label" for="phone_mode" >
+							<img style="border: 1px solid #52bb02; padding: 20px 20px;" alt="" src="${pageContext.servletContext.contextPath }/resources/imgs/phone.png">
+						</label>
+						<label id="card_label" class="label" for="card_mode">
+							<span>
+								<img style="border: 1px solid #ffdb43; padding: 20px 20px;" alt="" src="${pageContext.servletContext.contextPath }/resources/imgs/card.png">
+							</span>
+						</label>
+					</div>
+				</div>
+				</td>
+			</tr>
+		</table>
+		
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <script>
     function sample6_execDaumPostcode() {
+        $(".address_mode[value='new']").trigger("click");
         new daum.Postcode({
             oncomplete: function(data) {
                 // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
+                
                 // 각 주소의 노출 규칙에 따라 주소를 조합한다.
                 // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
                 var fullAddr = ''; // 최종 주소 변수
@@ -188,13 +467,10 @@
         }).open();
     }
 </script>
-			
-		</div>
-		<div>
-			<h3>결제 정보 입력</h3>
-			<P></P>
-		</div>
 		
+
+
+
 	</div>
 
 </div>
