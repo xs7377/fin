@@ -200,6 +200,8 @@
 			
 		});
 		
+		$("body").on("")
+		
 		$("body").on("click",".rereply_cancel",function(){
 			var parent = $(this).parents(".re_write_node");
 			$(parent).remove();
@@ -470,13 +472,14 @@
 		
 		function reply(data){
 			var mod = "";
+			var fName = imgs(data.m_id);
 				if(data.depth>0){
 					mod+="<div class='dept reply_plus_"+data.depth+"'>";
 					mod += "<div class='reply_wrap' id='replyNum_"+data.num+"' style='padding-left:"+(50*data.depth)+"px'>";
 				}else{
 					mod += "<div class='reply_wrap' id='replyNum_"+data.num+"'>";
 				}
-				mod += "<img id='cron_' class='reply_imgs' src='${pageContext.servletContext.contextPath }/resources/upload/noImage.png'>";
+				mod += "<img id='replyimgs_"+data.m_id+"' class='reply_imgs' src='${pageContext.servletContext.contextPath }/resources/upload/"+fName+"'>";
 				if(data.m_id==client){
 					mod += "<span id='mod_reply' class='replyIn_"+data.num+" reply_in_btn'>수정</span><span id='rereply_remove' class='replyOut_"+data.num+" reply_in_btn'>삭제</span>";
 				}else{
@@ -488,6 +491,18 @@
 					mod+="</div>"
 				}
 			return mod;
+		}
+		
+		function imgs(id){
+			$.ajax({
+				url:"${pageContext.servletContext.contextPath }/member/memberImages",
+				type:"post",
+				data:{
+					id:id
+				},success:function(data){
+					return data;
+				}
+			});
 		}
 		
 	});
@@ -545,6 +560,9 @@ var x = setInterval(function() {
 	frameborder: 0;
 }
 
+#auctionProduct_info{
+	margin-bottom: 30px;
+}
 
 #auctionView_body{
 	left:0;
@@ -708,6 +726,8 @@ var x = setInterval(function() {
 .reply_contents_pre{
 	margin-left: 100px;
 	margin-top: 20px;
+	background-color: white;
+	border: no
 }
 .reply_mid{
 	float: left;
@@ -782,6 +802,7 @@ var x = setInterval(function() {
 	padding: 20px 20px;
 	margin: 0 auto;
 	background-color: #f8f8f8;
+	margin-bottom: 30px;
 }
 
 

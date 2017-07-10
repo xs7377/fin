@@ -173,7 +173,7 @@
 			var num = $(this).parents(".relate_card").attr("id");
 			num = num.split("_");
 			alert(num);
-			location.href = "${pageContext.servletContext.contextPath }/auctionView/"+num[1];
+			location.href = "${pageContext.servletContext.contextPath }/auction/auctionView/"+num[1];
 		});
 		
 		$("#relate_prev").click(function(){

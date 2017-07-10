@@ -71,10 +71,11 @@
 		$("#card_label").click(function(){
 			var btn = $(this).find("img");
 			var phone = $("#phone_label").find("img");
-			$(btn).attr("src","${pageContext.servletContext.contextPath }/resources/img/auction/card_click.png");
+			alert("준비중입니다.")
+			/* $(btn).attr("src","${pageContext.servletContext.contextPath }/resources/img/auction/card_click.png");
 			$(btn).css("background-color","#ffdb43");
 			$(phone).attr("src","${pageContext.servletContext.contextPath }/resources/img/auction/phone.png");
-			$(phone).css("background-color","white");
+			$(phone).css("background-color","white"); */
 		});
 		
 		$("#phone_label").click(function(){
@@ -419,7 +420,7 @@
 					<p>결제 방법</p>
 					<div id="payment_mode">
 						<input hidden="true" class="pay_mode" type="radio"  id="phone_mode" name="payment" value="phone">
-						<input hidden="true" class="pay_mode" type="radio" id="card_mode" name="payment" value="card"> 
+						<!-- <input hidden="true" class="pay_mode" type="radio" id="card_mode" name="payment" value="card">  -->
 						<label id="phone_label" class="label" for="phone_mode" >
 							<img style="border: 1px solid #52bb02; padding: 20px 20px;" alt="" src="${pageContext.servletContext.contextPath }/resources/img/auction/phone.png">
 						</label>
