@@ -30,6 +30,11 @@ $(function(){
 		}
 		$(this).addClass('click');
 	});
+	$(".clk").hover(function(){
+		$(this).children(".tl-title").addClass('underl');
+	},function(){
+		$(this).children(".tl-title").removeClass('underl');
+	})
 	// ====================================토탈페이지 더보기
 	$("#moreBtn").on("click",function(){
 		var ic='${totalCount}';
@@ -327,6 +332,7 @@ function reload(){
 .tl-img{
 	width:100%;
 	height: 50%;
+	overflow: hidden;
 }
 .tl-title{
 	padding-top:8px;
@@ -400,8 +406,7 @@ function reload(){
 .clk:hover{
 	text-shadow: 1px 1px 1px rgb(220,220,220);
 	box-shadow: 5px 5px 5px rgb(180,180,180);
-	border-left: 1px solid #bcbcbc;
-	border-bottom: 1px solid #bcbcbc;
+	border: 1px solid #bcbcbc;
 }
 .clk{
 	cursor: pointer;
@@ -431,6 +436,9 @@ function reload(){
 	font-size: 20px;
 	display: inline-block;
 	height: 100%;
+}
+.underl{
+	text-decoration: underline;
 }
 </style>
 </head>

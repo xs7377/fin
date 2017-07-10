@@ -8,14 +8,16 @@
     
     <mapper namespace="ReplyMapper">
     	<resultMap type="replyDTO" id="reply"></resultMap>
+    	<resultMap type="java.util.Map" id="reply_map"></resultMap>
     	
     	<insert id="reply" parameterType="map" statementType="CALLABLE">
     		{ call auction_reply(#{replyDTO.kind, mode=IN},#{replyDTO.pNum, mode=IN},#{replyDTO.m_id, mode=IN},#{replyDTO.num, mode=IN},
     		#{replyDTO.contents, mode=IN},#{replyDTO, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=reply}) }
     	</insert>
     	
-    	<update id="reply_update">
-    	
+    	<update id="reply_remove" parameterType="map" statementType="CALLABLE">
+    		{ call reply_remove(#{num, mode=IN},#{pnum, mode=IN},
+    		#{result, mode=OUT, jdbcType=INTEGER, javaType=int, resultMap=reply_map}) }
     	</update>
     	
     	<select id="reply_view" parameterType="map" resultType="replyDTO">

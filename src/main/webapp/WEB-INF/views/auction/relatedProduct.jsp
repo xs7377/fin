@@ -209,7 +209,7 @@
 </script>
 </c:if>
 <c:if test="${count==0 }">
-	<div><img alt="" src="${pageContext.servletContext.contextPath }/resources/imgs/nolist.png" style="padding-left:9%; width:90%; height: 100%; border-radius: 10px;"> </div>
+	<div><img alt="" src="${pageContext.servletContext.contextPath }/resources/img/auction/nolist.png" style="padding-left:9%; width:90%; height: 100%; border-radius: 10px;"> </div>
 </c:if>
 </div>
 </body>

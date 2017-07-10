@@ -21,6 +21,7 @@
 	var seller = "${auctionDTO.m_id}";
 	var client = "${member.id}";
 	var lastRow = 10;
+	var curPage = 1;
 	$(function(){
 		$(document).ready(function(){
 			var date = period.split(",");
@@ -33,17 +34,35 @@
 			if(t_price!=''){
 				t_price=t_price.split(",");
 				if(akind=='buy'){
-					$("#price_title").html("낙찰가");
-					$(".real_tprice").append(t_price[1]+"원");
+					$(".price_title").html("낙찰가");
+					$(".real_tprice").html(t_price[1]+"원");
 				}else{
-					$("#price_title").html("현재가");
-					$(".real_tprice").append(t_price[1]+"원");
+					$(".price_title").html("현재가");
+					$(".real_tprice").html(t_price[1]+"원");
 				}
 			}else{
-				$("#price_title").html("현재가");
-				$(".real_tprice").append(+min_price+"원");
+				$(".price_title").html("현재가");
+				$(".real_tprice").html(+min_price+"원");
 			}
 			
+			if(client!=''){
+				var img = $(".auctionView_reply_write").children("img");
+				$(img).attr("src","${pageContext.servletContext.contextPath }/resources/upload/${member.fname}");
+				$.ajax({
+					url:"../likeSelect",
+					type:"post",
+					data:{
+						id:client,
+						num:number
+					},success:function(data){
+						if(data==1){
+							var img = $(".auction_likes").children("img");
+							$(img).attr("src","${pageContext.servletContext.contextPath }/resources/upload/heart_in.png");
+							$(img).attr("alt","yes");
+						}
+					}
+				});
+			}
 			
 			var top=800;
 			$(window).scroll(function () {
@@ -85,6 +104,28 @@
 				}
 			});
 			
+ 			$.ajax({
+				url: "../../review/reviewList",
+				type: "get",
+				data:{
+					curPage:curPage,
+					id:seller
+				},success:function(data){
+					$("#review_board").html(data);
+				}
+			});
+			
+		});
+		
+		$("#auction_mod").click(function(){
+			location.href="${pageContext.servletContext.contextPath }/auction/auctionMod?num="+number;
+		});
+		
+		$("#auction_cancel").click(function(){
+			var result = confirm("경매를 취소하시겠습니까?");
+			if(result){
+				location.href="${pageContext.servletContext.contextPath }/auction/auctionCancel/"+number;
+			}
 		});
 		
 		$("#scrol_top_btn").click(function(){
@@ -93,7 +134,6 @@
 		
 		$("body").on("click","#reply_more_btn",function(){
 			lastRow += 10;
-			alert(lastRow);
 			reply_list(number, lastRow);
 		});
 		
@@ -114,7 +154,7 @@
 					data:{
 						pNum:number,
 						contents:contents_val,
-						m_id:"xs7377",
+						m_id:client,
 						num:num
 					},success:function(data){
 						$(parent).before(reply(data));
@@ -175,8 +215,10 @@
 			var contents = $(parent_node).find(".reply_contents");
 			var contents_val = $(contents).val();
 			var text = $("#nolist").text();
-			alert(text);
-			if(contents_val==""){
+			if(client==''){
+				alert("로그인하셔야 합니다.");
+				$(contents).val("");
+			}else if(contents_val==""){
 				alert("댓글을 작성하세요.");
 			}else{
 				$.ajax({
@@ -185,7 +227,7 @@
 					data:{
 						pNum:number,
 						contents:contents_val,
-						m_id:"xs7377"
+						m_id:client
 					},success:function(data){
 						$(contents).val("");
 						$(".reply_btn_wrap").css("display","none");
@@ -200,8 +242,10 @@
 		});
 		
 		$(".auction_tender_btn").click(function(){
-			if(client==seller){
-				alert("본인의 물품입니다.");
+			if(client==''){
+				alert("로그인해 주세요.");
+			}else if(client==seller){
+				alert("경매에 참여할 수 없습니다.");
 			}else if(check){
 				var num = '${auctionDTO.num}';
 				$("#modal_title").html("입찰하기")
@@ -214,12 +258,13 @@
 			}else{
 				alert("경매종료된 물품입니다.");
 			}
-			
 		});
 		
 		$(".auction_buy_btn").click(function(){
-			if(client==seller){
-				alert("본인의 물품입니다.");
+			if(client==''){
+				alert("로그인해 주세요.");
+			}else if(client==seller){
+				alert("물품을 구매할 수 없습니다.");
 			}else if(check){
 				var num = '${auctionDTO.num}';
 				$("#modal_title").html("즉시구매")
@@ -249,29 +294,34 @@
 				$(img).attr("src","${pageContext.servletContext.contextPath }/resources/upload/heart_out.png");
 			}
 		})
-		$(".auction_likes").click(function(){
-			var m_id = 'xs7377';
+		$("body").on("click",".auction_likes",function(){
 			var img = $(this).children("img");
-			$.ajax({
-				url:"../auctionLike",
-				type:"post",
-				data:{
-					pNum:number,
-					m_id:m_id
-				},success:function(data){
-					if(data==1){
-						like_count++;
-						$(img).attr("src","${pageContext.servletContext.contextPath }/resources/upload/heart_in.png");
-						$(img).attr("alt","yes");
-					}else{
-						like_count--;
-						$(img).attr("src","${pageContext.servletContext.contextPath }/resources/upload/heart_out.png");
-						$(img).attr("alt","no");
+			if(client==''){
+				alert("로그인해주세요.");
+			}else if(seller==client){
+				alert("자신의 글입니다.");
+			}else{
+				$.ajax({
+					url:"../auctionLike",
+					type:"post",
+					data:{
+						pNum:number,
+						m_id:client
+					},success:function(data){
+						if(data==1){
+							like_count++;
+							$(img).attr("src","${pageContext.servletContext.contextPath }/resources/upload/heart_in.png");
+							$(img).attr("alt","yes");
+						}else{
+							like_count--;
+							$(img).attr("src","${pageContext.servletContext.contextPath }/resources/upload/heart_out.png");
+							$(img).attr("alt","no");
+						}
+						$(".like_count_wrap").html(like_count);
+						
 					}
-					$(".like_count_wrap").html(like_count);
-					
-				}
-			});
+				});
+			}
 		});
 		$('.modal').click(function () {  
 			$("#myModal").css("display","none");
@@ -293,6 +343,27 @@
 			}
 		});
 		
+		$("body").on("click","#rereply_remove",function(){
+			var result = confirm("댓글을 삭제하시겠습니까?");
+			var parent = $(this).parents(".reply_wrap").attr("id");
+			parent = parent.split("_");
+			if(result){
+				$.ajax({
+					url: "../replyRemove",
+					type:"post",
+					data:{
+						num:parent[1],
+						pnum:number
+					},success:function(data){
+						if(data==0){
+							alert("댓글을 삭제할 수 없습니다.")
+						}else{
+							reply_list(number,lastRow);
+						}
+					}
+				});
+			}
+		});
 		
 		
 		$("body").on("click","#reply_in_reply",function(){
@@ -314,10 +385,12 @@
 			}else{
 				depth = 1;				
 			}
-			if(next=='re_write_node'){
-				alert("리플을 작성하세요!");
+			if(client==''){
+				alert("로그인하셔야 됩니다.");
+			}else if(next=='re_write_node'){
+				alert("댓글을 작성하세요!");
 			}else if(depth>4){
-				alert("리플을 작성할 수 없습니다.");				
+				alert("댓글을 작성할 수 없습니다.");				
 			}else{
 				if(po!=null){
 					$(po).remove();
@@ -403,8 +476,12 @@
 				}else{
 					mod += "<div class='reply_wrap' id='replyNum_"+data.num+"'>";
 				}
-				mod += "<img class='reply_imgs' src='${pageContext.servletContext.contextPath }/resources/upload/noImage.png'>";
-				mod += "<span id='reply_in_reply' class='replyIn_"+data.num+" reply_in_btn'>답글</span><span id='rereply_cancel' class='replyOut_"+data.num+" reply_in_btn'>신고</span>";
+				mod += "<img id='cron_' class='reply_imgs' src='${pageContext.servletContext.contextPath }/resources/upload/noImage.png'>";
+				if(data.m_id==client){
+					mod += "<span id='mod_reply' class='replyIn_"+data.num+" reply_in_btn'>수정</span><span id='rereply_remove' class='replyOut_"+data.num+" reply_in_btn'>삭제</span>";
+				}else{
+					mod += "<span id='reply_in_reply' class='replyIn_"+data.num+" reply_in_btn'>답글</span><span id='rereply_' class='replyOut_"+data.num+" reply_in_btn'>신고</span>";
+				}
 				mod +="<span class='reply_mid'>"+data.m_id+"</span><span class='reply_mid'>"+data.reg_date+"</span>";
 				mod += "<pre class='reply_contents_pre'>"+data.contents+"</pre></div>";
 				if(data.depth>0){
@@ -441,9 +518,7 @@ var x = setInterval(function() {
     
     if (distance < 0) {
         clearInterval(x);
-        var num = "${auctionDTO.num}";
-		$(".demo").html("경매 종료");
-		$(".demo").css("color","#e61722");
+		$(".demo").remove();
 		check=false;
     }
     // If the count down is over, write some text 
@@ -474,7 +549,6 @@ var x = setInterval(function() {
 #auctionView_body{
 	left:0;
 	top:0;
-	margin: 140px auto;
 }
 
 
@@ -572,6 +646,9 @@ var x = setInterval(function() {
 	width: 900px;
 	margin: 0 auto;
 	border-radius: 20px;
+	height: auto;
+	overflow: hidden;
+	min-height: 300px;
 }
 
 #auctionView_reply_wrap{
@@ -582,6 +659,7 @@ var x = setInterval(function() {
 	min-height: 300px;	
 	background-color: #f8f8f8;
 	padding-bottom: 40px;
+	margin-bottom: 30px;
 }
 .auctionView_reply_write{
 	width: 80%;
@@ -589,6 +667,7 @@ var x = setInterval(function() {
 	border-bottom: 1px solid silver;
 	text-align: center;
 }
+
 .reply_wrap{
 	width: 71%;
 	height: auto;
@@ -651,7 +730,18 @@ var x = setInterval(function() {
 	height:48px;
 	float:left;
 }
-
+.seller_button{
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color:  #333333;
+  text-align: center;
+  cursor: pointer;
+  width: 40%;
+  font-size: 18px;
+}
 .dept .reply_imgs{
 	width: 42px;
 	height: 42px;
@@ -740,11 +830,12 @@ var x = setInterval(function() {
 	cursor: pointer;
 }
 
-.seller_id{
+.auctionView_seller_id{
 	width: 100%;
 	font-size: 1.7em;
 	font-weight: bold;
 	margin-top: 15px;
+	text-align: center;
 }
 
 .seller-content {
@@ -775,6 +866,8 @@ var x = setInterval(function() {
 
 #tender_btn_wrap{
 	width: 100%;
+	text-align: center;
+	margin-top: 15px;
 }
 
 #auctionView_tender_contents{
@@ -790,10 +883,10 @@ var x = setInterval(function() {
 
 .product_text{
 	border-bottom: 1px solid #c0c0c0;
-	padding-bottom: 15px;
 	color: #333333;
 	font-size: 1.2em;
 	font-weight: bolder;
+	padding: 15px 0;
 }
 
 .auctionView_tender_btn {
@@ -805,10 +898,9 @@ var x = setInterval(function() {
   background-color: #ca3038;
   text-align: center;
   cursor: pointer;
-  width: 185px;
+  width: 191px;
   font-size: 20px;
   font-weight: bolder;
-  margin-left: 7px;
   border-radius: 5px;
 }
 
@@ -850,7 +942,6 @@ var x = setInterval(function() {
 	padding: 9px;
 	vertical-align: middle;
 	border-bottom: 1px solid silver;
-	border-top: 1px solid silver;
 }
 .f-nav{z-index: 10; position: fixed; left: 0; top: 0; width: 100%;}
 
@@ -885,7 +976,6 @@ var x = setInterval(function() {
 }
 #auctionView_product{
 	width: 100%;
-	margin-top: 20px;
 }
 #modal_title{
 	font-size: 1.3em;
@@ -977,6 +1067,7 @@ var x = setInterval(function() {
   cursor: pointer;
   width: 100%;
   font-size: 18px;
+  margin: 15px auto;
 }
 .like_count_wrap{
 	width: 30px;
@@ -1024,7 +1115,25 @@ var x = setInterval(function() {
   opacity: 0.7;
 }
 
-
+.auction_end_text{
+	  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 10px;
+  color: white;
+  background-color: #ca3038;
+  text-align: center;
+  width: 100%;
+  font-size: 20px;
+  font-weight: bolder;
+  border-radius: 5px;
+}
+.auction_bar_text{
+	color: white;
+	float: left;
+	margin-top: 10px;
+	font-size: 17px;
+}
 
 
 /* review 게시판 */
@@ -1041,6 +1150,7 @@ var x = setInterval(function() {
 </style>
 </head>
 <body id="auctionView_body">
+<%@ include file="../sub/header.jspf"%>
 	<div id="auctionVeiw_category"></div>
 	<div id="auctionView_header">
 		<div class="auctionView_thumbnail"></div>
@@ -1048,22 +1158,36 @@ var x = setInterval(function() {
 			<div class="sel_title_wrap">
 				<h2 id="title_text">${auctionDTO.title }</h2>
 				<span id="bidder_btn">입찰자 : ${bidder } 명</span>
-				<span class="auction_likes">
-					<img alt="no" src="${pageContext.servletContext.contextPath }/resources/upload/heart_out.png">
-					<span class="like_count_wrap">${auctionDTO.likes }</span>
-				</span>
+					<span class="auction_likes">
+						<img alt="no" src="${pageContext.servletContext.contextPath }/resources/upload/heart_out.png">
+						<span class="like_count_wrap">${auctionDTO.likes }</span>
+					</span>
 			</div>
 			<div id="auctionView_product">
 				<div id="auction_product_info">
-					<h3 class="product_text real_tprice"><span id="price_title" class="text_normal"></span><span style="padding-left: 110px;"></span></h3>
-					<p class="product_text"><span class="text_normal">시작가</span><span style="padding-left: 110px;">${auctionDTO.min_price }원</span></p>
-					<h3 class="product_text"><span class="text_normal">즉시 구매가</span><span style="padding-left: 50px;">${auctionDTO.max_price }원</span></h3>
-					<h2 class="product_text demo"></h2>
-					<h3 class="product_text auctionView_period"></h3>
+					<div class="product_text"><span class="text_normal price_title"></span><div class="real_tprice" style="float: right;"></div></div>
+					<div class="product_text"><span class="text_normal">시작가</span><div style="float: right">${auctionDTO.min_price }원</div></div>
+					<div class="product_text"><span class="text_normal">즉시 구매가</span><div style="float: right;">${auctionDTO.max_price }원</div></div>
+					<div class="product_text auctionView_period"></div>
 				</div>
 				<div id="tender_btn_wrap">
-					<input type="button" class="auctionView_tender_btn auction_tender_btn" value="입찰하기">
-					<input type="button" class="auctionView_tender_btn auction_buy_btn"value="즉시구매">
+				<c:if test="${auctionDTO.kind eq '취소' }">
+					<div class="auction_end_text">경매가 취소되었습니다.</div>
+				</c:if>
+				<c:if test="${auctionDTO.kind eq '구매' }">
+					<div class="auction_end_text">경매가 종료되었습니다.</div>
+				</c:if>
+				<c:if test="${auctionDTO.kind eq 'auction' }">
+					<div class="auction_end_text demo" style="background-color: gray; margin-bottom: 15px;"></div>
+					<c:if test="${auctionDTO.m_id eq member.id }">
+						<input type="button" class="auctionView_tender_btn" id="auction_mod" value="수정하기">
+						<input type="button" class="auctionView_tender_btn" id="auction_cancel" value="취소하기">
+					</c:if>
+					<c:if test="${auctionDTO.m_id ne member.id }">
+						<input type="button" class="auctionView_tender_btn auction_tender_btn" value="입찰하기">
+						<input type="button" class="auctionView_tender_btn auction_buy_btn"value="즉시구매">
+					</c:if>
+				</c:if>
 				</div>
 			</div>
 		</div>
@@ -1080,17 +1204,30 @@ var x = setInterval(function() {
 	</div>
 	<div id="auctionView_tender">
 		<div id="auctionView_tender_contents">
-			<div id="auction_tender_info">
-				<h3 class="sel_info">시작가    ${auctionDTO.min_price }</h3>
-				<h3 class="sel_info">즉시 구매가   ${auctionDTO.max_price }</h3>
-				<h3 class="sel_info real_tprice"></h3>
-				<h2 class="sel_info demo"></h2>
-				<h3 class="sel_info auctionView_period"></h3>
-			</div>
-			<div id="auctionView_btn_wrap">
-				<input type="button" class="auctionView_tender_bar_btn auction_tender_btn" value="입찰하기">
-				<input type="button" class="auctionView_tender_bar_btn auction_buy_btn" value="즉시구매">
-			</div>
+				<div id="auction_tender_info">
+					<h3 class="sel_info">즉시 구매가   ${auctionDTO.max_price }</h3>
+					<h3 class="sel_info"><span class="price_title"></span> <span class="real_tprice"></span></h3>
+					<h2 class="sel_info demo"></h2>
+					<h3 class="sel_info auctionView_period"></h3>
+				</div>
+			<c:if test="${auctionDTO.kind eq '취소' }">
+				<div class="auction_bar_text" >경매가 취소되었습니다.</div>
+			</c:if>
+			<c:if test="${auctionDTO.kind eq '구매' }">
+				<div class="auction_bar_text">경매가 종료되었습니다.</div>
+			</c:if>
+			<c:if test="${auctionDTO.kind eq 'auction' }">
+				<div id="auctionView_btn_wrap">
+					<c:if test="${member.id eq auctionDTO.m_id }">
+						<input type="button" class="auctionView_tender_bar_btn auctionNum_${auctionDTO.num }" id="auction_mod" value="수정하기">
+						<input type="button" class="auctionView_tender_bar_btn auctionNum_${auctionDTO.num }" id="auction_cancel" value="취소하기">
+					</c:if>
+					<c:if test="${member.id ne auctionDTO.m_id }">
+						<input type="button" class="auctionView_tender_bar_btn auction_tender_btn" value="입찰하기">
+						<input type="button" class="auctionView_tender_bar_btn auction_buy_btn" value="즉시구매">
+					</c:if>
+				</div>
+			</c:if>
 		</div>
 	</div>
 <div id="auctionProduct_info">
@@ -1123,7 +1260,7 @@ var x = setInterval(function() {
 				  <img id="" src="${pageContext.servletContext.contextPath }/resources/upload/noImage.png" alt="John" style="width:100%; height: 200px;">
 				  <div class="seller_container">
 				  	<div id="seller_dropdown">
-					    <div class="seller_id">${auctionDTO.m_id }</div>
+					    <div class="auctionView_seller_id">${auctionDTO.m_id }</div>
 					    <div class="seller-content">
 							<a href="#">Link 1</a>
 							<a href="#">Link 2</a>
@@ -1159,6 +1296,6 @@ var x = setInterval(function() {
 
 </div>
 <button id="scrol_top_btn">Top</button>
-
+<%@ include file="../sub/footer.jspf"%>
 </body>
 </html>

@@ -128,5 +128,9 @@
 		<update id="auctionEnd" parameterType="map">
 			{ call auction_end(#{auction.num, mode=IN},#{kind, mode=IN}) }
 		</update>
+		
+		<select id="likes_select" parameterType="map" resultType="Integer">
+			select count(num) from likes where kind=#{kind} and m_id=#{id} and pnum=#{pnum}
+		</select>
 
     </mapper>

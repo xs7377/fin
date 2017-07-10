@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    
+    <mapper namespace="ReviewMapper">
+      <resultMap type="java.util.HashMap" id="reviewMap"/>
+    <!--
+    	게시판에서 검색하게 되면 카테고리를 어떻게 처리를 하지 
+    	kind  
+   		>>
+   		mypage>> 구매완료(후기 쓰기 )> write 넘어 가게 (여기서만 작성)
+   		> 작성하고나면 pnum 타서 바로 view로   
+   		VIEW안에서 LIST를 뽑습니다. 
+    	1.글쓰기
+    	2.리스트
+    	3.수정
+    	4.평점
+    	5.삭제
+    	6.댓글// 답글은 불가능하게.
+   	-->
+   	
+   	<!--완료  -->
+    <insert id="reviewInsert" parameterType="com.choa.review.ReviewDTO">
+    insert into review 
+    values(NVL((select max(num) from review),0)+1, #{m_id}, #{title}, #{contents}, sysdate, 0,NVL((select max(num) from review),0)+1,
+    0,0,#{score}, #{id},'review')
+    </insert>
+    <!--완료  -->
+    
+    <select id="reviewList" parameterType="java.util.Map" resultType="com.choa.review.ReviewDTO">
+    select * from 
+    (select rownum r, t.* from
+    (select * from review where p_id=#{id} order by ref desc, step asc) t) 
+    where r between #{startRow} and #{lastRow}
+    </select>
+    
+    
+    <!--일단 페이지 넘어가게 하자  -->
+    
+    <!-- view 하나  -->
+    <!--완료  -->
+    <select id="reviewView" parameterType="int" resultType="com.choa.review.ReviewDTO">
+    select * from review where num=#{num}
+    </select>
+    <!--완료  -->
+    <update id="hitUpdate" parameterType="int">
+    update review set hit=hit+1 where num=#{num}
+   	</update>
+    
+    
+    <!--완료  -->
+    <!-- mod -->
+    <update id="reviewUpdate" parameterType="com.choa.review.ReviewDTO">
+    update review 
+    set title=#{title}, contents=#{contents}, score=#{score} 
+    where num=#{num} 
+    </update>
+    
+    
+    <!--삭제  -->
+    <delete id="reviewDelete" parameterType="int">
+    delete review where num=#{num}
+    </delete>
+    
+   <!-- 답글 또는 댓글이 될 수 있음. -->
+    
+    
+    <insert id="reviewReply"  statementType="CALLABLE" parameterType="java.util.Map" >
+    { call Review_Reply(#{review.num, mode=IN},
+     #{review.m_id , mode=IN}, 
+     #{review.title, mode=IN},
+     #{review.contents, mode=IN},
+     #{review.p_id, mode=IN},
+     #{result, javaType=int, mode=OUT, jdbcType=INTEGER, resultMap=reviewMap}) 
+   	}
+    </insert>
+    
+    
+    
+    
+    
+    
+    </mapper>

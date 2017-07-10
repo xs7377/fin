@@ -25,6 +25,11 @@ public class CouponDAO {
 		return sqlSession.insert(namespace+"couponInsert", couponDTO);
 	}
 	
+	//모든 쿠폰 조회
+	public List<CouponDTO> allCoupon(String id)throws Exception{
+		return sqlSession.selectList(namespace+"couponAll", id);
+	}
+	
 	//쿠폰 조회
 	public CouponDTO couponSelect(String id, String name) throws Exception{
 		Map<String, Object> map = new HashMap<String, Object>();

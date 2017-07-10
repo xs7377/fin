@@ -43,4 +43,8 @@
    	 <![CDATA[ select buyer from auction where buyer like '%' || #{id} || '%' and kind='buy' and #{startDate} < reg_date 
    	 and reg_date < #{lastDate} ]]>
    	</select>
+   	
+   	<select id="couponAll" parameterType="String" resultType="com.choa.coupon.CouponDTO">
+   		select * from coupon where m_id=#{id}
+   	</select>
     </mapper>

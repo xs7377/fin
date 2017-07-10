@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,10 +26,14 @@
 		$(".address_mode").click(function(){
 			var val = $(this).val();
 			if(val=="basic"){
-				var address = addr.split(",");
-				$("#sample6_postcode").val(address[0]); // 우편번호
-				$("#sample6_address").val(address[1]); // 주소
-				$("#sample6_address2").val(address[2]); // 상세주소
+				var addr = address.split(",");
+				$("#sample6_postcode").val(addr[0]); // 우편번호
+				$("#sample6_address").val(addr[1]); // 주소
+				$("#sample6_address2").val(addr[2]); // 상세주소
+			}else{
+				$("#sample6_postcode").val(''); // 우편번호
+				$("#sample6_address").val(''); // 주소
+				$("#sample6_address2").val(''); // 상세주소
 			}
 		});
 		
@@ -54,11 +59,11 @@
 				$(this).val(0);
 				alert("포인트가 부족합니다.");
 			}else{
-				if(point>500){
+				if(point>=500){
 					price_check();
 				}else{
 					$(this).val(0);
-					alert("포인트를 다시 입력해주세요.");
+					alert("500Point부터 사용가능합니다.");
 				}
 			}
 		});
@@ -66,18 +71,18 @@
 		$("#card_label").click(function(){
 			var btn = $(this).find("img");
 			var phone = $("#phone_label").find("img");
-			$(btn).attr("src","${pageContext.servletContext.contextPath }/resources/imgs/card_click.png");
+			$(btn).attr("src","${pageContext.servletContext.contextPath }/resources/img/auction/card_click.png");
 			$(btn).css("background-color","#ffdb43");
-			$(phone).attr("src","${pageContext.servletContext.contextPath }/resources/imgs/phone.png");
+			$(phone).attr("src","${pageContext.servletContext.contextPath }/resources/img/auction/phone.png");
 			$(phone).css("background-color","white");
 		});
 		
 		$("#phone_label").click(function(){
 			var btn = $(this).find("img");
 			var card = $("#card_label").find("img");
-			$(btn).attr("src","${pageContext.servletContext.contextPath }/resources/imgs/phone_click.png");
+			$(btn).attr("src","${pageContext.servletContext.contextPath }/resources/img/auction/phone_click.png");
 			$(btn).css("background-color","#52bb02");
-			$(card).attr("src","${pageContext.servletContext.contextPath }/resources/imgs/card.png");
+			$(card).attr("src","${pageContext.servletContext.contextPath }/resources/img/auction/card.png");
 			$(card).css("background-color","white");
 		});
 		
@@ -100,7 +105,6 @@
 			var coupon = $("#coupon_info").text();
 			var point = $("#point_info").val();
 			coupon = coupon*1+point*1;
-			alert(coupon);
 			var pay_price = price+2500-(coupon);
 			$("#pay_price").html(pay_price+"원");
 			$("#price_pay").html(pay_price+"원");
@@ -197,6 +201,12 @@
 
 #point_info::-webkit-outer-spin-button,
 #point_info::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#real_point::-webkit-outer-spin-button,
+#real_point::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
@@ -334,7 +344,9 @@
 					<td class="coupon">
 						<select id="sel_coupon" style="width: 100%; height: 20px; font-size: 0.8em;">
 							<option value="no">Coupon</option>
-							<option value="5,퍼센트">5%</option>
+							<c:forEach items="${coupon }" var="c">
+								<option value="${c.contents },${c.kind}">${c.name }</option>
+							</c:forEach>
 						</select>
 					</td>
 					<td class="price">
@@ -358,12 +370,12 @@
 			<table class="price_table">
 				<tr>
 					<td class="price"><span>상품금액</span></td>
-					<td rowspan="2"><img alt="" src="${pageContext.servletContext.contextPath }/resources/imgs/plus.png"></td>
+					<td rowspan="2"><img alt="" src="${pageContext.servletContext.contextPath }/resources/img/auction/plus.png"></td>
 					<td class="tran"><span>배송비</span></td>
-					<td rowspan="2"><img alt="" src="${pageContext.servletContext.contextPath }/resources/imgs/minus.png"></td>
-					<td class="coupon"><span>할인</span></td>
+					<td rowspan="2"><img alt="" src="${pageContext.servletContext.contextPath }/resources/img/auction/minus.png"></td>
+					<td class="coupon"><span>쿠폰</span></td>
 					<td class="point"><span>포인트</span></td>
-					<td rowspan="2"><img alt="" src="${pageContext.servletContext.contextPath }/resources/imgs/equal.png"></td>
+					<td rowspan="2"><img alt="" src="${pageContext.servletContext.contextPath }/resources/img/auction/equal.png"></td>
 					<td class="payment"><span>결제금액</span></td>
 				</tr>
 				<tr style="margin-bottom: 20px;">
@@ -371,7 +383,7 @@
 					<td class="tran">2500원</td>
 					<td id="coupon_info" class="coupon">0</td>
 					<td class="point">
-						<span class="point_text">잔여포인트 <input type="number" id="real_point" style="width: 80px; text-align: right;" readonly="readonly" ></span>
+						<span class="point_text">잔여포인트 <input type="number" id="real_point" style="width: 80px; text-align: right;" readonly="readonly" value="${member.point }" ></span>
 						<span class="point_text">사용<input type="number" id="point_info" style="width: 80px; margin-left: 42px; text-align: right;" value="0"></span>
 					</td>
 					<td id="pay_price" class="payment"></td>
@@ -409,11 +421,11 @@
 						<input hidden="true" class="pay_mode" type="radio"  id="phone_mode" name="payment" value="phone">
 						<input hidden="true" class="pay_mode" type="radio" id="card_mode" name="payment" value="card"> 
 						<label id="phone_label" class="label" for="phone_mode" >
-							<img style="border: 1px solid #52bb02; padding: 20px 20px;" alt="" src="${pageContext.servletContext.contextPath }/resources/imgs/phone.png">
+							<img style="border: 1px solid #52bb02; padding: 20px 20px;" alt="" src="${pageContext.servletContext.contextPath }/resources/img/auction/phone.png">
 						</label>
 						<label id="card_label" class="label" for="card_mode">
 							<span>
-								<img style="border: 1px solid #ffdb43; padding: 20px 20px;" alt="" src="${pageContext.servletContext.contextPath }/resources/imgs/card.png">
+								<img style="border: 1px solid #ffdb43; padding: 20px 20px;" alt="" src="${pageContext.servletContext.contextPath }/resources/img/auction/card.png">
 							</span>
 						</label>
 					</div>

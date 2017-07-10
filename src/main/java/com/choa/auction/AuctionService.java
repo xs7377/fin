@@ -203,4 +203,13 @@ public class AuctionService {
 		auctionDAO.auction();
 	}
 	
+	public int reply_remove(int num, int pnum){
+		return auctionDAO.reply_remove(num, pnum);
+		
+	}
+	
+	public int likeSelect(String id, int num)throws Exception{
+		return auctionDAO.likeSelect(id, num);
+	}
+	
 }

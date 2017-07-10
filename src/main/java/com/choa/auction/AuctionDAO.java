@@ -221,6 +221,11 @@ public class AuctionDAO {
 		replyDTO.setpNum(pNum);
 		return this.replyDAO.reply_view(lastRow,replyDTO);
 	}
+	
+	public int reply_remove(int num, int pnum){
+		return this.replyDAO.reply_remove(num, pnum);
+	}
+	
 	public AuctionDTO tenderInfo(int num) throws Exception{
 		return sqlSession.selectOne(NAME_SPACE+"tender_info", num);
 	}
@@ -287,6 +292,17 @@ public class AuctionDAO {
 		sqlSession.selectOne(NAME_SPACE+"auctionAll_list", map);
 		return map;
 	}
+	
+	public int likeSelect(String id,int num){
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("kind", "auction");
+		map.put("id", id);
+		map.put("pnum", num);
+		num = sqlSession.selectOne(NAME_SPACE+"likes_select", map);
+		return num;
+	}
+	
+	
 	public List<List<CategoryDTO>> category_set(List<CategoryDTO> ar){
 		List<CategoryDTO> cate1 = new ArrayList<CategoryDTO>();
 		List<CategoryDTO> cate2 = new ArrayList<CategoryDTO>();
@@ -308,6 +324,8 @@ public class AuctionDAO {
 		
 		return cateList;
 	}
+	
+	
 	public void viewList(HttpServletRequest request, HttpServletResponse response, int num){
 		Cookie [] co = request.getCookies();
 		String view="";

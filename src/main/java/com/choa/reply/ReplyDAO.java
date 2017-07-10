@@ -34,6 +34,14 @@ public class ReplyDAO {
 		return sqlSession.selectList(NAME_SPACE+"reply_view", map);
 	}
 	
+	public int reply_remove(int num, int pnum){
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("num",num);
+		map.put("pnum", pnum);
+		sqlSession.selectOne(NAME_SPACE+"reply_remove", map);
+		return (Integer)map.get("result");
+	}
+	
 	
 
 }

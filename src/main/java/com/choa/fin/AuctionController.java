@@ -27,6 +27,9 @@ import com.choa.auction.AuctionService;
 import com.choa.auction.CategoryDTO;
 import com.choa.auction.RankDTO;
 import com.choa.auction.SearchDTO;
+import com.choa.coupon.CouponDTO;
+import com.choa.coupon.CouponService;
+import com.choa.member.MemberDTO;
 import com.choa.reply.ReplyDTO;
 import com.choa.upload.UploadDTO;
 import com.choa.util.PageResult;
@@ -36,6 +39,9 @@ import com.choa.util.PageResult;
 public class AuctionController {
 	@Inject
 	private AuctionService auctionService;
+	
+	@Inject
+	private CouponService couponService;
 	
 	// =========================================== auction view, reply 추가분 =========================
 	@RequestMapping(value="auctionView/{num}")
@@ -68,7 +74,7 @@ public class AuctionController {
 	
 	@RequestMapping(value="auction_tender/{num}/{kind}", method=RequestMethod.GET)
 	public ModelAndView auction_tender(@PathVariable(value="num")int num, @PathVariable(value="kind") String kind, ModelAndView modelAndView) throws Exception{
-		modelAndView.addObject("tender_info", this.auctionService.tenderInfo(num));
+		modelAndView.addObject("auction_info", this.auctionService.tenderInfo(num));
 		modelAndView.setViewName("auction/auction_tender");
 		return modelAndView;
 	}
@@ -86,7 +92,6 @@ public class AuctionController {
 		
 	}
 	
-	
 	@RequestMapping(value="auctionImage", method=RequestMethod.POST)
 	public ModelAndView auctionImage(UploadDTO uploadDTO, ModelAndView modelAndView) throws Exception{
 		List<UploadDTO> ar = auctionService.auctionImage(uploadDTO);
@@ -102,14 +107,15 @@ public class AuctionController {
 		return auctionService.auctionLikes(pNum, m_id);
 	}
 	
-	
 	@RequestMapping(value="categoryDrop")
 	public void categoryDrop(){
+	
 	}
 	
 	@RequestMapping(value="category_search", method=RequestMethod.POST)
 	public ModelAndView category_search(String category, ModelAndView modelAndView)throws Exception{
 			String[] cate = category.split(",");
+			System.out.println(category);
 			modelAndView.setViewName("auction/categoryDrop");
 			modelAndView.addObject("cateList", auctionService.category_search(cate));
 			modelAndView.addObject("cateTitle", cate);
@@ -147,10 +153,13 @@ public class AuctionController {
 		return modelAndView;
 	}
 	@RequestMapping(value="auctionPay/{num}")
-	public ModelAndView auctionPay(@PathVariable(value="num") int num, ModelAndView model) throws Exception{
+	public ModelAndView auctionPay(@PathVariable(value="num") int num, ModelAndView model, HttpSession session) throws Exception{
 		Map<String, Object> map = auctionService.view(num);
+		MemberDTO memberDTO = (MemberDTO)session.getAttribute("member");
+		System.out.println(memberDTO.getId());
+		List<CouponDTO> ar = couponService.allCoupon(memberDTO.getId());
 		model.setViewName("auction/auctionPay");
-		model.addObject("auction", map.get("auctionDTO")).addObject("imgs", map.get("imgList"));
+		model.addObject("auction", map.get("auctionDTO")).addObject("imgs", map.get("imgList")).addObject("coupon", ar);
 		return model;
 	}
 	
@@ -161,6 +170,20 @@ public class AuctionController {
 		mv.addObject("auction", map.get("auctionDTO"));
 		return mv;
 	}
+	
+	@RequestMapping(value="likeSelect", method=RequestMethod.POST)
+	@ResponseBody
+	public int likeSelect(String id, int num) throws Exception{
+		return auctionService.likeSelect(id, num);
+	}
+	
+	
+	@RequestMapping(value="replyRemove")
+	@ResponseBody
+	public int replyRemove(int num, int pnum){
+		return auctionService.reply_remove(num, pnum);
+	}
+	
 	// ============================== 검색어 카운트 ====================================
 	@RequestMapping(value="/searchCount", method=RequestMethod.POST)
 	public void searchCount(String search)throws Exception{

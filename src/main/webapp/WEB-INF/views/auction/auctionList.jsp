@@ -16,9 +16,9 @@ $(function() {
 			location.href="${pageContext.servletContext.contextPath}/auction/auctionView/"+getViewNum;
 		});
 		$(".go-view").hover(function(){
-			$(this).addClass('go-view-change');
+			$(this).children(".al-title").addClass('go-view-change');
 		},function(){
-			$(this).removeClass('go-view-change');	
+			$(this).children(".al-title").removeClass('go-view-change');
 		});
 	// =======================================hover 밑줄처리================================
 		$(".rank-search").hover(function(){
@@ -681,9 +681,29 @@ a {
   background: #666; 
 }
 /*----------------------list info -------------------------------*/
+.al-img  img {
+    -webkit-transform:scale(1);
+    -moz-transform:scale(1);
+    -ms-transform:scale(1); 
+    -o-transform:scale(1);  
+    transform:scale(1);
+    -webkit-transition:.3s;
+    -moz-transition:.3s;
+    -ms-transition:.3s;
+    -o-transition:.3s;
+    transition:.3s;
+}
+.go-view:hover img {
+    -webkit-transform:scale(1.2);
+    -moz-transform:scale(1.2);
+    -ms-transform:scale(1.2);   
+    -o-transform:scale(1.2);
+    transform:scale(1.2);
+}
 .al-img{
 	width:100%;
 	height: 50%;
+	overflow: hidden;
 }
 .al-title{
 	padding-top:8px;
@@ -922,10 +942,23 @@ a {
 	float: right;
 	margin-bottom: 20px;
 }
+.al-list-img  img {
+    -webkit-transform:scale(1);
+    -moz-transform:scale(1);
+    -ms-transform:scale(1); 
+    -o-transform:scale(1);  
+    transform:scale(1);
+    -webkit-transition:.3s;
+    -moz-transition:.3s;
+    -ms-transition:.3s;
+    -o-transition:.3s;
+    transition:.3s;
+}
 .al-list-img{
 	float:left;
 	width: 150px;
 	height:90%;
+	overflow: hidden;
 }
 .al-list-title{
 	float:left;
@@ -1067,8 +1100,7 @@ a {
 .font-eft{
 	text-shadow: 1px 1px 1px rgb(220,220,220);
 	box-shadow: 5px 5px 5px rgb(180,180,180);
-	border-left: 1px solid #bcbcbc;
-	border-bottom: 1px solid #bcbcbc;
+	border: 1px solid #bcbcbc;
 }
 .font-eft2{
 	text-decoration: underline;
@@ -1082,11 +1114,13 @@ a {
 }
 .go-view-change{
 	text-decoration: underline;
-	font-weight: bold;
 }
 .clk{
-	text-decoration: none;
 }
+
+
+
+
 </style>
 </head>
 <body style="background-image: url('${pageContext.servletContext.contextPath}/resources/auction-img/dot.jpg');">

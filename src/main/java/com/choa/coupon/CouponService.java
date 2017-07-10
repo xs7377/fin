@@ -1,10 +1,12 @@
 package com.choa.coupon;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,6 +23,11 @@ public class CouponService {
 	//쿠폰 조회
 	public CouponDTO couponSelect(String id, String name) throws Exception{
 		return couponDAO.couponSelect(id, name);
+	}
+	
+	//모든 쿠폰 조회
+	public List<CouponDTO> allCoupon(String id) throws Exception{
+		return couponDAO.allCoupon(id);
 	}
 	
 	//퍼센트 쿠폰 조회

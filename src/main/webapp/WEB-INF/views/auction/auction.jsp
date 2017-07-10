@@ -107,7 +107,6 @@
 	    			alert("최소 가격 설정은 1000원 이상입니다");
 	    			$("#minP").val('');
 	    		}
-	    		
 	    	});
 			$("#maxP").on("focus",function(){
 				var min=$("#minP").val()*1;
