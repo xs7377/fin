@@ -155,6 +155,9 @@ public class MemberService {
 	public boolean checkId(String id) throws Exception{
 		return memberDAO.checkId(id);
 	}
+	public int pointUpdate(String id,int point){
+		return memberDAO.pointUpdate(id, point);
+	}
 
 
 }

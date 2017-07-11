@@ -237,13 +237,19 @@ public class MemberDAO {
 		return check;
 	}
 
-
 	public String fileSelect(String id) throws Exception {
 		return sqlSession.selectOne(namespace+"fileSelect", id);
 	}
 
 	public int fileDelete(String id) throws Exception {
 		return sqlSession.update(namespace+"fileDelete", id);
+	}
+
+	public int pointUpdate(String id, int point){
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("point", point);
+		return sqlSession.update(namespace, map);
 	}
 
 }

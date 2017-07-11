@@ -1,6 +1,7 @@
 package com.choa.auction;
 
 import java.awt.Image;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -220,21 +221,21 @@ public class AuctionDAO {
 		replyDTO.setKind("auction");
 		return this.replyDAO.reply(replyDTO);
 	}
-	public List<ReplyDTO> reply_view(int pNum, int lastRow){
+	public List<ReplyDTO> reply_view(int pNum, int lastRow)throws Exception{
 		ReplyDTO replyDTO = new ReplyDTO();
 		replyDTO.setKind("auction");
 		replyDTO.setpNum(pNum);
 		return this.replyDAO.reply_view(lastRow,replyDTO);
 	}
 	
-	public int reply_remove(int num, int pnum){
+	public int reply_remove(int num, int pnum)throws Exception{
 		return this.replyDAO.reply_remove(num, pnum);
 	}
 	
 	public AuctionDTO tenderInfo(int num) throws Exception{
 		return sqlSession.selectOne(NAME_SPACE+"tender_info", num);
 	}
-	public int auctionTender(int num, String buyer, int t_price, String addr){
+	public int auctionTender(int num, String buyer, int t_price, String addr, String coupon, int point)throws Exception{
 		Map<String, Object> map = new HashMap<String, Object>();
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d,HH:mm");
@@ -244,6 +245,8 @@ public class AuctionDAO {
 		map.put("period", period);
 		map.put("t_price", t_price);
 		map.put("addr", addr);
+		map.put("coupon", coupon);
+		map.put("point", point);
 		sqlSession.update(NAME_SPACE+"tender", map);
 		
 		return (Integer)map.get("result");
@@ -264,7 +267,7 @@ public class AuctionDAO {
 		uploadDTO.setKind("auction");
 		return this.uploadDAO.imgView(uploadDTO);
 	}
-	public List<List<CategoryDTO>> category_search(String[] cate){
+	public List<List<CategoryDTO>> category_search(String[] cate)throws Exception{
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("cate1", cate[0]);
 		map.put("cate2", cate[1]);
@@ -287,7 +290,7 @@ public class AuctionDAO {
 		
 		return map;
 	}
-	public Map<String, Object> viewList(int curPage, int num){
+	public Map<String, Object> viewList(int curPage, int num)throws Exception{
 		RowMaker rowMaker =new RowMaker();
 		rowMaker.makeRow(curPage, 4);
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -298,7 +301,7 @@ public class AuctionDAO {
 		return map;
 	}
 	
-	public int likeSelect(String id,int num){
+	public int likeSelect(String id,int num)throws Exception{
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("kind", "auction");
 		map.put("id", id);
@@ -332,6 +335,30 @@ public class AuctionDAO {
 		cateList.add(cate3);
 		
 		return cateList;
+	}
+	
+	public boolean buyCheck(int num)throws Exception{
+		Calendar cal = Calendar.getInstance();
+		Calendar period = Calendar.getInstance();
+		String p = sqlSession.selectOne(NAME_SPACE+"buy_check", num);
+		System.out.println(p);
+		SimpleDateFormat s = new SimpleDateFormat("yyyy-M-d,HH:mm");
+		period.setTime(s.parse(p));
+		long result = period.getTimeInMillis() - cal.getTimeInMillis();
+		if(result>0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	public boolean tenderCheck(String id,int num)throws Exception{
+		String m_id = sqlSession.selectOne(NAME_SPACE+"tender_check", num);
+		if(m_id.equals(id)){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 	
@@ -376,7 +403,7 @@ public class AuctionDAO {
 					map.put("kind", "취소");
 					sqlSession.update(NAME_SPACE+"auctionEnd", map);
 				}else{
-					map.put("kind", "구매");
+					map.put("kind", "결제");
 					sqlSession.update(NAME_SPACE+"auctionEnd", map);
 				}
 			}

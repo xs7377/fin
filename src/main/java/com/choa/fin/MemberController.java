@@ -879,4 +879,10 @@ public class MemberController {
 	public String memberImages(@RequestParam(value="id",required=false)String id) throws Exception{
 		return memberService.fileSelect(id);
 	}
+	
+	@RequestMapping(value="pointUpdate")
+	@ResponseBody
+	public int pointUpdate(String id, int point){
+		return memberService.pointUpdate(id, point);
+	}
 }

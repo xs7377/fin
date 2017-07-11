@@ -132,7 +132,7 @@ public class AuctionService {
 	public ReplyDTO reply(ReplyDTO replyDTO) throws Exception{
 		return auctionDAO.reply(replyDTO);
 	}
-	public List<ReplyDTO> reply_view(int pNum,int lastRow){
+	public List<ReplyDTO> reply_view(int pNum,int lastRow) throws Exception{
 		return auctionDAO.reply_view(pNum,lastRow);
 	}
 	
@@ -140,8 +140,8 @@ public class AuctionService {
 		return auctionDAO.tenderInfo(num);
 	}
 	
-	public int tender(int num, String id, int t_price,String addr){
-		return auctionDAO.auctionTender(num, id, t_price,addr);
+	public int tender(int num, String id, int t_price,String addr,String coupon, int point) throws Exception{
+		return auctionDAO.auctionTender(num, id, t_price,addr,coupon,point);
 	}
 	
 	public List<UploadDTO> auctionImage(UploadDTO uploadDTO) throws Exception{
@@ -203,7 +203,7 @@ public class AuctionService {
 		auctionDAO.auction();
 	}
 	
-	public int reply_remove(int num, int pnum){
+	public int reply_remove(int num, int pnum) throws Exception{
 		return auctionDAO.reply_remove(num, pnum);
 		
 	}
@@ -214,6 +214,14 @@ public class AuctionService {
 	
 	public int replyMod(ReplyDTO replyDTO) throws Exception{
 		return auctionDAO.replyMod(replyDTO);
+	}
+	
+	public boolean buyCheck(int num) throws Exception{
+		return auctionDAO.buyCheck(num);
+	}
+	
+	public boolean tenderCheck(String id, int num) throws Exception{
+		return auctionDAO.tenderCheck(id, num);
 	}
 	
 	//3개월 전 게시물 삭제

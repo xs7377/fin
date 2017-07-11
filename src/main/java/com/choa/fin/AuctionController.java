@@ -74,7 +74,7 @@ public class AuctionController {
 	
 	@RequestMapping(value="replyView")
 	@ResponseBody
-	public List<ReplyDTO> replyView(int pNum,int lastRow){
+	public List<ReplyDTO> replyView(int pNum,int lastRow) throws Exception{
 		List<ReplyDTO> ar = auctionService.reply_view(pNum,lastRow);
 		
 		return ar;
@@ -89,14 +89,15 @@ public class AuctionController {
 	
 	@RequestMapping(value="auction_tender", method=RequestMethod.POST)
 	@ResponseBody
-	public int auction_tender(int num, int price, String addr){
+	public int auction_tender(int num, int price, String addr,String coupon, int point) throws Exception{
 		String id="xs7377";
 		System.out.println(addr);
 		if(addr=="" || addr==null){
 			addr="no";
+			coupon = "no";
+			point = 0;
 		}
-		System.out.println(addr);
-		return auctionService.tender(num, id, price,addr);
+		return auctionService.tender(num, id, price,addr,coupon,point);
 		
 	}
 	
@@ -165,16 +166,22 @@ public class AuctionController {
 		boolean check_pay = false;
 		MemberDTO memberDTO = (MemberDTO)session.getAttribute("member");
 		if(kind.equals("buy")){
-			
+			check_pay = auctionService.buyCheck(num);
 		}else if(kind.equals("tender")){
-			
+			check_pay = auctionService.tenderCheck(memberDTO.getId(), num);
+		}
+		
+		if(check_pay){
+			Map<String, Object> map = auctionService.view(num);
+			List<CouponDTO> ar = couponService.allCoupon(memberDTO.getId());
+			if(ar==null){
+				ar = new ArrayList<CouponDTO>();
+			}
+			model.setViewName("auction/auctionPay");
+			model.addObject("auction", map.get("auctionDTO")).addObject("imgs", map.get("imgList")).addObject("coupon", ar);
 		}else{
 			
 		}
-		Map<String, Object> map = auctionService.view(num);
-		List<CouponDTO> ar = couponService.allCoupon(memberDTO.getId());
-		model.setViewName("auction/auctionPay");
-		model.addObject("auction", map.get("auctionDTO")).addObject("imgs", map.get("imgList")).addObject("coupon", ar);
 		return model;
 	}
 	
@@ -195,7 +202,7 @@ public class AuctionController {
 	
 	@RequestMapping(value="replyRemove")
 	@ResponseBody
-	public int replyRemove(int num, int pnum){
+	public int replyRemove(int num, int pnum) throws Exception{
 		return auctionService.reply_remove(num, pnum);
 	}
 	

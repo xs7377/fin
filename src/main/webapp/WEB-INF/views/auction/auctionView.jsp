@@ -1215,7 +1215,11 @@ var x = setInterval(function() {
 	margin-top: 10px;
 	font-size: 17px;
 }
-
+#seller_gradev{
+	width: 500px;
+	height: 400px;
+	float: left;
+}
 
 /* review 게시판 */
 #review_board{
@@ -1352,7 +1356,15 @@ var x = setInterval(function() {
 				  </div>
 				</div>
 				<div id="seller_grade">
-					
+							<div style="width: 100px;"><br> <br> <br> <img
+								alt="" src="../resources/img/membership/${member.grade}.JPG"></div>
+							<div style="width: 400px; vertical-align: middle;">
+							<span style="font-weight: bolder;">${member.name}</span>님의 멤버십 등급은
+							<span style="color: #ffbf00; font-weight: bolder;">${member.grade}</span>입니다.<br><br>
+							<span style="font-weight: bolder; color: #8c8c8c;">유지기간 | </span> 1개월 / 매월 1일 변경 <br> 
+							<span style="font-weight: bolder; color: #8c8c8c;">산정기간 | </span> 최근 3개월 / 
+							<span style="font-weight: bolder;">${startDate} ~ ${lastDate}</span>
+							</div>
 				</div>
 				<div id="review_board"></div>
 			</div>
