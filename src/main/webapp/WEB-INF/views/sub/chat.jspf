@@ -11,9 +11,8 @@
         z-index: 99999;
         text-align: right;
         padding-right: 10px;
-       	border: 3px solid red;
+       	border: none;
        	width: 300px;
-       	
     }
     #chat{
     	width: 250px;
@@ -185,14 +184,15 @@
         <div class="box dark" >
             <header>
                
-                <div class="toolTip" style="border: 3px solid green; width: 300px;" >
+                <div class="toolTip" style="width: 300px;" >
  <a class="btn btn-primary btn-small" data-toggle="collapse" data-parent="#accordion"
-                       href="#collapseOne" style="margin-top: 5px; margin-right: 2px; width: 200px; ">
-                       	채팅
-                    </a>
+                       href="#collapseOne" style="width: 280px; margin: 0 auto; 
+                       font-weight: bolder; background-color: #999999; border: none;">
+                     CHATTING START
+                    </a> 
                 </div>
             </header>
-            <div class="body collapse" id="collapseOne" style="border: 3px solid blue; width: 300px;">
+            <div class="body collapse" id="collapseOne" style="border: 1px dotted gray; width: 300px;">
                 <div class="panel-body" id="chat_body" >
                     <ul id="chat_li" class="chat"></ul>
                 </div>

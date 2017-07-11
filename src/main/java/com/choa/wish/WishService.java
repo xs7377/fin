@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import com.choa.auction.CategoryDTO;
 import com.choa.reply.ReplyDTO;
 
 @Service
@@ -19,6 +20,16 @@ public class WishService {
 		
 		return wishDAO.wishCount();
 	}
+	
+	//select 
+	public List<CategoryDTO> categorySel(int pnum)throws Exception{
+		return wishDAO.categorySel(pnum);
+	}
+	
+	public CategoryDTO category(int num) throws Exception{
+		return wishDAO.category(num);
+	}
+	
 	
 	
 	//LIST
@@ -44,11 +55,16 @@ public class WishService {
 		public int wishDel(int num) throws Exception{
 			return wishDAO.wishDel(num);
 		}
+		
+		
+		
 		//답글
 		public int wishReply(Map<String, Object> map) throws Exception{
 			System.out.println("service wish reply");
 			return wishDAO.wishReply(map);
 		}
+		
+		
 		
 		//댓글
 		public ReplyDTO reply(ReplyDTO replyDTO) throws Exception{

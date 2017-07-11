@@ -132,5 +132,10 @@
 		<select id="likes_select" parameterType="map" resultType="Integer">
 			select count(num) from likes where kind=#{kind} and m_id=#{id} and pnum=#{pnum}
 		</select>
+		
+				<!-- 3개월 전 게시물 삭제 -->
+		<delete id="threeMonthDelete" parameterType="String">
+			delete auction where #{beforeDate} > reg_date
+		</delete>
 
     </mapper>

@@ -59,7 +59,7 @@ button.accordion.active:after {
 	content: "\2212";
 }
 
-div.panel {
+div.panel2 {
 	padding: 0 18px;
 	background-color: none;
 	max-height: 0;
@@ -77,7 +77,6 @@ a{
 	font-weight: normal;
 	 
 }
-
 
 </style>	
 <script type="text/javascript">	
@@ -165,7 +164,7 @@ function openCity(evt, menuList) {
 		</button> 
 		</a>
 	
-		<div class="panel"></div>
+		<div class="panel2"></div>
 	 
 	<!--@hyo3  -->	
 		
@@ -175,15 +174,26 @@ function openCity(evt, menuList) {
 		</button> 
 		</a> 
 		
-		<div class="panel"></div>
-
+		<div class="panel2"></div>
+		
+		
+		<a href="/fin/member/memberFriends?curPage=1&id=${member.id }" style="font-weight: normal;">
+		<button class="accordion">
+			<span class="glyphicon glyphicon-music"></span> 나의 친구
+		</button> 
+		</a> 
+		
+		<div class="panel2"></div>
+ 
+		
 
 		<button class="accordion">
 			<span class="glyphicon glyphicon-envelope"></span> 나의 쪽지
 		</button>
 	
 		
-		<div class="panel">
+		
+		<div class="panel2">
 			<dl>
 				<dd class="w3-bar-item w3-button tablink" onclick="openCity(event,'sendM')">
 					<a href="/fin/member/memberMessage?id=${member.id }" id="sendList" style="font-weight: normal; font-size: 0.9em;" > 보낸 쪽지함</a>
@@ -194,37 +204,39 @@ function openCity(evt, menuList) {
 			</dl>
 		</div>
 		
-
+<a href="/fin/member/memberAttend?m_id=${member.id }" style="font-weight: normal;">
 		<button class="accordion">
 			<span class="glyphicon glyphicon-ok-circle"></span> 나의 출석
 		</button>
-		<div class="panel"></div>
+		</a>
+		<div class="panel2"></div>
+		
 
-	<a href="/fin/member/memberPoint">
+	<a href="/fin/member/memberPoint" style="font-weight: normal;">
 		<button class="accordion">
 			<span class="glyphicon glyphicon-heart"></span> 포인트 몰
 		</button>
 		</a>
 		
 		 
-		<div class="panel"></div>
+		<div class="panel2"></div>
 
 		<button class="accordion">
 			<span class="glyphicon glyphicon-shopping-cart"></span> 구매 관련
 		</button>
-		<div class="panel">
+		<div class="panel2">
 			<dl>
 				<dd>
-					<a href="#" style="font-weight: normal; font-size: 0.9em;">입찰 중 상품</a>
+					<a href="/fin/member/bidding?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">입찰 중 상품</a>
 				</dd>
 				<dd>
-					<a href="#" style="font-weight: normal; font-size: 0.9em;">구매 중 상품</a>
+					<a href="/fin/member/buyIng?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">구매 중 상품</a>
 				</dd>
 				<dd>
 					<a href="/fin/member/likesProduct?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">관심 상품</a>
 				</dd>
 				<dd>
-					<a href="#" style="font-weight: normal; font-size: 0.9em;">구매 완료 상품</a>
+					<a href="/fin/member/buyEnd?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">구매 완료 상품</a>
 				</dd>
 			</dl>
 		</div>
@@ -232,7 +244,7 @@ function openCity(evt, menuList) {
 		<button class="accordion">
 			<span class="glyphicon glyphicon-usd"></span> 판매 관련
 		</button>
-		<div class="panel">
+		<div class="panel2">
 			<dl>
 				<dd>
 					<a href="/fin/member/sellIng?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">판매 중 상품</a>
@@ -242,8 +254,8 @@ function openCity(evt, menuList) {
 				</dd>
 			</dl>
 		</div>
-</div>
-
+		
+	</div>	
 
 
 

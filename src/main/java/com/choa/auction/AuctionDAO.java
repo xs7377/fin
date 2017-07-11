@@ -35,6 +35,11 @@ public class AuctionDAO {
 	private SqlSession sqlSession;
 	private String NAME_SPACE="AuctionMapper.";
 	
+	//3개월 전 게시물 삭제
+	public int threeMonthDelete(String beforeDate) throws Exception {
+		return sqlSession.delete(NAME_SPACE+"threeMonthDelete", beforeDate);
+	}
+	
 	public List<AuctionDTO> listChoice(String search, String category, int startNum, int lastNum)throws Exception{
 		Map<String, Object> map=new HashMap<String, Object>();
 		map.put("search", search);
@@ -300,6 +305,10 @@ public class AuctionDAO {
 		map.put("pnum", num);
 		num = sqlSession.selectOne(NAME_SPACE+"likes_select", map);
 		return num;
+	}
+	
+	public int replyMod(ReplyDTO replyDTO)throws Exception{
+		return replyDAO.reply_mod(replyDTO);
 	}
 	
 	

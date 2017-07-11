@@ -98,7 +98,8 @@ alert(message);
 <body>
 	<%@ include file="../sub/header.jspf"%>
 	<section class="mypage_wrap">
-	<div style="display: inline-block;">
+<div style="display: inline-block;">
+	
 	<!--@hyo3  -->
 		<a href="/fin/member/memberMypage" style="font-weight: normal;">
 		<button class="accordion">
@@ -117,12 +118,23 @@ alert(message);
 		</a> 
 		
 		<div class="panel2"></div>
-
+		
+		
+		<a href="/fin/member/memberFriends?curPage=1&id=${member.id }" style="font-weight: normal;">
+		<button class="accordion">
+			<span class="glyphicon glyphicon-music"></span> 나의 친구
+		</button> 
+		</a> 
+		
+		<div class="panel2"></div>
+ 
+		
 
 		<button class="accordion">
 			<span class="glyphicon glyphicon-envelope"></span> 나의 쪽지
 		</button>
 	
+		
 		
 		<div class="panel2">
 			<dl>
@@ -135,13 +147,15 @@ alert(message);
 			</dl>
 		</div>
 		
-
+<a href="/fin/member/memberAttend?m_id=${member.id }" style="font-weight: normal;">
 		<button class="accordion">
 			<span class="glyphicon glyphicon-ok-circle"></span> 나의 출석
 		</button>
+		</a>
 		<div class="panel2"></div>
+		
 
-	<a href="/fin/member/memberPoint">
+	<a href="/fin/member/memberPoint" style="font-weight: normal;">
 		<button class="accordion">
 			<span class="glyphicon glyphicon-heart"></span> 포인트 몰
 		</button>
@@ -156,16 +170,16 @@ alert(message);
 		<div class="panel2">
 			<dl>
 				<dd>
-					<a href="#" style="font-weight: normal; font-size: 0.9em;">입찰 중 상품</a>
+					<a href="/fin/member/bidding?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">입찰 중 상품</a>
 				</dd>
 				<dd>
-					<a href="#" style="font-weight: normal; font-size: 0.9em;">구매 중 상품</a>
+					<a href="/fin/member/buyIng?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">구매 중 상품</a>
 				</dd>
 				<dd>
 					<a href="/fin/member/likesProduct?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">관심 상품</a>
 				</dd>
 				<dd>
-					<a href="#" style="font-weight: normal; font-size: 0.9em;">구매 완료 상품</a>
+					<a href="/fin/member/buyEnd?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">구매 완료 상품</a>
 				</dd>
 			</dl>
 		</div>
@@ -183,8 +197,8 @@ alert(message);
 				</dd>
 			</dl>
 		</div>
-
-</div>
+		
+	</div>	
 	
 	
 	
@@ -351,7 +365,7 @@ alert(message);
 								</c:if> <c:if test="${member.grade != 'FIRST'}">
 									<img src="/fin/resources/img/coupon/5000원채도.png"
 										class="coupon_img"> <br><br>
-								</c:if> <br> <span style="color: #d9d9d9;">--------------------------------</span>
+								</c:if> <br> <span style="color: #d9d9d9;">-----------------------------</span>
 								<br> <br> <br> <c:if
 									test="${member.grade == 'FIRST' && percent_result == 1}">
 									<a href="memberCoupon?name=30퍼센트 할인쿠폰&contents=30&kind=퍼센트">
@@ -391,7 +405,7 @@ alert(message);
 								</c:if> <c:if test="${member.grade != 'VVIP'}">
 									<img src="/fin/resources/img/coupon/4000원채도.png"
 										class="coupon_img"><br><br>
-								</c:if> <br> <span style="color: #d9d9d9;">--------------------------------</span>
+								</c:if> <br> <span style="color: #d9d9d9;">-----------------------------</span>
 								<br> <br> <br> <c:if
 									test="${member.grade == 'VVIP' && percent_result == 1}">
 									<a href="memberCoupon?name=25퍼센트 할인쿠폰&contents=25&kind=퍼센트">
@@ -431,7 +445,7 @@ alert(message);
 								</c:if> <c:if test="${member.grade != 'VIP'}">
 									<img src="/fin/resources/img/coupon/3000원채도.png"
 										class="coupon_img"><br><br>
-								</c:if> <br> <span style="color: #d9d9d9;">--------------------------------</span>
+								</c:if> <br> <span style="color: #d9d9d9;">-----------------------------</span>
 								<br> <br> <br> <c:if
 									test="${member.grade == 'VIP' && percent_result == 1}">
 									<a href="memberCoupon?name=20퍼센트 할인쿠폰&contents=20&kind=퍼센트">
@@ -471,7 +485,7 @@ alert(message);
 								</c:if> <c:if test="${member.grade != 'GOLD'}">
 									<img src="/fin/resources/img/coupon/2000원채도.png"
 										class="coupon_img"><br><br>
-								</c:if> <br> <span style="color: #d9d9d9;">--------------------------------</span>
+								</c:if> <br> <span style="color: #d9d9d9;">-----------------------------</span>
 								<br> <br> <br> <c:if
 									test="${member.grade == 'GOLD' && percent_result == 1}">
 									<a href="memberCoupon?name=15퍼센트 할인쿠폰&contents=15&kind=퍼센트">
@@ -512,7 +526,7 @@ alert(message);
 								</c:if> <c:if test="${member.grade != 'SILVER'}">
 									<img src="/fin/resources/img/coupon/1000원채도.png"
 										class="coupon_img"><br><br>
-								</c:if> <br> <span style="color: #d9d9d9;">--------------------------------</span>
+								</c:if> <br> <span style="color: #d9d9d9;">-----------------------------</span>
 								<br> <br> <br> <c:if
 									test="${member.grade == 'SILVER' && percent_result == 1}">
 									<a href="memberCoupon?name=10퍼센트 할인쿠폰&contents=10&kind=퍼센트">

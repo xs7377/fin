@@ -387,7 +387,8 @@
 						<span class="point_text">잔여포인트 <input type="number" id="real_point" style="width: 80px; text-align: right;" readonly="readonly" value="${member.point }" ></span>
 						<span class="point_text">사용<input type="number" id="point_info" style="width: 80px; margin-left: 42px; text-align: right;" value="0"></span>
 					</td>
-					<td id="pay_price" class="payment"></td>
+					<td id="pay_price" class="payment">
+					</td>
 				</tr>	
 			</table>
 		</div>

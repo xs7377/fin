@@ -1,5 +1,6 @@
 package com.choa.fin;
 
+import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,13 +8,17 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.choa.auction.CategoryDTO;
 import com.choa.likes.LikesDTO;
 import com.choa.likes.LikesService;
 import com.choa.reply.ReplyDTO;
@@ -35,6 +40,26 @@ public class WishController {
 	
 	//List, view , write , mod, del, reply 
 	
+	
+	//글 작성할 때 select 처리해주는 부분.
+	@RequestMapping(value="selectOption", method=RequestMethod.POST)
+	public @ResponseBody List<CategoryDTO> categorySel(int pnum) throws Exception{
+		System.out.println("카테고리 들어옴");
+		System.out.println(pnum);
+		
+		List<CategoryDTO> ar=wishService.categorySel(pnum);
+		
+		for(CategoryDTO dd: ar){
+			System.out.println(dd.getName());
+		}
+		
+		
+		return ar;
+	}
+	
+	
+	
+	
 	@RequestMapping(value="wishViewReply", method=RequestMethod.POST)
 	@ResponseBody
 	public ReplyDTO reply(ReplyDTO replyDTO) throws Exception{
@@ -42,7 +67,6 @@ public class WishController {
 		replyDTO.setContents(contents);
 		return wishService.reply(replyDTO);
 	}
-	
 	@RequestMapping(value="replyView")
 	@ResponseBody
 	public List<ReplyDTO> replyView(int pNum,int lastRow){
@@ -54,9 +78,9 @@ public class WishController {
 	
 	
 	
-	//List
+	//List//7.10
 	@RequestMapping(value="wishList", method=RequestMethod.GET)
-	public String wishList( Integer curPage,String kinds,String search, Model model){
+	public String wishList( Integer curPage,String kinds,String search, Model model) throws Exception{
 		//list
 		// String category, String kind,
 		if(curPage==null){
@@ -69,34 +93,27 @@ public class WishController {
 		if(search==null){
 			search="%";
 		}
-		
+		String sb="";
 		List<WishDTO> ar =new ArrayList<WishDTO>();
 		Map<String, Object> map=new HashMap<String, Object>();
 		PageMaker pageMaker=new PageMaker(curPage);
 		RowMaker rowMaker=pageMaker.getRowMaker();
 		PageResult pageResult=new PageResult();
 		
-		map.put("category", "패션,여성의류,원피스");
+		
 		map.put("kind", "wish");
 		map.put("startRow", rowMaker.getStartRow());
 		map.put("lastRow", rowMaker.getLastRow());
 		//map설정
+	
+		map.put("kinds", kinds);
+		map.put("search", search);
+			
+		pageResult=pageMaker.paging(wishService.wishCount());
+		ar=wishService.wishList(map);
+		//ar.get(0).getThumb();  이 놈을 처리해야함.
+		//컨텐츠 꺼내서 img 처리하고 그 다음 set으로 설정 그러면 thumb에 값이 담겼지 그리고 보내준다. 
 		
-		
-		try {
-			
-			
-			map.put("kinds", kinds);
-			map.put("search", search);
-			
-			pageResult=pageMaker.paging(wishService.wishCount());
-			ar=wishService.wishList(map);
-			System.out.println("일단 들어옴");
-			System.out.println(ar.get(0).getContents());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		model.addAttribute("pageResult", pageResult);
 		model.addAttribute("list", ar);
@@ -152,28 +169,37 @@ public class WishController {
 	
 	//글쓰기
 	@RequestMapping(value="wishWrite", method=RequestMethod.POST)
-	public String wishWrite(WishDTO wishDTO, RedirectAttributes redirectAttributes){
+	public String wishWrite(WishDTO wishDTO,RedirectAttributes redirectAttributes) throws Exception{
+		System.out.println("WISH WRITE");
+		StringBuffer sb=new StringBuffer();
+	
+		
+		int [] list=new int[3];
+		list[0]=Integer.parseInt(wishDTO.getCate1());
+		list[1]=Integer.parseInt(wishDTO.getCate2());
+		list[2]=Integer.parseInt(wishDTO.getCate3());
+		CategoryDTO categoryDTO=new CategoryDTO();
+		for(int i=0;i<3;i++){
+				categoryDTO=wishService.category(list[i]);
+				if(i==2){
+					sb.append(categoryDTO.getName());
+				}else{
+					sb.append(categoryDTO.getName()+",");	
+				}
+		}
+			
+		System.out.println(sb.toString());
+		wishDTO.setCategory(sb.toString());
 		String msg="글쓰기 실패";
 		int result=0;
-		wishDTO.setCategory("패션,여성의류,원피스");
 		wishDTO.setKind("wish");
-		
-		System.out.println(wishDTO.getM_id());
-		
-		try {
-			result=wishService.wishWrite(wishDTO);
-			if(result>0){
-				msg="글쓰기 완료";
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		result=wishService.wishWrite(wishDTO);
+		if(result>0){
+			msg="글쓰기 완료";
 		}
-		
 		redirectAttributes.addFlashAttribute("msg", msg);
-		
-		
 		return "redirect:/";
+		
 	}
 	
 	
@@ -236,6 +262,7 @@ public class WishController {
 	}
 	
 	
+	
 	//답글
 	@RequestMapping(value="wishReply", method=RequestMethod.GET)
 	public String wishReply(int num,RedirectAttributes redirectAttributes){
@@ -245,6 +272,9 @@ public class WishController {
 		
 		return "/board/boardWrite";
 	}
+	
+	
+	
 	
 	
 	@RequestMapping(value="wishReply", method=RequestMethod.POST)

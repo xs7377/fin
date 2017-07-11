@@ -8,7 +8,7 @@ private int num;
 private String m_id;
 private String title;
 private String contents;
-private Date red_date;
+private Date reg_date;
 private int hit;
 private String reply;
 private int likes;
@@ -50,11 +50,11 @@ public String getContents() {
 public void setContents(String contents) {
 	this.contents = contents;
 }
-public Date getRed_date() {
-	return red_date;
+public Date getReg_date() {
+	return reg_date;
 }
-public void setRed_date(Date red_date) {
-	this.red_date = red_date;
+public void setReg_date(Date reg_date) {
+	this.reg_date = reg_date;
 }
 public int getHit() {
 	return hit;

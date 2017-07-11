@@ -42,6 +42,9 @@ public class ReplyDAO {
 		return (Integer)map.get("result");
 	}
 	
+	public int reply_mod(ReplyDTO replyDTO){
+		return sqlSession.update(NAME_SPACE+"reply_mod", replyDTO);
+	}
 	
 
 }

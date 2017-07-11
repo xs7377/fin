@@ -57,7 +57,7 @@
 					},success:function(data){
 						if(data==1){
 							var img = $(".auction_likes").children("img");
-							$(img).attr("src","${pageContext.servletContext.contextPath }/resources/upload/heart_in.png");
+							$(img).attr("src","${pageContext.servletContext.contextPath }/resources/img/auction/heart_in.png");
 							$(img).attr("alt","yes");
 						}
 					}
@@ -105,7 +105,7 @@
 			});
 			
  			$.ajax({
-				url: "../../review/reviewList",
+				url: "${pageContext.servletContext.contextPath }/review/reviewList",
 				type: "get",
 				data:{
 					curPage:curPage,
@@ -117,11 +117,11 @@
 			
 		});
 		
-		$("#auction_mod").click(function(){
+		$(".auction_mod").click(function(){
 			location.href="${pageContext.servletContext.contextPath }/auction/auctionMod?num="+number;
 		});
 		
-		$("#auction_cancel").click(function(){
+		$(".auction_cancel").click(function(){
 			var result = confirm("경매를 취소하시겠습니까?");
 			if(result){
 				location.href="${pageContext.servletContext.contextPath }/auction/auctionCancel/"+number;
@@ -200,7 +200,61 @@
 			
 		});
 		
-		$("body").on("")
+		$("body").on("click","#mod_reply",function(){
+			var parent = $(this).parents(".reply_wrap");
+			var gparent = $(parent).parents("#auctionView_reply");
+			var dept = $(parent).parent(".dept");
+			var depth = $(dept).attr("class");
+			alert(depth);
+			var find = $(gparent).find(".re_write_node");
+			if(depth==undefined){
+				depth=0;
+			}else{
+				depth = depth.split(" ");
+				depth = depth[1].split("_");
+				alert(depth[2]);
+				depth = depth[2];
+			}
+			var id = $(parent).attr("id");
+			id = id.split("_");
+			if(find.size()>0){
+				$(find).remove();
+			}
+				var contents = $(parent).find(".reply_contents_pre").html();
+				var mod = "<div class='re_write_node'>";
+				mod += '<div id="replyNum_${member.id}" class="auctionView_reply_write"style="padding-left:'+(50*depth)+'">';
+				mod += '<img alt="" src="${pageContext.servletContext.contextPath }/resources/upload/${member.fname}" style="width: 48px; height: 48px; margin: 10px 10px;">';
+				mod +='<span><textarea class="reply_contents reply_mod_contents" rows="" cols="">'+contents+'</textarea></span>';
+				mod += '<div class="reply_btn_wrap"><input id="replyModCancel_'+id[1]+'" class="reply_btn reply_mod_cancel" type="button" value="취소"><input class="reply_btn reply_mod_input" id="replyModInput_'+id[1]+'" type="button" value="수정"></div>';
+				mod += '</div></div>';
+				$(parent).after(mod);
+				$(parent).attr("hidden",true);
+		});
+		
+		$("body").on("click",".reply_mod_cancel",function(){
+			var gparent = $(this).parents("#auctionView_reply");
+			var parent = $(this).parents(".re_write_node");
+			var reply = $(gparent).find(".reply_wrap");
+			$(parent).remove();
+			$(reply).attr("hidden",false);
+		});
+		
+		$("body").on("click",".reply_mod_input",function(){
+			var contents = $(".reply_mod_contents").val();
+			var num = $(this).attr("id");
+			num = num.split("_");
+			alert(contents);
+			$.ajax({
+				url: "../replyMod",
+				type:"post",
+				data:{
+					contents:contents,
+					num:num[1]
+				},success:function(data){
+					reply_list(number,lastRow);
+				}
+			});
+		});
 		
 		$("body").on("click",".rereply_cancel",function(){
 			var parent = $(this).parents(".re_write_node");
@@ -285,7 +339,7 @@
 			var img = $(this).children("img");
 			var alt = $(img).attr("alt");
 			if(alt=='no'){
-				$(img).attr("src","${pageContext.servletContext.contextPath }/resources/upload/heart_hover.png");
+				$(img).attr("src","${pageContext.servletContext.contextPath }/resources/img/auction/heart_hover.png");
 			}
 		})
 		
@@ -293,7 +347,7 @@
 			var img = $(this).children("img");
 			var alt = $(img).attr("alt");
 			if(alt=='no'){
-				$(img).attr("src","${pageContext.servletContext.contextPath }/resources/upload/heart_out.png");
+				$(img).attr("src","${pageContext.servletContext.contextPath }/resources/img/auction/heart_out.png");
 			}
 		})
 		$("body").on("click",".auction_likes",function(){
@@ -312,11 +366,11 @@
 					},success:function(data){
 						if(data==1){
 							like_count++;
-							$(img).attr("src","${pageContext.servletContext.contextPath }/resources/upload/heart_in.png");
+							$(img).attr("src","${pageContext.servletContext.contextPath }/resources/img/auction/heart_in.png");
 							$(img).attr("alt","yes");
 						}else{
 							like_count--;
-							$(img).attr("src","${pageContext.servletContext.contextPath }/resources/upload/heart_out.png");
+							$(img).attr("src","${pageContext.servletContext.contextPath }/resources/img/auction/heart_out.png");
 							$(img).attr("alt","no");
 						}
 						$(".like_count_wrap").html(like_count);
@@ -340,7 +394,9 @@
 		$("body").on("focus","#contents_focus",function(){
 			var parent_reply = $(this).parents(".auctionView_reply_write");
 			var po = $("#auctionView_reply").find(".re_write_node");
+			var reply = $("#auctionView_reply").find('.reply_wrap');
 			if(po.length>=1){
+				$(reply).attr("hidden",false);
 				$(po).remove();
 			}
 		});
@@ -372,6 +428,7 @@
 			var parent = $(this).parent("div");
 			var next = $(parent).next().attr("class");
 			var po = $("#auctionView_reply").find(".re_write_node");
+			var reply = $("#auctionView_reply").find(".reply_wrap");
 			var num = $(this).attr("class");
 			num = num.split(" ");
 			num = num[0].split("_");
@@ -396,10 +453,11 @@
 			}else{
 				if(po!=null){
 					$(po).remove();
+					$(reply).attr("hidden",false);
 				}
 				var mod = "<div class='re_write_node'>";
 				mod += '<div id="replyNum_'+parent_id[1]+'" class="auctionView_reply_write"style="padding-left:'+(50*depth)+'">';
-				mod += '<img alt="" src="${pageContext.servletContext.contextPath }/resources/upload/noImage.png" style="width: 48px; height: 48px; margin: 10px 10px;">';
+				mod += '<img alt="" src="${pageContext.servletContext.contextPath }/resources/upload/${member.fname}" style="width: 48px; height: 48px; margin: 10px 10px;">';
 				mod +='<span><textarea class="reply_contents" rows="" cols=""></textarea></span>';
 				mod += '<div class="reply_btn_wrap"><input id="replyCancel_'+num+'" class="reply_btn rereply_cancel" type="button" value="취소"><input class="reply_btn rereply_input" id="replyInput_'+num+'" type="button" value="댓글"></div>';
 				mod += '</div></div>';
@@ -494,15 +552,18 @@
 		}
 		
 		function imgs(id){
+			var imgs = 'noImage.png'
 			$.ajax({
 				url:"${pageContext.servletContext.contextPath }/member/memberImages",
 				type:"post",
+				async:false,
 				data:{
 					id:id
 				},success:function(data){
-					return data;
+					imgs = data;
 				}
 			});
+			return imgs;
 		}
 		
 	});
@@ -682,7 +743,6 @@ var x = setInterval(function() {
 .auctionView_reply_write{
 	width: 80%;
 	margin: 0 auto;
-	border-bottom: 1px solid silver;
 	text-align: center;
 }
 
@@ -1180,7 +1240,7 @@ var x = setInterval(function() {
 				<h2 id="title_text">${auctionDTO.title }</h2>
 				<span id="bidder_btn">입찰자 : ${bidder } 명</span>
 					<span class="auction_likes">
-						<img alt="no" src="${pageContext.servletContext.contextPath }/resources/upload/heart_out.png">
+						<img alt="no" src="${pageContext.servletContext.contextPath }/resources/img/auction/heart_out.png">
 						<span class="like_count_wrap">${auctionDTO.likes }</span>
 					</span>
 			</div>
@@ -1201,8 +1261,8 @@ var x = setInterval(function() {
 				<c:if test="${auctionDTO.kind eq 'auction' }">
 					<div class="auction_end_text demo" style="background-color: gray; margin-bottom: 15px;"></div>
 					<c:if test="${auctionDTO.m_id eq member.id }">
-						<input type="button" class="auctionView_tender_btn" id="auction_mod" value="수정하기">
-						<input type="button" class="auctionView_tender_btn" id="auction_cancel" value="취소하기">
+						<input type="button" class="auctionView_tender_btn auction_mod" value="수정하기">
+						<input type="button" class="auctionView_tender_btn auction_cancel" value="취소하기">
 					</c:if>
 					<c:if test="${auctionDTO.m_id ne member.id }">
 						<input type="button" class="auctionView_tender_btn auction_tender_btn" value="입찰하기">
@@ -1240,8 +1300,8 @@ var x = setInterval(function() {
 			<c:if test="${auctionDTO.kind eq 'auction' }">
 				<div id="auctionView_btn_wrap">
 					<c:if test="${member.id eq auctionDTO.m_id }">
-						<input type="button" class="auctionView_tender_bar_btn auctionNum_${auctionDTO.num }" id="auction_mod" value="수정하기">
-						<input type="button" class="auctionView_tender_bar_btn auctionNum_${auctionDTO.num }" id="auction_cancel" value="취소하기">
+						<input type="button" class="auctionView_tender_bar_btn auctionNum_${auctionDTO.num } auction_mod" value="수정하기">
+						<input type="button" class="auctionView_tender_bar_btn auctionNum_${auctionDTO.num } auction_cancel" value="취소하기">
 					</c:if>
 					<c:if test="${member.id ne auctionDTO.m_id }">
 						<input type="button" class="auctionView_tender_bar_btn auction_tender_btn" value="입찰하기">
@@ -1264,7 +1324,7 @@ var x = setInterval(function() {
 <c:if test="${auctionDTO.reply eq 'y' }">
 	<div id="auctionView_reply_wrap">
 		<div id="auction_reply_box">
-				<div class="auctionView_reply_write">
+				<div class="auctionView_reply_write" style="border-bottom: 1px solid silver;">
 					<img alt="" src="${pageContext.servletContext.contextPath }/resources/upload/noImage.png" style="width: 48px; height: 48px; margin: 10px 10px;">
 					<span><textarea id="contents_focus" class="reply_contents" rows="" cols=""></textarea></span>
 					<div class="reply_btn_wrap"><input class="reply_btn" id="reply_cancel" type="button" value="취소"><input class="reply_btn" id="auctionReply_input" type="button" value="댓글"></div>
@@ -1291,7 +1351,9 @@ var x = setInterval(function() {
 				   <p><button id="select_btn">판매자 물품보기</button></p>
 				  </div>
 				</div>
-				
+				<div id="seller_grade">
+					
+				</div>
 				<div id="review_board"></div>
 			</div>
 </div>

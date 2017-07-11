@@ -23,12 +23,12 @@ body{
 }
 .mypage_wrap {
 	width: 1300px;  
-	height: 600px;  
+	height: auto;  
 	margin: 100px auto; 
 } 
 
 button.accordion {
-	background-color: #eee;
+	background-color: #eee; 
 	color: #444; 
 	cursor: pointer;
 	padding: 18px;
@@ -38,7 +38,6 @@ button.accordion {
 	outline: none;
 	font-size: 15px;
 	transition: 0.4s;
-
 }
 
 button.accordion.active, button.accordion:hover {
@@ -51,14 +50,13 @@ button.accordion:after {
 	font-weight: bold;
 	float: right;
 	margin-left: 5px;
-	
 }
 
 button.accordion.active:after {
 	content: "\2212";
 }
 
-div.panel {
+div.panel2 {
 	padding: 0 18px;
 	background-color: none;
 	max-height: 0;
@@ -74,7 +72,6 @@ a{
 	color: #595959;
 	line-height: 250%;
 	font-weight: normal;
-	 
 }
 .myPageHome{
 	font-weight: bolder;
@@ -93,6 +90,8 @@ a{
 	<section class="mypage_wrap">
 
 <div style="display: inline-block;">
+<c:if test="${member.kind == 'member' }">
+
 	
 	<!--@hyo3  -->
 		<a href="/fin/member/memberMypage" style="font-weight: normal;">
@@ -101,7 +100,7 @@ a{
 		</button> 
 		</a>
 	
-		<div class="panel"></div>
+		<div class="panel2"></div>
 	 
 	<!--@hyo3  -->	
 		
@@ -111,8 +110,17 @@ a{
 		</button> 
 		</a> 
 		
-		<div class="panel"></div>
-
+		<div class="panel2"></div>
+		
+		
+		<a href="/fin/member/memberFriends?curPage=1&id=${member.id }" style="font-weight: normal;">
+		<button class="accordion">
+			<span class="glyphicon glyphicon-music"></span> 나의 친구
+		</button> 
+		</a> 
+		
+		<div class="panel2"></div>
+ 
 		
 
 		<button class="accordion">
@@ -121,7 +129,7 @@ a{
 	
 		
 		
-		<div class="panel">
+		<div class="panel2">
 			<dl>
 				<dd class="w3-bar-item w3-button tablink" onclick="openCity(event,'sendM')">
 					<a href="/fin/member/memberMessage?id=${member.id }" id="sendList" style="font-weight: normal; font-size: 0.9em;" > 보낸 쪽지함</a>
@@ -132,37 +140,39 @@ a{
 			</dl>
 		</div>
 		
-
+	<a href="/fin/member/memberAttend?m_id=${member.id }" style="font-weight: normal;">
 		<button class="accordion">
 			<span class="glyphicon glyphicon-ok-circle"></span> 나의 출석
 		</button>
-		<div class="panel"></div>
+		</a>
+		<div class="panel2"></div>
+		
 
-	<a href="/fin/member/memberPoint">
+	<a href="/fin/member/memberPoint" style="font-weight: normal;">
 		<button class="accordion">
 			<span class="glyphicon glyphicon-heart"></span> 포인트 몰
 		</button>
 		</a>
 		
 		 
-		<div class="panel"></div>
+		<div class="panel2"></div>
 
 		<button class="accordion">
 			<span class="glyphicon glyphicon-shopping-cart"></span> 구매 관련
 		</button>
-		<div class="panel">
+		<div class="panel2">
 			<dl>
 				<dd>
-					<a href="#" style="font-weight: normal; font-size: 0.9em;">입찰 중 상품</a>
+					<a href="/fin/member/bidding?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">입찰 중 상품</a>
 				</dd>
 				<dd>
-					<a href="#" style="font-weight: normal; font-size: 0.9em;">구매 중 상품</a>
+					<a href="/fin/member/buyIng?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">구매 중 상품</a>
 				</dd>
 				<dd>
 					<a href="/fin/member/likesProduct?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">관심 상품</a>
 				</dd>
 				<dd>
-					<a href="#" style="font-weight: normal; font-size: 0.9em;">구매 완료 상품</a>
+					<a href="/fin/member/buyEnd?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">구매 완료 상품</a>
 				</dd>
 			</dl>
 		</div>
@@ -170,7 +180,7 @@ a{
 		<button class="accordion">
 			<span class="glyphicon glyphicon-usd"></span> 판매 관련
 		</button>
-		<div class="panel">
+		<div class="panel2">
 			<dl>
 				<dd>
 					<a href="/fin/member/sellIng?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">판매 중 상품</a>
@@ -181,30 +191,35 @@ a{
 			</dl>
 		</div>
 		
+</c:if>
 		
+</div>
 		
+		<div style="display: inline-block;">
+		<c:if test="${member.kind == 'manager' }">
 		<!--매니져  -->
 		<button class="accordion">
-			<span class="glyphicon glyphicon-usd"></span> 매니져
+			<span class="glyphicon glyphicon-user"></span> 매니져
 		</button>
-		<div class="panel">
+		<div class="panel2">
 			<dl>
 				
 				<dd>
-					<a href="#" style="font-weight: normal; font-size: 0.9em;">신고 접수</a>
+					<a href="/fin/manager/managerReport?curPage=1" style="font-weight: normal; font-size: 0.9em;">신고 접수</a>
 				</dd>
 				
 				<dd>
-					<a href="#" style="font-weight: normal; font-size: 0.9em;">판매 완료 상품</a>
+					<a href="/fin/manager/managerSell?curPage=1" style="font-weight: normal; font-size: 0.9em;">판매 결산 페이지</a>
 				</dd>
 				
 			</dl>
 		</div>
+		</c:if>
+		</div>
 		
 		
 		
-		
-</div>
+<c:if test="${member.kind == 'member' }">
 
 <div style="width: 1050px; height: auto;  display: inline-block; float: right;">
 <table class="table table-hover" style="width:500px; display: inline-block;">
@@ -282,10 +297,10 @@ onclick="return confirm('탈퇴하시겠습니까?');">
 </div>
 </div>
 
-
-
-
 </div>
+</c:if>
+
+
 
 		<script>
 			var acc = document.getElementsByClassName("accordion");

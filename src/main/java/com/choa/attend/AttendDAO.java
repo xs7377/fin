@@ -16,6 +16,17 @@ public class AttendDAO {
 	
 	private static String NAMESPACE="AttendMapper.";
 	
+	//totalCheck 출력
+	public int totalCheck(String m_id) throws Exception{
+		int total = 0;
+		AttendDTO attendDTO=sqlSession.selectOne(NAMESPACE+"totalCheck", m_id);
+		if(attendDTO == null) {
+			total = 0;
+		} else {
+			total = attendDTO.getTotal();
+		}
+		return total;
+	}
 	
 	//출석
 	public int attendCheck(String m_id) throws Exception{
@@ -35,16 +46,17 @@ public class AttendDAO {
 		return result;
 	}
 	
+	
 	//오늘 출첵 두번째인지 중복 확인.
 	public int attendCut(String m_id) throws Exception{
-		int result=0;
-		if(sqlSession.selectOne(NAMESPACE+"attendCut", m_id)!=null){
-			result=1;
+		int result=sqlSession.selectOne(NAMESPACE+"attendCut", m_id);
+		if(sqlSession.selectOne(NAMESPACE+"attendCut", m_id)==null){
+			result=0;
+		}else{
+			result=sqlSession.selectOne(NAMESPACE+"attendCut", m_id);
 		}
-		
 		return result;
 	}
-	
 	
 	
 	//자정되면 clear today  0으로 
@@ -64,7 +76,5 @@ public class AttendDAO {
 	public int attendDel(String m_id) throws Exception{
 		return sqlSession.delete(NAMESPACE+"attendDel",m_id);
 	}
-	
-	
 	
 }

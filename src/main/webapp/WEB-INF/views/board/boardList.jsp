@@ -18,6 +18,12 @@
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <style>
+	
+	#td_thumb{
+		width: 90px;
+		height: 90px;
+	}
+	
 	.box{
 		width: 1000px;
 		margin: 0 auto;
@@ -45,79 +51,179 @@
 <title>Insert title here</title>
 <script type="text/javascript">
 	$(function(){
-	
-		 var page="${board}";
-	
-		$("#write").click(function(){
+	 var page="${board}";
+	$("#write").click(function(){
 			location.href="./"+page+"Write";
 		});
-		
-		$("#home").click(function(){
+	$("#home").click(function(){
 			location.href="../";
-		});
-		
-		$(".go").click(function(){
+	});
+	$(".go").click(function(){
 			var curPage=$(this).attr("id");
 			location.href="./"+page+"List?curPage="+curPage+"&kinds=${kinds}&search=${search}";
-		}); 
+	}); 
 		
-		
-		//user 메뉴
+	//user 메뉴
 		$(".w3-container").on("click","#userMenu",function(){
 			var f_id=$(this).val();
 		
 			 var message ="#m"+f_id;
 			var fAdd="#a"+f_id;
 			var fDel="#d"+f_id;
-			
-		//메세지 보내기
-			$(message).click(function() {
+	//메세지 보내기
+	$(message).click(function() {
 				$("#to_id").val(f_id);
 			})
-			
-			 
-			//친구 추가
-			$(fAdd).click(function() {
+	//친구 추가
+	$(fAdd).click(function() {
 				 var r = confirm("친구추가 하시겠습니까?");
 				    if (r == true) {
 				       location.href="../friend/friendAdd?f_id="+f_id;
 				    } else {
 				    	location.href="../";
 				 	}
-			})
+	})
 			
-			$(fDel).click(function() {
-				var r = confirm("친구삭제 하시겠습니까?");
-				    if (r == true) {
-				       location.href="../friend/friendDel?f_id="+f_id;
-				    } else {
-				    	location.href="../";
-				    }
-			}) 
+	$(fDel).click(function() {
+		var r = confirm("친구삭제 하시겠습니까?");
+		 if (r == true) {
+			   location.href="../friend/friendDel?f_id="+f_id;
+		} else {
+				location.href="../";
+		 }
+	}) 
 			
-			$("#mClose").click(function() {
+	$("#mClose").click(function() {
 				$("#contents").val("");
 			})
-			
-			
-			
-		});
+	});
+		
+		$("table").on("click","#cate",function(){
+		var temp=$(this).html();
+		alert(temp);
+		var ctgNum='';
+		var curPage=1;
+		var perPage=8;
+		var pri_curPage=1;
+		if(temp == '패션'){
+			ctgNum='1';
+		}else if(temp == '잡화'){
+			ctgNum='2';
+		}else if(temp == '스포츠/레저/자동차'){
+			ctgNum='3';
+		}else if(temp == '유아'){
+			ctgNum='4';
+		}else if(temp == '가구/생활/건강'){
+			ctgNum='5';
+		}else if(temp == '디지털/가전/컴퓨터'){
+			ctgNum='6';
+		}else if(temp == '도서'){
+			ctgNum='7';
+		}else{
+			ctgNum='0';
+		}
+		alert(ctgNum);
+		sendCtg(temp,ctgNum);
+		});	
+		
 });
+	function sendCtg(ctg, ctgNum){
+		var form=document.createElement("form");
+		form.method="post";
+		form.action="../auction/auctionList";
+		var e1=document.createElement("input");
+		var e2=document.createElement("input");
+		var e3=document.createElement("input");
+		var e4=document.createElement("input");
+		var e5=document.createElement("input");
+		var e6=document.createElement("input");
+		var e7=document.createElement("input");
+		var e8=document.createElement("input");
+		var e9=document.createElement("input");
+		
+		e1.name="curPage";
+		e2.name="perPage";
+		e3.name="category";
+		e4.name="kind";
+		e5.name="search";
+		e6.name="ctgNum";
+		e7.name="pri_curPage";
+		e8.name="view_kind";
+		e9.name="isSearch";
+		
+		e1.value=1;
+		e2.value=8;
+		e3.value=ctg;
+		e4.value="titleContents";
+		e5.value="";
+		e6.value=ctgNum;
+		e7.value=1;
+		e8.value="album";
+		e9.value="n";
+		
+		e1.type="hidden";
+		e2.type="hidden";
+		e3.type="hidden";
+		e4.type="hidden";
+		e5.type="hidden";
+		e6.type="hidden";
+		e7.type="hidden";
+		e8.type="hidden";
+		e9.type="hidden";
+		document.body.appendChild(form);
+		form.appendChild(e1);
+		form.appendChild(e2);
+		form.appendChild(e3);
+		form.appendChild(e4);
+		form.appendChild(e5);
+		form.appendChild(e6);
+		form.appendChild(e7);
+		form.appendChild(e8);
+		form.appendChild(e9);
+		form.submit();
+	}	
+	
+	
+	
 </script>
 
 </head>
 <body>
 	<%@ include file="../sub/header.jspf"%>
 	<div class="box">
+	
 	<h2>${board} List</h2>
 	<table id="Mtable" class="table table-hover">
 		<tr>
-			<td>번호</td><td>제목</td><td>작성자</td><td>작성일자</td><td>조회수</td>
+			<td>번호</td>
+			
+			<c:if test="${board eq 'wish' }">
+			<td> category </td>
+			<td >사진</td>
+			</c:if>
+			<td>제목</td>
+			<td>작성자</td>
+			<td>작성일자</td>
+			<td>조회수</td>
 		</tr>
 		<c:forEach items="${list}" var="f">
 			<tr>
 				<td >${f.num }</td>
-				<td style="width: 500px; text-align: left;">
+				
+	 
+				<c:if test="${board eq 'wish' }">
+				
+				<td ><span id="cate">${f.category}</span>  </td>
+				
+				
+				<td id="td_thumb">
+				<a style="width: 90px; height: 90px" href="${board}View?num=${f.num}&pnum=${f.num}&m_id=${member.id}&kind=${f.kind}">${f.thumb }</a>
+				</td>
+				</c:if>
+			
+				
+				
+				<td style="width: 300px;  text-align: left;" >
 				<c:catch var="e">
 					<c:forEach begin="1" end="${f.depth}">
 						ㄴ
@@ -125,6 +231,7 @@
 				</c:catch>
 				
 				<a href="${board}View?num=${f.num}&pnum=${f.num}&m_id=${member.id}&kind=${f.kind}">${f.title}</a>
+				
 				</td>
 				
 

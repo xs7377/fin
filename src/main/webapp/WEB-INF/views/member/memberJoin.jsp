@@ -295,9 +295,9 @@ $("#join_btn").click(function() {
      <!-- 주소 -->
      <div class="input-group">
       <span class="input-group-addon"><i class="glyphicon glyphicon-modal-window"></i></span> 
-	   <input type="text" id="sample6_postcode" class="form-control" placeholder="Postal Code" style="width: 120px;" readonly="readonly">
+	   <input type="text" id="sample6_postcode" class="form-control" name="addr" placeholder="Postal Code" style="width: 120px;" readonly="readonly">
       <input id="sample6_address" type="text" class="form-control" name="addr" placeholder="Address" style="width: 350px; margin-left: 5px;" readonly="readonly">
-      <input id="sample6_address2" type="text" class="form-control" placeholder="Detailed Address" style="width: 194px; margin-left: 5px;">
+      <input id="sample6_address2" type="text" class="form-control" name="addr"  placeholder="Detailed Address" style="width: 194px; margin-left: 5px;">
 		<input type="button" onclick="sample6_execDaumPostcode()" value="주소검색"  class="id_check btn" style="margin-left: 5px;"><br>
     </div> <br> <br> 
     

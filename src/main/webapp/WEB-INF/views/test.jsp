@@ -49,6 +49,7 @@ $(function(){
 	        	data:{
 	        		num:num,
 	        		price:pay[0],
+	        		id:"${member.id}",
 	        		addr:addr[0]+","+addr[1]+","+addr[2]
 	        	},success:function(){
 	        		opener.parent.location.reload();

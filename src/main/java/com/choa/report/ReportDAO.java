@@ -10,6 +10,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.choa.util.PageMaker;
+import com.choa.util.PageResult;
 import com.choa.util.RowMaker;
 
 @Repository
@@ -20,15 +21,21 @@ public class ReportDAO {
 	
 	private static String NAMESPACE="ReportMapper.";
 	
-	public List<ReportDTO> reportList(int curPage) throws Exception{
+	//김민아 - reportList 최종 수정
+	public Map<String, Object> reportList(int curPage) throws Exception{
 		Map<String, Object> map=new HashMap<String, Object>();
 		PageMaker pageMaker=new PageMaker(curPage);
 		RowMaker rowMaker=pageMaker.getRowMaker();
 		rowMaker.makeRow(curPage, 10);
-		
 		map.put("startRow", rowMaker.getStartRow());
 		map.put("lastRow", rowMaker.getLastRow());
-		return sqlSession.selectList(NAMESPACE+"reportList",map);
+		//위에는 db에 들어가서 처리하는 값 밑
+		
+		int totalCount = sqlSession.selectOne(NAMESPACE+"totalCount");
+		PageResult pr=pageMaker.paging(totalCount);
+		map.put("list", sqlSession.selectList(NAMESPACE+"reportList",map));
+		map.put("pageResult", pr);
+		return map;
 	}
 	
 	//count 몇 회 신고 당했는지
@@ -39,7 +46,6 @@ public class ReportDAO {
 	
 	//view
 	public ReportDTO reportView(int num) throws Exception{
-		
 		return sqlSession.selectOne(NAMESPACE+"reportView", num);
 	}
 	
@@ -51,7 +57,6 @@ public class ReportDAO {
 
 	//신고
 	public int report(ReportDTO reportDTO) throws Exception{
-		
 		return sqlSession.insert(NAMESPACE+"report", reportDTO);
 	}
 	

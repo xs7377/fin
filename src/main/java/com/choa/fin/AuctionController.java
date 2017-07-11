@@ -3,6 +3,7 @@ package com.choa.fin;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +33,11 @@ import com.choa.coupon.CouponService;
 import com.choa.member.MemberDTO;
 import com.choa.reply.ReplyDTO;
 import com.choa.upload.UploadDTO;
+import com.choa.util.PageMaker;
 import com.choa.util.PageResult;
+import com.choa.util.RowMaker;
+import com.choa.util.SearchService;
+import com.sun.mail.imap.protocol.SearchSequence;
 
 @Controller
 @RequestMapping(value="/auction")
@@ -42,6 +47,9 @@ public class AuctionController {
 	
 	@Inject
 	private CouponService couponService;
+	
+	@Inject
+	private SearchService searchService;
 	
 	// =========================================== auction view, reply 추가분 =========================
 	@RequestMapping(value="auctionView/{num}")
@@ -152,18 +160,25 @@ public class AuctionController {
 		}
 		return modelAndView;
 	}
-	@RequestMapping(value="auctionPay/{num}")
-	public ModelAndView auctionPay(@PathVariable(value="num") int num, ModelAndView model, HttpSession session) throws Exception{
-		Map<String, Object> map = auctionService.view(num);
+	@RequestMapping(value="auctionPay/{num}/{kind}")
+	public ModelAndView auctionPay(@PathVariable(value="num") int num, @PathVariable(value="kind")String kind, ModelAndView model, HttpSession session) throws Exception{
+		boolean check_pay = false;
 		MemberDTO memberDTO = (MemberDTO)session.getAttribute("member");
-		System.out.println(memberDTO.getId());
+		if(kind.equals("buy")){
+			
+		}else if(kind.equals("tender")){
+			
+		}else{
+			
+		}
+		Map<String, Object> map = auctionService.view(num);
 		List<CouponDTO> ar = couponService.allCoupon(memberDTO.getId());
 		model.setViewName("auction/auctionPay");
 		model.addObject("auction", map.get("auctionDTO")).addObject("imgs", map.get("imgList")).addObject("coupon", ar);
 		return model;
 	}
 	
-	@RequestMapping(value="auctionPayment/{num}")
+	@RequestMapping(value="auctionPayment/{num}/{id}")
 	public ModelAndView auctionPayment(@PathVariable(value="num")int num, String addr, ModelAndView mv) throws Exception{
 		Map<String, Object> map = auctionService.view(num);
 		mv.setViewName("/test");
@@ -182,6 +197,12 @@ public class AuctionController {
 	@ResponseBody
 	public int replyRemove(int num, int pnum){
 		return auctionService.reply_remove(num, pnum);
+	}
+	
+	@RequestMapping(value="replyMod")
+	@ResponseBody
+	public int replyMod(ReplyDTO replyDTO) throws Exception{
+		return auctionService.replyMod(replyDTO);
 	}
 	
 	// ============================== 검색어 카운트 ====================================
@@ -205,6 +226,22 @@ public class AuctionController {
 	@RequestMapping(value="/totalList", method=RequestMethod.POST)
 	public ModelAndView totalList(String search, int startNum,int lastNum, ModelAndView mv)throws Exception{
 		System.out.println("===================totalList");
+		
+		//hyo 추가
+		System.out.println("검색어"+search);
+		if(startNum==0&&lastNum==0){
+			startNum=1;
+			lastNum=8;
+		}
+		Map<String, Object> searchList=new HashMap<String, Object>();
+		PageMaker pageMaker=new PageMaker(1, 5);
+		RowMaker rowMaker=pageMaker.getRowMaker();
+		searchList.put("search", search);
+		searchList.put("startRow", rowMaker.getStartRow());
+		searchList.put("lastRow", rowMaker.getLastRow());
+		System.out.println(searchList.get("startRow"));
+		//끝
+
 		Map<String, Object> map= auctionService.totalList(search, "",startNum, lastNum);
 		List<AuctionDTO> list=(List<AuctionDTO>)map.get("list");
 		List<Integer> listCount=new ArrayList<Integer>();
@@ -216,6 +253,12 @@ public class AuctionController {
 		mv.addObject("totalCount", map.get("totalCount")).addObject("totalList",map.get("list")).addObject("listCount", listCount);
 		mv.addObject("search", search).addObject("ctg", ctg);
 		mv.setViewName("auction/totalList");
+		
+		//hyo 추가
+		mv.addObject("searchWish", searchService.searchWish(searchList)).addObject("searchNotice", searchService.searchNotice(searchList));
+		mv.addObject("searchFreeBoard",searchService.searchFreeBoard(searchList));
+				//여까지
+		
 		return mv;
 	}
 	// ============================== Home ==========================================
@@ -382,7 +425,7 @@ public class AuctionController {
 		auctionService.update(auctionDTO, this.thum(session), dList);
 	}
 	// ============================== 수정조회 ==========================================
-	@RequestMapping(value="/auctionMod", method=RequestMethod.POST)
+	@RequestMapping(value="/auctionMod", method=RequestMethod.GET)
 	public ModelAndView auctionModForm(ModelAndView mv, int num)throws Exception{
 		System.out.println("수정할 글번호 : "+num);
 		mv.addObject("kind", "ModProcess");

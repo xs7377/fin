@@ -68,7 +68,7 @@
 				parent.$("#tender_modal_frame").css("height","650px");
 				parent.$(".modal-content").css("width","750px");
 				parent.$(".modal").css("padding-top","50px");
-				location.replace("${pageContext.servletContext.contextPath }/auction/auctionPay/"+num);	
+				location.replace("${pageContext.servletContext.contextPath }/auction/auctionPay/"+num+"/buy");	
 			}else if(check_id){
 				if(check_pri){
 					$.ajax({

@@ -212,4 +212,13 @@ public class AuctionService {
 		return auctionDAO.likeSelect(id, num);
 	}
 	
+	public int replyMod(ReplyDTO replyDTO) throws Exception{
+		return auctionDAO.replyMod(replyDTO);
+	}
+	
+	//3개월 전 게시물 삭제
+	public int threeMonthDelete(String beforeDate) throws Exception{
+		return auctionDAO.threeMonthDelete(beforeDate);
+	}
+	
 }

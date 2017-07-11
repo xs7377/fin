@@ -5,7 +5,6 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-
 <style type="text/css">
 .agree_wrap{
 	width: 1100px;
@@ -98,6 +97,7 @@
 
 	function go() {
 		for (var i = 0; i < check.length; i++) {
+			alert("ㅎㅇ");
 			if (check_all.checked) {
 				check[i].checked = true;
 				not_check[i].checked = false;

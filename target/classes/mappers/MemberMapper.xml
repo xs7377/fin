@@ -3,99 +3,157 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    
-    <mapper namespace="MemberMapper">
-    <select id="idFind" parameterType="java.util.Map" resultType="com.choa.member.MemberDTO">
-     	select id, email from member where name=#{name} and email=#{email}
-    </select>
-    
-    <select id="pwFind" parameterType="java.util.Map" resultType="com.choa.member.MemberDTO">
-     	select id, email, pw from member where id=#{id} and email=#{email}
-    </select>
-    
-    <insert id="memberJoin" parameterType="com.choa.member.MemberDTO">
-    	insert into member values(#{id}, #{pw}, #{name}, #{phone}, #{addr},
-    	#{email}, 0, 0, 0 , 'NEW', #{fname}, #{oname}, 'member')
-    </insert>
-     
-    <delete id="memberDelete" parameterType="String">
-		delete member where id=#{id}
+
+<mapper namespace="MemberMapper">
+
+	<select id="idFind" parameterType="java.util.Map" resultType="com.choa.member.MemberDTO">
+		select id, email from member where name=#{name} and email=#{email}
+	</select>
+
+	<select id="pwFind" parameterType="java.util.Map" resultType="com.choa.member.MemberDTO">
+		select id, email, pw from member where id=#{id} and email=#{email}
+	</select>
+
+	<insert id="memberJoin" parameterType="com.choa.member.MemberDTO">
+		insert into member values(#{id}, #{pw}, #{name}, #{phone}, #{addr},
+		#{email}, 0, 0, 0 , 'NEW', #{fname}, #{oname}, 'member')
+	</insert>
+
+	<delete id="memberDelete" parameterType="String">
+		delete member where
+		id=#{id}
 	</delete>
-	
-	<select id="memberView" parameterType="String" resultType="com.choa.member.MemberDTO">
+
+	<select id="memberView" parameterType="String"
+		resultType="com.choa.member.MemberDTO">
 		select * from member where id=#{id}
 	</select>
-    
-    <select id="memberLogin" parameterType="com.choa.member.MemberDTO" resultType="com.choa.member.MemberDTO">
+
+	<select id="memberLogin" parameterType="com.choa.member.MemberDTO"
+		resultType="com.choa.member.MemberDTO">
 		select * from member where id=#{id} and pw=#{pw}
 	</select>
-    
-    <update id="memberUpdate" parameterType="com.choa.member.MemberDTO">
-    	update member set pw=#{pw}, name=#{name}, phone=#{phone}, addr=#{addr},
-    	email=#{email}, fname=#{fname}, oname=#{oname} where id=#{id}
-    </update>
-    
-    <select id="checkId" parameterType="String" resultType="com.choa.member.MemberDTO">
-    	select * from member where id=#{id}
-    </select>
-    
-    <select id="searchEmail" parameterType="String">
-    	select * from member where email=#{email}
-    </select>
-    
-    <update id="pwUpdate" parameterType="java.util.Map">
-    	update member set pw=#{password} where id=#{id}
-    </update>
-    
-    <select id="fileSelect" parameterType="java.lang.String" resultType="java.lang.String">
+
+	<update id="memberUpdate" parameterType="com.choa.member.MemberDTO">
+		update member set pw=#{pw}, name=#{name}, phone=#{phone}, addr=#{addr},
+		email=#{email}, fname=#{fname}, oname=#{oname} where id=#{id}
+	</update>
+
+	<select id="checkId" parameterType="String" resultType="com.choa.member.MemberDTO">
+		select * from member where id=#{id}
+	</select>
+
+	<select id="searchEmail" parameterType="String">
+		select * from member where email=#{email}
+	</select>
+
+	<update id="pwUpdate" parameterType="java.util.Map">
+		update member set pw=#{password} where id=#{id}
+	</update>
+
+	<select id="fileSelect" parameterType="java.lang.String"
+		resultType="java.lang.String">
 		select fname from member where id=#{id}
 	</select>
-	
-	<update id="fileDelete" parameterType="java.lang.String">
-		update member set fname=null , oname=null where id=#{id}
-	</update>
-    
-    <select id="memberList" resultType="com.choa.member.MemberDTO">
-     	select * from member;
-    </select>
-    
-    <update id="gradeUpdate" parameterType="java.util.Map">
-   		 update member set grade=#{grade} where id = #{id}
-    </update>
-    
-    <select id="sellIng" parameterType="java.util.Map" resultType="com.choa.auction.AuctionDTO">
-    	select * from (select rownum r, a.* from 
-    		(select * from auction
-    		 where m_id=#{id} and kind = 'auction'
-    		 order by num desc) a)
-    		 where r between #{row.startRow} and #{row.lastRow}
-    </select>
-    
-    <select id="sellIngTotalCount" parameterType="String" resultType="int">
-    	select count(num) from auction where m_id=#{id} and kind = 'auction'
-    </select>
-    
-    <select id="sellEnd" parameterType="java.util.Map" resultType="com.choa.auction.AuctionDTO">
-    	select * from (select rownum r, a.* from 
-    		(select * from auction
-    		where m_id=#{id} and kind = 'buy'
-    		 order by num desc) a)
-    		 where r between #{row.startRow} and #{row.lastRow}
-    </select>
-    
-    <select id="sellEndTotalCount" parameterType="String" resultType="int">
-    	select count(num) from auction where m_id=#{id} and kind = 'buy'
-    </select>
-    
-    <select id="likesNum" parameterType="String" resultType="int">
-   		select pnum from likes where m_id = #{id} and kind = 'auction'
-    </select>
-    
-    <select id="likesProduct" parameterType="java.util.Map" resultType="com.choa.auction.AuctionDTO">
-    	select * from (select rownum r, a.* from 
-    		(select * from auction where num = #{pnum}
-    		 order by num desc) a)
-    		 where r between #{row.startRow} and #{row.lastRow}
-    </select>
 
-    </mapper>
+	<update id="fileDelete" parameterType="java.lang.String">
+		update member set
+		fname=null , oname=null where id=#{id}
+	</update>
+
+	<select id="memberList" resultType="com.choa.member.MemberDTO">
+		select * from member;
+	</select>
+
+	<update id="gradeUpdate" parameterType="java.util.Map">
+		update member set grade=#{grade} where id = #{id}
+	</update>
+
+	<select id="sellIng" parameterType="java.util.Map" resultType="com.choa.auction.AuctionDTO">
+		select * from (select rownum r, a.* from
+		(select * from auction
+		where m_id=#{id} and kind = 'auction'
+		order by num desc) a)
+		where r between #{row.startRow} and #{row.lastRow}
+	</select>
+
+	<select id="sellIngTotalCount" parameterType="String"
+		resultType="int">
+		select count(num) from auction where m_id=#{id} and kind = 'auction'
+	</select>
+
+	<select id="sellEnd" parameterType="java.util.Map" resultType="com.choa.auction.AuctionDTO">
+		select * from (select rownum r, a.* from
+		(select * from auction
+		where m_id=#{id} and kind = 'buy'
+		order by num desc) a)
+		where r between #{row.startRow} and #{row.lastRow}
+	</select>
+
+	<select id="sellEndTotalCount" parameterType="String"
+		resultType="int">
+		select count(num) from auction where m_id=#{id} and kind = 'buy'
+	</select>
+
+	<select id="likesNum" parameterType="String" resultType="int">
+		select pnum from likes where m_id = #{id} and kind = 'auction'
+	</select>
+
+	<select id="likesProduct" parameterType="java.util.Map"
+		resultType="com.choa.auction.AuctionDTO">
+		select * from (select rownum r, a.* from
+		(select * from auction where num = #{pnum}
+		order by num desc) a)
+		where r between #{row.startRow} and #{row.lastRow}
+	</select>
+
+	<select id="buyEndTotalCount" parameterType="String" resultType="int">
+		select count(num) from auction where buyer like '%' || #{id} || '%' and
+		kind = 'buy'
+	</select>
+
+	<select id="buyEnd" parameterType="java.util.Map" resultType="com.choa.auction.AuctionDTO">
+		select * from (select rownum r, a.*from
+		(select * from auction where buyer like '%' || #{id} || '%' and kind ='buy'
+		order by num desc) a)
+		where r between #{row.startRow} and #{row.lastRow}
+	</select>
+	
+	<select id="buyIngPnum" parameterType="String" resultType="int">
+		select pnum from bidder where m_id = #{id} and kind = '구매'
+	</select>
+	
+	<select id="buyIng" parameterType="java.util.Map" resultType="com.choa.auction.AuctionDTO">
+		select * from (select rownum r, a.* from
+		(select * from auction where num = #{pnum}
+		order by num desc) a)
+		where r between #{row.startRow} and #{row.lastRow}
+	</select>
+	
+	<select id="biddingPnum" parameterType="String" resultType="int">
+		select pnum from bidder where m_id = #{id} and kind = '입찰'
+	</select>
+	
+	<select id="bidding" parameterType="java.util.Map" resultType="com.choa.auction.AuctionDTO">
+		select * from (select rownum r, a.* from
+		(select * from auction where num = #{pnum}
+		order by num desc) a)
+		where r between #{row.startRow} and #{row.lastRow}
+	</select>
+	
+	<!--모든 판매자 리스트/판매 건수 출력  -->
+	<select id="sellerList" resultType="com.choa.auction.AuctionDTO">
+		select m_id, count(num) num from auction where kind='buy' group by m_id
+	</select>
+	
+	<!-- 판매자 별 판매 금액 리스트 출력 -->
+	<select id="buyerList" parameterType="String" resultType="String">
+		select buyer from auction where m_id = #{m_id} and kind='buy'
+	</select>
+	
+	<!-- 출석체크 -->
+	<insert id="attendInsert" parameterType="String">
+		insert into attend values(#{id}, 0, 0)
+	</insert>
+	
+</mapper>

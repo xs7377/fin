@@ -27,9 +27,8 @@ public class NoticeDAO implements BoardDAO{
 	@Override
 	public List<BoardDTO> boardList(RowMaker rowMaker, String kinds, String search) throws Exception {
 		Map<String, Object> map=new HashMap<String, Object>();
-		
 		map.put("row", rowMaker);
-		map.put("kind", kinds);
+		map.put("kinds", kinds);
 		map.put("search", search);
 		return sqlSession.selectList(namespace+"noticeList",map);
 	}

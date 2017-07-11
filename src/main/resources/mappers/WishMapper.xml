@@ -21,20 +21,19 @@
    	</select>	
    		
    		
-   		
    	<!--리스트 완  -->
    	<select id="wishList" parameterType="java.util.Map" resultType="com.choa.wish.WishDTO">
    	select * from
    	(select rownum r, t.* from
    	(select * from wish 
    	<if test="kinds=='title'">
-    	where title like '%'||#{search}||'%' and category=#{category} and kind=#{kind} 
+    	where title like '%'||#{search}||'%' and kind=#{kind} 
    </if>
     <if test="kinds=='contents'">
-    	where contents like '%'||#{search}||'%' and category=#{category} and kind=#{kind} 
+    	where contents like '%'||#{search}||'%' and kind=#{kind} 
     </if>
     <if test="kinds=='writer'">
-    	where m_id like '%'||#{search}||'%' and category=#{category} and kind=#{kind} 
+    	where m_id like '%'||#{search}||'%'  and kind=#{kind} 
     </if>
    	
    	order by ref desc, step asc) t)
@@ -50,7 +49,7 @@
     <!-- 글 쓰 기 완-->
     <insert id="wishWrite" parameterType="com.choa.wish.WishDTO">
     	insert into wish
-    	values(NVL((select max(num) from wish),0)+1,#{m_id},#{title},#{contents},sysdate, 0,NVL((select max(num) from wish),0)+1,0,0,0,#{category},#{kind})
+    	values(NVL((select max(num) from wish),0)+1, #{m_id} ,#{title},#{contents},sysdate, 0,NVL((select max(num) from wish),0)+1,0,0,0,#{category},#{kind})
     </insert>
     <!-- 수 정  완-->
     <update id="wishMod" parameterType="com.choa.wish.WishDTO">
@@ -75,6 +74,27 @@
      #{result, javaType=int, mode=OUT, jdbcType=INTEGER, resultMap=wishMap}) 
    	}
     </insert>
+
+
+
+
+
+	<select id="categorySel" parameterType="int" resultType="categoryDTO">
+	
+	select * from category where pnum=#{pnum}
+	
+	</select>
+
+	<select id="category" parameterType="int" resultType="categoryDTO">
+	
+	select * from category where num=#{num}
+	
+	</select>
+	
+	
+
+
+
     
     
     </mapper>

@@ -11,7 +11,7 @@
     		where contents like '%'||#{search}||'%'
     	</sql>
     	<sql id="t3">
-    		where writer like '%'||#{search}||'%'
+    		where m_id like '%'||#{search}||'%'
     	</sql>
     	<select id="noticeView" parameterType="java.lang.Integer" resultType="com.choa.notice.NoticeDTO">
     		select * from notice where num=#{num}
@@ -43,9 +43,9 @@
     	</select>
     	
     	<select id="noticeList" parameterType="java.util.Map" resultType="com.choa.notice.NoticeDTO">
-    		select * from 
-    		(select rownum r, t.* from 
-    		(select * from notice 
+    		select * from
+    		(select rownum r, t.* from
+    		(select * from notice
     		<if test="kinds =='title'">
     			where title like '%'||#{search}||'%'
     		</if>
@@ -53,7 +53,7 @@
     			where contents like '%'||#{search}||'%'
     		</if>
     		<if test="kinds =='writer'">
-    			where writer like '%'||#{search}||'%'
+    			where m_id like '%'||#{search}||'%'
     		</if>
     		 order by num desc) t)
     		 where r between #{row.startRow} and #{row.lastRow}

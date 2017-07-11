@@ -2,36 +2,47 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    
-    
-    <mapper namespace="FriendMapper">
-    
-    <!-- 1.일단 친구추가  -->
-    
-    <insert id="friendAdd" parameterType="com.choa.friend.FriendDTO">
-    insert into friend
-    values(NVL((select max(num) from friend),0)+1,#{m_id},#{f_id})
-    </insert>
-    
-    <!-- 자연스럽게 삭제  -->
-    <delete id="friendDelete" parameterType="com.choa.friend.FriendDTO">
-    delete friend where m_id=#{m_id} and f_id=#{f_id}
-    </delete>
-    
-    <!-- 자연스럽게 체크  -->
-    <select id="friendCheck" parameterType="com.choa.friend.FriendDTO" resultType="com.choa.friend.FriendDTO">
-    
-    select * from friend 
-    where m_id=#{m_id} and f_id=#{f_id}
-    
-    </select>
-    
-    <!--friend List startRow랑 lastRow 만들어줘야하는데 귀찮다. -->
-    <select id="friendList" parameterType="String" resultType="com.choa.friend.FriendDTO">
-    select * from friend 
-    where m_id=#{m_id}
-   	</select>
-    
-    
-    </mapper>
+
+
+<mapper namespace="FriendMapper">
+
+	<!-- 1.일단 친구추가 -->
+
+	<insert id="friendAdd" parameterType="com.choa.friend.FriendDTO">
+		insert into friend
+		values(NVL((select max(num) from friend),0)+1,#{m_id},#{f_id})
+	</insert>
+
+	<!-- 자연스럽게 삭제 -->
+	<delete id="friendDelete" parameterType="com.choa.friend.FriendDTO">
+		delete friend where m_id=#{m_id} and f_id=#{f_id}
+	</delete>
+
+	<!-- 자연스럽게 체크 -->
+	<select id="friendCheck" parameterType="com.choa.friend.FriendDTO"
+		resultType="com.choa.friend.FriendDTO">
+
+		select * from friend
+		where m_id=#{m_id} and f_id=#{f_id}
+
+	</select>
+
+	<!--friend List startRow랑 lastRow 만들어줘야하는데 귀찮다. -->
+	<select id="friendList" parameterType="java.util.Map"
+		resultType="com.choa.friend.FriendDTO">
+
+		select * from
+		(select rownum r, f.* from
+		(select * from friend
+		where m_id=#{id}
+		order by num desc) f )
+		where r between #{row.startRow} and #{row.lastRow}
+
+	</select>
+
+	<select id="totalCount" parameterType="String" resultType="int">
+	 	select count(num) from friend where m_id = #{m_id}
+	</select>
+
+</mapper>
     

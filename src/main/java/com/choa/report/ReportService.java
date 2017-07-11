@@ -18,7 +18,7 @@ public class ReportService {
 	private ReportDAO reportDAO;
 	
 	
-	public List<ReportDTO> reportList(int curPage) throws Exception{
+	public Map<String, Object> reportList(int curPage) throws Exception{
 		return reportDAO.reportList(curPage);
 	}
 	

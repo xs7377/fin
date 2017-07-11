@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SearchMapper" > 
+
+	
+	<select id="searchFreeBoard" parameterType="java.util.Map" resultType="com.choa.freeBoard.FreeBoardDTO">
+	select * from 
+	(select rownum r, t.* from
+	(select * from freeboard where title like '%'||#{search}||'%' or contents like '%'||#{search}||'%' order by num desc)t)
+	where r between #{startRow} and #{lastRow}
+	</select>
+
+	<select id="searchNotice" parameterType="java.util.Map" resultType="com.choa.notice.NoticeDTO">
+	select * from 
+	(select rownum r, t.* from
+	(select * from notice where title like '%'||#{search}||'%' or contents like '%'||#{search}||'%' order by num desc)t)
+	where r between #{startRow} and #{lastRow}
+	</select>
+
+	<select id="searchWish" parameterType="java.util.Map" resultType="com.choa.wish.WishDTO">
+	select * from 
+	(select rownum r, t.* from
+	(select * from wish where title like '%'||#{search}||'%' or contents like '%'||#{search}||'%' order by num desc)t)
+	where r between #{startRow} and #{lastRow}
+	</select>
+
+	<!--Review도 만들어야함. -->
+
+
+</mapper>

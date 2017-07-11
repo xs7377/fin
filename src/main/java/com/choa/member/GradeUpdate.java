@@ -1,17 +1,13 @@
 package com.choa.member;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
 import com.choa.coupon.CouponService;
 
 @Component
@@ -34,10 +30,10 @@ public class GradeUpdate {
 		Calendar real_today = Calendar.getInstance();
 		int real_month = (real_today.get(Calendar.MONTH));
 		if(real_month == 1 || real_month == 3 ||  real_month == 5 ||  real_month == 7 ||
-				 real_month == 8 ||  real_month == 10 ||  real_month == 12 ){
+				real_month == 8 ||  real_month == 10 ||  real_month == 12 ){
 			lastDay = 31;
 		} else if( real_month == 4 ||  real_month == 6 ||  real_month == 9 ||
-				 real_month == 11 ) {
+				real_month == 11 ) {
 			lastDay = 30;
 		} else {
 			lastDay = 28;
@@ -47,7 +43,7 @@ public class GradeUpdate {
 		String lastDate = format2.format(lastMonth);
 
 		Map<String, Object> map = new HashMap<String, Object>();
-		
+
 		List<MemberDTO> memberList = memberService.memberList();
 		map.put("startDate", startDate);
 		map.put("lastDate", lastDate);
@@ -72,11 +68,11 @@ public class GradeUpdate {
 				} else if(tCount>=2 && tMoney>= 40000){ //silver
 					grade = "SILVER";
 				} else { //new
-					
+
 				}
 				map.put("grade", grade);
 				memberService.gradeUpdate(map);
-				
+
 			}
 		}catch (Exception e) {
 		}

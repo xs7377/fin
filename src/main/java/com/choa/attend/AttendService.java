@@ -10,6 +10,16 @@ public class AttendService {
 	@Inject
 	private AttendDAO attendDAO;
 	
+	//totalCheck
+	public int totalCheck(String m_id) throws Exception{
+		int total = attendDAO.totalCheck(m_id);
+		if(total == 0) {
+			total = 0;
+		}
+		
+		return total;
+	}
+	
 	//출석체크
 	public int attendCheck(String m_id)throws Exception{
 		return attendDAO.attendCheck(m_id);

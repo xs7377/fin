@@ -1,11 +1,7 @@
 package com.choa.fin;
 
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withCreatedEntity;
-
 import javax.inject.Inject;
-
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -20,7 +16,7 @@ public class AttendController {
 	private AttendService attendService;
 
 
-	@RequestMapping(value="attendCheck",method=RequestMethod.GET)
+	@RequestMapping(value="memberAttend",method=RequestMethod.GET)
 	public String attendCheck(String m_id,RedirectAttributes redirectAttributes){
 		String msg="출석 실패";
 		int result=0;

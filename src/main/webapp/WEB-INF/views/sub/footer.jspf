@@ -7,15 +7,16 @@
 <title>Insert title here</title>
 <style type="text/css">
 footer {
+	height: 300px;
+	margin-top: 60px;
 	border-top: 1px dotted #a6a6a6;
 }
 
 .footer_wrap{
 	width: 1300px;
+	height: 220px;
 	margin: 0 auto;
 	padding-top: 20px;
-	padding-bottom: 20px;
-	height: 180px;
 }
 
 .info{
@@ -26,7 +27,7 @@ footer {
 } 
 
 
-#info_2{
+#info_2222{
 	width: 232px; 
 	float: right; 
 	color: #595959;
@@ -37,8 +38,8 @@ footer {
 	float: right;
 } 
 
-#ph{   
-	font-size: 1.8em;
+#ph1234{   
+	font-size: 1.7em;
 	font-weight: bolder; 
 	float: right;
 } 
@@ -53,7 +54,6 @@ footer {
 
 
 <footer>
-	<div style="">
 	<div class="footer_wrap">
 		<div class="info">
 			<p>주식회사 트레이드마크 | 사업자 등록번호: 123-456-7890 | 대표자: 트레이드마크</p>
@@ -65,11 +65,11 @@ footer {
 			<p style="color:#179f96; font-weight: bolder;">Copyright TRADEMARK All rights reserved.</p>
 		</div>
 		
-	<div id="info_2">  
-	<p id="ph">010-1234-5678</p>
+	<div id="info_2222">  
+	<p id="ph1234">010-1234-5678</p>
 	<p class="info_2_inner">카카오톡ID: <span id="kkiri">TRADEMARK</span></p>
 	</div>
-	</div>
+
 	</div>
 </footer>
 

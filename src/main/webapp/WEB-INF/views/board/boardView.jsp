@@ -207,6 +207,8 @@
 	});
 	
 		
+		
+		//여기서부터 손 좀 보자
 		$("body").on("click", "#reply_more_btn", function() {
 			lastRow += 10;
 			alert(lastRow);
@@ -278,6 +280,9 @@
 			var parent_node = $(this).parent("div");
 			$(parent_node).css("display", "none");
 		});
+		
+		
+		//여기도 손 보자
 
 		$("body").on("click", "#wishReply_input", function() {
 			var parent_node = $(this).parents(".wishView_reply_write");
@@ -315,12 +320,17 @@
 			}
 		});
 		
+		
+		
+		//여기도 
 		$("body").on("focus",".reply_contents",function(){
 			var parent_reply = $(this).parents(".wishView_reply_write");
 			var children_btn = $(parent_reply).children('div');
 			$(children_btn).css("display","block");			
 		});
 		
+		
+		//여기또한
 		$("body").on("focus","#contents_focus",function(){
 			var parent_reply = $(this).parents(".wishView_reply_write");
 			var po = $("#wishView_reply").find(".re_write_node");
@@ -330,7 +340,7 @@
 		});
 		
 		
-		
+		//여기도 
 		$("body").on("click","#reply_in_reply",function(){
 			var parent = $(this).parent("div");
 			var next = $(parent).next().attr("class");
@@ -360,6 +370,8 @@
 				if(po!=null){
 					$(po).remove();
 				}
+				
+				//여기도 
 				var mod = "<div class='re_write_node'>";
 				mod += '<div id="replyNum_'+parent_id[1]+'"class="wishView_reply_write"style="padding-left:'+(50*depth)+'">';
 				mod += '<img alt="" src="${pageContext.servletContext.contextPath }/resources/upload/noImage.png" style="width: 48px; height: 48px; margin: 10px 10px;">';
@@ -384,6 +396,8 @@
 						$(data).each(function(){
 							text += reply(this);
 						});
+						
+						//여기도 
 					$("#wishView_reply").html(text);
 						var j = 0;
 						$(".reply_wrap").map(function(){
@@ -496,7 +510,11 @@
 
 
 
-		<!-- 댓글 -->
+	<!-- 여기로 안 들어오는구나 생각해보니까  -->
+		<!-- 댓글 여기도 Wish로 된 곳 다 고쳐야지 -->
+	
+	<c:if test="${board == 'wish'}">
+	
 		<div id="wishView_reply_wrap">
 
 
@@ -520,6 +538,7 @@
 
 
 		</div>
+		</c:if>
 		<!-- 댓글 끝ㅅ-->
 
 

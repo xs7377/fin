@@ -45,7 +45,7 @@ public class ReviewController {
 			RowMaker rowMaker=pageMaker.getRowMaker();
 			PageResult pageResult=new PageResult();
 			map.put("kind", "review");
-			map.put("id", id);
+			map.put("p_id", id);
 			map.put("startRow", rowMaker.getStartRow());
 			map.put("lastRow", rowMaker.getLastRow());
 			//map설정
@@ -55,6 +55,7 @@ public class ReviewController {
 			
 			model.addAttribute("pageResult", pageResult);
 			model.addAttribute("list", ar);
+			model.addAttribute("p_id", id);
 			model.addAttribute("board","review");
 			model.addAttribute("curPage",curPage);
 			

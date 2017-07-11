@@ -5,6 +5,14 @@
     
     <mapper namespace="AttendMapper">
     <resultMap type="java.util.HashMap" id="myMap2"></resultMap>
+    
+    
+<!--     total 체크 출력  -->
+    <select id="totalCheck" parameterType="String" resultType="com.choa.attend.AttendDTO">
+    	select total from attend where m_id = #{m_id}
+    </select>
+
+    
     <!--처음 출첵하는 건지  -->	
     
     <update id="attendCheck" statementType="CALLABLE" parameterType="java.util.Map">
@@ -23,6 +31,7 @@
     <select id="attendCut" parameterType="String" resultType="int">
     select today from attend where m_id=#{m_id}
     </select>
+    
     <!-- 15일되면 자동으로  update로 today =1 로 하고 total 0 으로  -->
 	<update id="attendReset" parameterType="String">
 	update attend set today=1, total=1 where m_id=#{m_id}  
@@ -33,6 +42,7 @@
 	<delete id="attendDel" parameterType="String">
 	delete attend where m_id=#{m_id}
 	</delete>
+
 
 
     

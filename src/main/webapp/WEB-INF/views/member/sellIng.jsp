@@ -57,7 +57,7 @@ button.accordion.active:after {
 	content: "\2212";
 }
 
-div.panel {
+div.panel2 {
 	padding: 0 18px;
 	background-color: none;
 	max-height: 0;
@@ -79,6 +79,16 @@ a{
 	margin-left: 500px;
 }
 </style>
+<script type="text/javascript">
+$(function(){
+
+	var id = '${member.id}'
+	$(".go").click(function(){
+			var curPage=$(this).attr("id");
+			location.href="sellIng?curPage="+curPage+"&id="+id;
+		}); 
+});
+</script>
 </head>
 <body>
 <%@ include file="../sub/header.jspf"%>
@@ -92,7 +102,7 @@ a{
 		</button> 
 		</a>
 	
-		<div class="panel"></div>
+		<div class="panel2"></div>
 	 
 	<!--@hyo3  -->	
 		
@@ -102,8 +112,17 @@ a{
 		</button> 
 		</a> 
 		
-		<div class="panel"></div>
-
+		<div class="panel2"></div>
+		
+		
+		<a href="/fin/member/memberFriends?curPage=1&id=${member.id }" style="font-weight: normal;">
+		<button class="accordion">
+			<span class="glyphicon glyphicon-music"></span> 나의 친구
+		</button> 
+		</a> 
+		
+		<div class="panel2"></div>
+ 
 		
 
 		<button class="accordion">
@@ -112,7 +131,7 @@ a{
 	
 		
 		
-		<div class="panel">
+		<div class="panel2">
 			<dl>
 				<dd class="w3-bar-item w3-button tablink" onclick="openCity(event,'sendM')">
 					<a href="/fin/member/memberMessage?id=${member.id }" id="sendList" style="font-weight: normal; font-size: 0.9em;" > 보낸 쪽지함</a>
@@ -123,37 +142,39 @@ a{
 			</dl>
 		</div>
 		
-
+<a href="/fin/member/memberAttend?m_id=${member.id }" style="font-weight: normal;">
 		<button class="accordion">
 			<span class="glyphicon glyphicon-ok-circle"></span> 나의 출석
 		</button>
-		<div class="panel"></div>
+		</a>
+		<div class="panel2"></div>
+		
 
-	<a href="/fin/member/memberPoint">
+	<a href="/fin/member/memberPoint" style="font-weight: normal;">
 		<button class="accordion">
 			<span class="glyphicon glyphicon-heart"></span> 포인트 몰
 		</button>
 		</a>
 		
 		 
-		<div class="panel"></div>
+		<div class="panel2"></div>
 
 		<button class="accordion">
 			<span class="glyphicon glyphicon-shopping-cart"></span> 구매 관련
 		</button>
-		<div class="panel">
+		<div class="panel2">
 			<dl>
 				<dd>
-					<a href="#" style="font-weight: normal; font-size: 0.9em;">입찰 중 상품</a>
+					<a href="/fin/member/bidding?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">입찰 중 상품</a>
 				</dd>
 				<dd>
-					<a href="#" style="font-weight: normal; font-size: 0.9em;">구매 중 상품</a>
+					<a href="/fin/member/buyIng?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">구매 중 상품</a>
 				</dd>
 				<dd>
 					<a href="/fin/member/likesProduct?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">관심 상품</a>
 				</dd>
 				<dd>
-					<a href="#" style="font-weight: normal; font-size: 0.9em;">구매 완료 상품</a>
+					<a href="/fin/member/buyEnd?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">구매 완료 상품</a>
 				</dd>
 			</dl>
 		</div>
@@ -161,7 +182,7 @@ a{
 		<button class="accordion">
 			<span class="glyphicon glyphicon-usd"></span> 판매 관련
 		</button>
-		<div class="panel">
+		<div class="panel2">
 			<dl>
 				<dd>
 					<a href="/fin/member/sellIng?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">판매 중 상품</a>
@@ -171,7 +192,8 @@ a{
 				</dd>
 			</dl>
 		</div>
-</div>
+		
+	</div>	
 	
 	
 <div style="width: 1050px; height: 700px; float: right;">
@@ -192,9 +214,9 @@ a{
 	<c:forEach items="${list}" var="f">
 			<tr style="text-align: center; ">
 		<td style="width: 150px; vertical-align: middle;">${f.category}</td>
-		<td style="vertical-align: middle;"><a href="#">${f.title}</a></td>
-		<td style="width: 90px; vertical-align: middle;">${f.min_price}</td>
-		<td style="width: 90px; vertical-align: middle;">${f.max_price}</td>
+		<td style="vertical-align: middle;"><a href="/fin/auction/auctionView/${f.num}">${f.title}</a></td>
+		<td style="width: 100px; vertical-align: middle;">${f.min_price}원</td>
+		<td style="width: 100px; vertical-align: middle;">${f.max_price}원</td>
 		
 		<c:if test="${f.buyer != null}">
 		<td style="width: 100px; vertical-align: middle;">${f.buyer}</td>
@@ -220,13 +242,13 @@ a{
 	</table>
 <div class="paging">
 		<c:if test="${pageResult.curBlock>1}">
-			<span class="go" id="${pageResult.startNum-1}">[이전]</span>
+			<span class="go" id="${pageResult.startNum-1}" style="cursor: pointer; font-weight: bolder;">[이전]</span>
 		</c:if>
 		<c:forEach begin="${pageResult.startNum}" end="${pageResult.lastNum}" var="i">
-			<span class="go" id="${i}">${i}</span>
+			<span class="go" id="${i}" style="cursor: pointer; font-weight: bolder;">${i}</span>
 		</c:forEach>
 		<c:if test="${pageResult.curBlock<pageResult.totalBlock}">
-			<span class="go" id="${pageResult.lastNum+1}">[다음]</span>
+			<span class="go" id="${pageResult.lastNum+1}" style="cursor: pointer; font-weight: bolder;">[다음]</span>
 		</c:if>
 	</div>
 </div>

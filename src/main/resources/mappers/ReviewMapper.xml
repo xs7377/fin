@@ -26,14 +26,14 @@
     <insert id="reviewInsert" parameterType="com.choa.review.ReviewDTO">
     insert into review 
     values(NVL((select max(num) from review),0)+1, #{m_id}, #{title}, #{contents}, sysdate, 0,NVL((select max(num) from review),0)+1,
-    0,0,#{score}, #{id},'review')
+    0,0,#{score}, #{p_id},'review')
     </insert>
     <!--완료  -->
     
     <select id="reviewList" parameterType="java.util.Map" resultType="com.choa.review.ReviewDTO">
     select * from 
     (select rownum r, t.* from
-    (select * from review where p_id=#{id} order by ref desc, step asc) t) 
+    (select * from review where p_id=#{p_id} order by ref desc, step asc) t) 
     where r between #{startRow} and #{lastRow}
     </select>
     

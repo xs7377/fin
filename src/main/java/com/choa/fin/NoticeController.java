@@ -40,6 +40,8 @@ public class NoticeController {
 			if(search==null){
 				search="%";
 			}
+			System.out.println(kinds);
+			System.out.println(search);
 			Map<String, Object> map=noticeService.noticeList(curPage,kinds,search);
 			model.addAttribute("list",map.get("list"));
 			model.addAttribute("pageResult",map.get("pageResult"));

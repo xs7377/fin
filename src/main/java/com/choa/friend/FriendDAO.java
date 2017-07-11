@@ -1,12 +1,16 @@
 package com.choa.friend;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
+
+import com.choa.util.RowMaker;
 
 @Repository
 public class FriendDAO {
@@ -38,10 +42,15 @@ public class FriendDAO {
 		
 	}
 	//m_id가 친추한 친구의 목록
-	public List<FriendDTO> friendList(String m_id) throws Exception{
-		
-		return sqlSession.selectList(NAMESPACE+"friendList",m_id);
+	public List<FriendDTO> friendList(RowMaker rowMaker, String m_id) throws Exception{
+		Map<String, Object> map=new HashMap<String, Object>();
+		map.put("row", rowMaker);
+		map.put("id", m_id);
+		return sqlSession.selectList(NAMESPACE+"friendList",map);
 	}
 	
-	
+	//total Count
+	public int totalCount (String m_id) throws Exception{
+		return sqlSession.selectOne(NAMESPACE+"totalCount", m_id);
+	}
 }

@@ -30,11 +30,6 @@ $(function(){
 		}
 		$(this).addClass('click');
 	});
-	$(".clk").hover(function(){
-		$(this).children(".tl-title").addClass('underl');
-	},function(){
-		$(this).children(".tl-title").removeClass('underl');
-	})
 	// ====================================토탈페이지 더보기
 	$("#moreBtn").on("click",function(){
 		var ic='${totalCount}';
@@ -332,7 +327,6 @@ function reload(){
 .tl-img{
 	width:100%;
 	height: 50%;
-	overflow: hidden;
 }
 .tl-title{
 	padding-top:8px;
@@ -406,7 +400,8 @@ function reload(){
 .clk:hover{
 	text-shadow: 1px 1px 1px rgb(220,220,220);
 	box-shadow: 5px 5px 5px rgb(180,180,180);
-	border: 1px solid #bcbcbc;
+	border-left: 1px solid #bcbcbc;
+	border-bottom: 1px solid #bcbcbc;
 }
 .clk{
 	cursor: pointer;
@@ -437,16 +432,82 @@ function reload(){
 	display: inline-block;
 	height: 100%;
 }
-.underl{
-	text-decoration: underline;
+
+.search_list{
+
+	border: 3px solid pink; 
+	display: inline-block; 
+	width: 343px;
+ 	height: 370px;
+    margin-left:28px;
+    margin-top:10px; 
+    float: left;
+    
 }
+
 </style>
 </head>
 <body>
 	<div class="t-container">
-		<div class="t-con-title"></div>
-		<div class="t-board-con"></div>
-		<div class="t-paging"></div>
+		<div class="t-con-title" style="border: 3px solid red;"></div>
+		
+		
+		<div class="t-board-con" style="border: 3px solid blue;">
+		
+		
+		<!--NOTICE  -->
+		<div class="search_list">
+			<span style="border-bottom: 3px solid rgb(160,160,160);">NOTICE</span>
+			<ul>
+			<c:forEach items="${searchNotice}" var="s">
+				<li>
+				<span>
+				<!-- 이미지 넣을 거야 -->
+				<span id="hyo1" style="border: 3px solid red; width: 170px;">${s.title}</span>
+				${s.hit}
+				
+				</span>
+				</li>
+			</c:forEach>
+			</ul>
+		</div>
+		
+		<!--FREEBOARD  -->
+		<div class="search_list">
+			<span style="border-bottom: 3px solid rgb(160,160,160);" >FREEBOARD</span>
+			<ul>
+			<c:forEach items="${searchFreeBoard}" var="b">
+				<li>
+				<span id="hyo1" style="border: 3px solid red; width: 170px;">${b.title}</span>
+				${b.hit}
+				</li>
+			</c:forEach>
+			</ul>
+		</div>
+		
+		
+		<!--BUY  -->
+		<div class="search_list">
+			<span style="border-bottom: 3px solid rgb(160,160,160);">BUY</span>
+			<ul>
+			<c:forEach items="${searchWish}" var="w">
+				<li>
+				<span id="hyo1" style="border: 3px solid red; width: 170px;">${w.title}</span>
+				${w.hit}
+				</li>
+			</c:forEach>
+			</ul>
+		</div>
+	
+		
+		
+		
+		
+		</div>
+		
+		
+		
+		
 		<div class="t-con-title">
 			<span style="font-weight: bold;font-size: 20px;color:red;cursor: pointer;" id="search_result" onclick="reload()">' ${search } '</span>
 			<span style="font-size: 20px;display: inline-block;text-indent: 20px;">에 대한 물품 검색결과(${totalCount})</span><br>
@@ -458,6 +519,12 @@ function reload(){
 				</c:if>
 			</c:forEach>
 		</div>
+		
+		
+		
+		
+		
+		
 		<div class="t-auc-con">
 			<c:if test="${totalList.size() gt 0}">
 				<c:forEach begin="0" end="${totalList.size()-1}" step="1" var="i">
