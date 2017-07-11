@@ -93,8 +93,8 @@
 			select * from auction where num=#{num}
 		</select>
 		<update id="tender" parameterType="map" statementType="CALLABLE">
-			{ call auction_tender(#{buyer, mode=IN},#{t_price, mode=IN},#{period, mode=IN},#{num, mode=IN},
-			#{result, mode=OUT, javaType=int, jdbcType=INTEGER, resultMap=myMap}) }
+			{ call auction_tender(#{buyer, mode=IN},#{t_price, mode=IN},#{period, mode=IN},#{num, mode=IN},#{addr, mode=IN},
+			#{point, mode=IN},#{coupon, mode=IN},#{result, mode=OUT, javaType=int, jdbcType=INTEGER, resultMap=myMap}) }
 		</update>
 		<insert id="likes" parameterType="map" statementType="CALLABLE">
 			{ call likesIO(#{kind, mode=IN},#{pNum, mode=IN},#{m_id, mode=IN},

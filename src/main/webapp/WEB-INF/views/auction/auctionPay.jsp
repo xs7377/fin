@@ -26,7 +26,7 @@
 		$(".address_mode").click(function(){
 			var val = $(this).val();
 			if(val=="basic"){
-				var addr = address.split(",");
+				var addr = address.split("_");
 				$("#sample6_postcode").val(addr[0]); // 우편번호
 				$("#sample6_address").val(addr[1]); // 주소
 				$("#sample6_address2").val(addr[2]); // 상세주소
@@ -96,7 +96,9 @@
 				check_addr=false;
 			}
 			if(check_addr){
-				window.open("${pageContext.servletContext.contextPath }/auction/auctionPayment/"+num,"결제하기","width=690px; height=550px;");
+				$("#put_address").val(postcode+"_"+addr1+"_"+addr2);
+				window.open("","pay_ment","width=500, height=500, scrollbars=no");
+				$("#payMent_frm").submit();
 			}else{
 				alert("주소를 입력해주세요.");
 			}
@@ -481,7 +483,10 @@
         }).open();
     }
 </script>
-		
+		<form id="payMent_frm" target="pay_ment" action="${pageContext.servletContext.contextPath }/auction/auctionPayment" hidden="true" method="post">
+			<input id="put_address" type="hidden" name="addr">
+			<input type="hidden" name="num" value="${auction.num }">
+		</form>
 
 
 

@@ -10,6 +10,7 @@
 <script type="text/javascript">
 	$(function(){
 		var client_id ="";
+		var m_id = "${member.id}";
 		var seller_id = "${auction_info.m_id}";
 		var tender_price = "${auction_info.buyer}";
 		var min_price = "${auction_info.min_price}";
@@ -36,7 +37,6 @@
 		});
 		$("#tender_btn").click(function(){
 			var check_pri=true;
-			var m_id = "xs7377";
 			var check_id=true;
 			var text = "";
 			var price = $("#tender_price").val();
@@ -76,7 +76,8 @@
 						type:"post",
 						data:{
 							price:price,
-							num:num
+							num:num,
+							point:0
 						},success:function(data){
 							if(data=='1'){
 								if(kind=='buy'){

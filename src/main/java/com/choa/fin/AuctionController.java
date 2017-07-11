@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -89,15 +90,15 @@ public class AuctionController {
 	
 	@RequestMapping(value="auction_tender", method=RequestMethod.POST)
 	@ResponseBody
-	public int auction_tender(int num, int price, String addr,String coupon, int point) throws Exception{
-		String id="xs7377";
+	public int auction_tender(int num, int price, String addr, String coupon, int point, HttpSession session) throws Exception{
+		MemberDTO memberDTO = (MemberDTO)session.getAttribute("member");
 		System.out.println(addr);
 		if(addr=="" || addr==null){
 			addr="no";
 			coupon = "no";
 			point = 0;
 		}
-		return auctionService.tender(num, id, price,addr,coupon,point);
+		return auctionService.tender(num, memberDTO.getId(), price,addr,coupon,point);
 		
 	}
 	
@@ -185,8 +186,8 @@ public class AuctionController {
 		return model;
 	}
 	
-	@RequestMapping(value="auctionPayment/{num}/{id}")
-	public ModelAndView auctionPayment(@PathVariable(value="num")int num, String addr, ModelAndView mv) throws Exception{
+	@RequestMapping(value="auctionPayment")
+	public ModelAndView auctionPayment(int num, String addr, ModelAndView mv) throws Exception{
 		Map<String, Object> map = auctionService.view(num);
 		mv.setViewName("/test");
 		mv.addObject("auction", map.get("auctionDTO"));
