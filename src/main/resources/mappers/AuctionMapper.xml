@@ -138,7 +138,7 @@
 		</select>
 		
 		<select id="tender_check" parameterType="java.lang.Integer" resultType="java.lang.String">
-			select m_id from bidder where pnum=#{num} and price=(select max(price) from bidder where pnum=#{num}
+			select m_id from bidder where pnum=#{num} and price=(select max(price) from bidder where pnum=#{num})
 		</select>
 		
 				<!-- 3개월 전 게시물 삭제 -->

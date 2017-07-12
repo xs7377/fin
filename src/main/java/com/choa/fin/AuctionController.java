@@ -39,11 +39,23 @@ import com.choa.util.PageMaker;
 import com.choa.util.PageResult;
 import com.choa.util.RowMaker;
 import com.choa.util.SearchService;
+import com.siot.IamportRestHttpClientJava.IamportClient;
+import com.siot.IamportRestHttpClientJava.request.CancelData;
+import com.siot.IamportRestHttpClientJava.response.IamportResponse;
+import com.siot.IamportRestHttpClientJava.response.Payment;
 import com.sun.mail.imap.protocol.SearchSequence;
 
 @Controller
 @RequestMapping(value="/auction")
 public class AuctionController {
+	
+	IamportClient client;
+	public void setup() throws Exception {
+		String api_key = "3789746569992238";
+		String api_secret = "763H5yZtjNq2f7yU3wTfJe6u13qkyRQGXUo3snxLaXNq4lk7RdnBsu5uxwP6nFMlzao2xVNITB8XWt5O";
+		client = new IamportClient(api_key, api_secret);
+	}
+	
 	@Inject
 	private AuctionService auctionService;
 	
@@ -95,6 +107,7 @@ public class AuctionController {
 	@RequestMapping(value="auction_tender", method=RequestMethod.POST)
 	@ResponseBody
 	public int auction_tender(int num, int price, String addr, String coupon, int point, HttpSession session) throws Exception{
+		boolean check_pay = false;
 		MemberDTO memberDTO = (MemberDTO)session.getAttribute("member");
 		System.out.println(addr);
 		int result = 0;
@@ -102,18 +115,30 @@ public class AuctionController {
 			addr="no";
 			coupon = "no";
 			point = 0;
+			result = auctionService.tender(num, memberDTO.getId(), price,addr,coupon,point);
+		}else{
+			check_pay = auctionService.tenderCheck(memberDTO.getId(), num);
+			result = auctionService.tender(num, memberDTO.getId(), price,addr,coupon,point);
 		}
 
 		if(!coupon.equals("no")){
 			couponService.couponUpdate(coupon,memberDTO.getId());
 		}
-		
-		result = memberService.pointUpdate(memberDTO.getId(), point);
+
 		if(result>0){
-			memberDTO = memberService.memberView(memberDTO.getId());
+			memberService.pointUpdate(memberDTO.getId(), point);
 		}
+		
+		if(!check_pay || result==0){
+			CancelData cancel2 = new CancelData(num+"", false);
+			IamportResponse<Payment> cancelpayment2 = client.cancelPayment(cancel2);
+			System.out.println(cancelpayment2.getMessage());
+		}
+		
+		memberDTO = memberService.memberView(memberDTO.getId());
 		session.setAttribute("member", memberDTO);
-		return auctionService.tender(num, memberDTO.getId(), price,addr,coupon,point);
+		
+		return result;
 		
 	}
 	
@@ -202,10 +227,17 @@ public class AuctionController {
 	}
 	
 	@RequestMapping(value="auctionPayment")
-	public ModelAndView auctionPayment(int num, String addr, ModelAndView mv) throws Exception{
-		Map<String, Object> map = auctionService.view(num);
-		mv.setViewName("/test");
-		mv.addObject("auction", map.get("auctionDTO"));
+	public ModelAndView auctionPayment(int num, String addr, ModelAndView mv, HttpSession session) throws Exception{
+		boolean check_pay = false;
+		MemberDTO memberDTO = (MemberDTO)session.getAttribute("member");
+		check_pay = auctionService.tenderCheck(memberDTO.getId(), num);
+		if(check_pay){
+			Map<String, Object> map = auctionService.view(num);
+			mv.setViewName("/test");
+			mv.addObject("auction", map.get("auctionDTO"));
+		}else{
+			
+		}
 		return mv;
 	}
 	

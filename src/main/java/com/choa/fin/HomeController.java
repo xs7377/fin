@@ -49,4 +49,8 @@ public class HomeController {
 		model.addAttribute("rankMove", rankMove);
 	}
 	
+	@RequestMapping(value="/NewFile")
+	public void NewFile(){
+	}
+	
 }

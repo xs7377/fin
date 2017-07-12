@@ -46,7 +46,7 @@ $(function(){
 	    buyer_postcode : addr[0],
 	}, function(rsp) {
 	    if ( rsp.success ) {
-	        var msg = '결제가 완료되었습니다.';
+	        var msg = '';
 	        $.ajax({
 	        	url: "${pageContext.servletContext.contextPath }/auction/auction_tender",
 	        	type:"post",
@@ -56,7 +56,12 @@ $(function(){
 	        		addr:addr[0]+","+addr[1]+","+addr[2],
 	        		coupon:use_coupon,
 	        		point:use_point-point
-	        	},success:function(){
+	        	},success:function(data){
+	        		if(data>0){
+	        			msg = '결제가 완료되었습니다.';
+	        		}else{
+	        			msg = "결제가 취소되었습니다.";
+	        		}
 	        		opener.parent.location.reload();
 	        		window.close();
 	        	}

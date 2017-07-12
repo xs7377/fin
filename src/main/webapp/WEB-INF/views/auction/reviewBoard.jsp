@@ -257,6 +257,21 @@ margin: 5px 60px;;
 	width: 100%;
 	height: 50px;
 }
+
+.pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+}
+
+.pagination a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
 </style>
 </head>
 <body>
@@ -291,6 +306,18 @@ margin: 5px 60px;;
   </div>
 </c:forEach>
 </div>
-<div class="page_wrap"></div>
+<div class="page_wrap">
+<c:forEach var="p" items="${pageResult }">
+
+  <a id="perv_">&laquo;</a>
+  <a href="#">1</a>
+  <a class="select" href="#">2</a>
+  <a href="#">3</a>
+  <a href="#">4</a>
+  <a href="#">5</a>
+  <a href="#">6</a>
+  <a href="#">&raquo;</a>
+</c:forEach>
+</div>
 </body>
 </html>

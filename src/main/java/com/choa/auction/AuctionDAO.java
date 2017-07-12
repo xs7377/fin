@@ -354,12 +354,16 @@ public class AuctionDAO {
 	
 	public boolean tenderCheck(String id,int num)throws Exception{
 		boolean period = this.buyCheck(num);
+		boolean check = false;
 		String m_id = sqlSession.selectOne(NAME_SPACE+"tender_check", num);
 		if(m_id.equals(id) && !period){
-			return true;
+			check =true;
+		}else if(period){
+			check=true;
 		}else{
-			return false;
+			check=false;
 		}
+		return check;
 	}
 	
 	
