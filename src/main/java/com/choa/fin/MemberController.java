@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -880,9 +881,10 @@ public class MemberController {
 		return memberService.fileSelect(id);
 	}
 	
-	@RequestMapping(value="pointUpdate")
+	@RequestMapping(value="memberInfo", method=RequestMethod.POST)
 	@ResponseBody
-	public int pointUpdate(String id, int point){
-		return memberService.pointUpdate(id, point);
+	public String memberInfo(String id) throws Exception{
+		MemberDTO memberDTO = memberService.memberView(id);
+		return memberDTO.getGrade();
 	}
 }

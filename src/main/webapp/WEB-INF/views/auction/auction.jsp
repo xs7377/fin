@@ -75,7 +75,7 @@
 				var ctg2=$("#ctg2").val();
 				var ctg3=$("#ctg3").val();
 	    	 	if(ctg3==null || ctg3=='' || ctg2==null || ctg2=='' || ctg1==null || ctg1==''){
-	    	 		ctg3=false
+	    	 		ctg3=false;
 				}else{
 					ctg3=true;
 				}
@@ -112,7 +112,7 @@
 				var min=$("#minP").val()*1;
 				if(min==''){
 					$(this).trigger("blur");
-					alert("최소가격을 먼저 설정 해주세요")
+					alert("최소가격을 먼저 설정 해주세요");
 				}
 			});
 	    	$("#maxP").on("blur",function(){

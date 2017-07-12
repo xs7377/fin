@@ -44,6 +44,8 @@
 				$(".price_title").html("현재가");
 				$(".real_tprice").html(+min_price+"원");
 			}
+			var sel_img = imgs(seller);
+			$("#seller_imgs").attr("src", "${pageContext.servletContext.contextPath }/resources/upload/"+sel_img);
 			
 			if(client!=''){
 				var img = $(".auctionView_reply_write").children("img");
@@ -114,6 +116,18 @@
 					$("#review_board").html(data);
 				}
 			});
+ 			
+ 			$.ajax({
+ 				url: "${pageContext.servletContext.contextPath }/member/memberInfo",
+ 				type: "post",
+ 				data:{
+ 					id:seller
+ 				},success:function(data){
+ 					var img = $("#seller_grade").find("img");
+ 					$(img).attr("src","${pageContext.servletContext.contextPath }/resources/img/membership/"+data+".JPG")
+ 					$("#seller_membership").html(data);
+ 				}
+ 			});
 			
 		});
 		
@@ -355,7 +369,6 @@
 			if(client==''){
 				alert("로그인해주세요.");
 			}else if(seller==client){
-				alert("자신의 글입니다.");
 			}else{
 				$.ajax({
 					url:"../auctionLike",
@@ -512,8 +525,7 @@
 						});
 						var last_node = $("#auctionView_reply").children(".dept").last();
 						var display = $(last_node).css("display");
-						
-						if(data.length>=lastRow){
+						if(data.length>lastRow){
 							$("#auctionView_reply").append("<div id='reply_more_btn'>더보기</div>")
 						}else{
 							if(display=='none'){
@@ -1114,6 +1126,8 @@ var x = setInterval(function() {
   max-width: 300px;
   text-align: center;
   font-family: arial;
+  float: left;
+  margin-bottom: 50px;
 }
 
 .seller_container {
@@ -1214,11 +1228,14 @@ var x = setInterval(function() {
 	float: left;
 	margin-top: 10px;
 	font-size: 17px;
+	width: 100%;
+	text-align: center;
 }
-#seller_gradev{
+#seller_grade{
 	width: 500px;
-	height: 400px;
+	height: 250px;
 	float: left;
+	margin-left: 150px;
 }
 
 /* review 게시판 */
@@ -1250,17 +1267,19 @@ var x = setInterval(function() {
 			</div>
 			<div id="auctionView_product">
 				<div id="auction_product_info">
+				<c:if test="${auctionDTO.kind eq 'auction' }">
 					<div class="product_text"><span class="text_normal price_title"></span><div class="real_tprice" style="float: right;"></div></div>
+				</c:if>
 					<div class="product_text"><span class="text_normal">시작가</span><div style="float: right">${auctionDTO.min_price }원</div></div>
 					<div class="product_text"><span class="text_normal">즉시 구매가</span><div style="float: right;">${auctionDTO.max_price }원</div></div>
 					<div class="product_text auctionView_period"></div>
 				</div>
 				<div id="tender_btn_wrap">
 				<c:if test="${auctionDTO.kind eq '취소' }">
-					<div class="auction_end_text">경매가 취소되었습니다.</div>
+					<div class="auction_end_text" style="margin-top: 50px;">경매가 취소되었습니다.</div>
 				</c:if>
 				<c:if test="${auctionDTO.kind eq '구매' }">
-					<div class="auction_end_text">경매가 종료되었습니다.</div>
+					<div class="auction_end_text" style="margin-top: 50px;">경매가 종료되었습니다.</div>
 				</c:if>
 				<c:if test="${auctionDTO.kind eq 'auction' }">
 					<div class="auction_end_text demo" style="background-color: gray; margin-bottom: 15px;"></div>
@@ -1290,10 +1309,12 @@ var x = setInterval(function() {
 	<div id="auctionView_tender">
 		<div id="auctionView_tender_contents">
 				<div id="auction_tender_info">
+				<c:if test="${auctionDTO.kind eq 'auction'}">
 					<h3 class="sel_info">즉시 구매가   ${auctionDTO.max_price }</h3>
 					<h3 class="sel_info"><span class="price_title"></span> <span class="real_tprice"></span></h3>
 					<h2 class="sel_info demo"></h2>
 					<h3 class="sel_info auctionView_period"></h3>
+				</c:if>
 				</div>
 			<c:if test="${auctionDTO.kind eq '취소' }">
 				<div class="auction_bar_text" >경매가 취소되었습니다.</div>
@@ -1342,7 +1363,7 @@ var x = setInterval(function() {
 <div id="auctionSeller_info">
 			<div id="auctionView_seller">
 				<div class="card">
-				  <img id="" src="${pageContext.servletContext.contextPath }/resources/upload/noImage.png" alt="John" style="width:100%; height: 200px;">
+				  <img id="seller_imgs" src="" alt="John" style="width:300px; height: 200px;">
 				  <div class="seller_container">
 				  	<div id="seller_dropdown">
 					    <div class="auctionView_seller_id">${auctionDTO.m_id }</div>
@@ -1356,14 +1377,13 @@ var x = setInterval(function() {
 				  </div>
 				</div>
 				<div id="seller_grade">
-							<div style="width: 100px;"><br> <br> <br> <img
-								alt="" src="../resources/img/membership/${member.grade}.JPG"></div>
-							<div style="width: 400px; vertical-align: middle;">
-							<span style="font-weight: bolder;">${member.name}</span>님의 멤버십 등급은
-							<span style="color: #ffbf00; font-weight: bolder;">${member.grade}</span>입니다.<br><br>
+							<div style="width: 100px;"><br> <br> <br> <img style="float: left; margin-right: 25px;"
+								alt="" src="${pageContext.servletContext.contextPath }/resources/img/membership/${member.grade}.JPG"></div>
+							<div style="margin: 25px 10px;">
+							<span style="font-weight: bolder;">${auctionDTO.m_id }</span>님의 멤버십 등급은
+							<span id="seller_membership" style="color: #ffbf00; font-weight: bolder;"></span>입니다.<br><br>
 							<span style="font-weight: bolder; color: #8c8c8c;">유지기간 | </span> 1개월 / 매월 1일 변경 <br> 
 							<span style="font-weight: bolder; color: #8c8c8c;">산정기간 | </span> 최근 3개월 / 
-							<span style="font-weight: bolder;">${startDate} ~ ${lastDate}</span>
 							</div>
 				</div>
 				<div id="review_board"></div>

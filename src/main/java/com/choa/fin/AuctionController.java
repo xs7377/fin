@@ -32,6 +32,7 @@ import com.choa.auction.SearchDTO;
 import com.choa.coupon.CouponDTO;
 import com.choa.coupon.CouponService;
 import com.choa.member.MemberDTO;
+import com.choa.member.MemberService;
 import com.choa.reply.ReplyDTO;
 import com.choa.upload.UploadDTO;
 import com.choa.util.PageMaker;
@@ -51,6 +52,9 @@ public class AuctionController {
 	
 	@Inject
 	private SearchService searchService;
+	
+	@Inject
+	private MemberService memberService;
 	
 	// =========================================== auction view, reply 추가분 =========================
 	@RequestMapping(value="auctionView/{num}")
@@ -93,11 +97,22 @@ public class AuctionController {
 	public int auction_tender(int num, int price, String addr, String coupon, int point, HttpSession session) throws Exception{
 		MemberDTO memberDTO = (MemberDTO)session.getAttribute("member");
 		System.out.println(addr);
+		int result = 0;
 		if(addr=="" || addr==null){
 			addr="no";
 			coupon = "no";
 			point = 0;
 		}
+
+		if(!coupon.equals("no")){
+			couponService.couponUpdate(coupon,memberDTO.getId());
+		}
+		
+		result = memberService.pointUpdate(memberDTO.getId(), point);
+		if(result>0){
+			memberDTO = memberService.memberView(memberDTO.getId());
+		}
+		session.setAttribute("member", memberDTO);
 		return auctionService.tender(num, memberDTO.getId(), price,addr,coupon,point);
 		
 	}

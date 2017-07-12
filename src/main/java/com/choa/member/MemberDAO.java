@@ -245,11 +245,14 @@ public class MemberDAO {
 		return sqlSession.update(namespace+"fileDelete", id);
 	}
 
-	public int pointUpdate(String id, int point){
+	public int pointUpdate(String id, int point) throws Exception{
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", id);
+		MemberDTO memberDTO = this.memberView(id);
+		point = memberDTO.getPoint()-point;
+		System.out.println(point);
 		map.put("point", point);
-		return sqlSession.update(namespace, map);
+		return sqlSession.update(namespace+"point_update", map);
 	}
 
 }

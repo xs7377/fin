@@ -54,4 +54,9 @@ public class CouponService {
 	public int tradeMoney(Map<String, Object> map) throws Exception{
 		return couponDAO.tradeMoney(map);
 	}
+	
+	//쿠폰 사용 업데이트
+	public int couponUpdate(String coupon,String id) throws Exception{
+		return couponDAO.couponUpdate(coupon, id);
+	}
 }

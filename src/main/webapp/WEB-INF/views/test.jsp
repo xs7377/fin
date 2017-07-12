@@ -13,9 +13,13 @@ $(function(){
 	$(document).ready(function(){
 		
 	});
+	var real_price = $(".real_price",opener.document).text();
+	real_price = real_price.split("원");
+	real_price = real_price[0]*1+2500;
 	var pay = $("#pay_price",opener.document).text();
 	pay = pay.split('원');
 	var use_point = $("#point_info",opener.document).val();
+	var point = $(".pay_point",opener.document).text()*1;
 	var use_coupon = $("#sel_coupon",opener.document).val();
 	var ad = $(".address_mode:checked",opener.document).val();
 	var pay_method = $(".pay_mode:checked",opener.document).val();
@@ -32,7 +36,7 @@ $(function(){
 	IMP.request_pay({
 	    pg : 'danal', // version 1.1.0부터 지원.
 	    pay_method : 'phone',
-	    merchant_uid : num,
+	    merchant_uid : 'merchant_' + new Date().getTime(),
 	    name : '${auction.title}',
 	    amount : pay[0],
 	    buyer_email : '${member.email}',
@@ -48,9 +52,10 @@ $(function(){
 	        	type:"post",
 	        	data:{
 	        		num:num,
-	        		price:pay[0],
-	        		id:"${member.id}",
-	        		addr:addr[0]+","+addr[1]+","+addr[2]
+	        		price:real_price,
+	        		addr:addr[0]+","+addr[1]+","+addr[2],
+	        		coupon:use_coupon,
+	        		point:use_point-point
 	        	},success:function(){
 	        		opener.parent.location.reload();
 	        		window.close();

@@ -54,14 +54,17 @@
 		
 		$("#point_info").change(function(){
 			var point = $(this).val()*1;
-			var real = $("#real_point").val();
+			var real = "${member.point}"*1;
 			if(real<point){
 				$(this).val(0);
+				$("#real_point").val(real);
 				alert("포인트가 부족합니다.");
 			}else{
 				if(point>=500){
+					$("#real_point").val(real-point);
 					price_check();
 				}else{
+					$("#real_point").val(real);
 					$(this).val(0);
 					alert("500Point부터 사용가능합니다.");
 				}
@@ -95,12 +98,16 @@
 			if(addr1=='' || addr2=='' || postcode ==''){
 				check_addr=false;
 			}
-			if(check_addr){
-				$("#put_address").val(postcode+"_"+addr1+"_"+addr2);
-				window.open("","pay_ment","width=500, height=500, scrollbars=no");
-				$("#payMent_frm").submit();
+			if($(".pay_mode").is(":checked")){
+				if(check_addr){
+					$("#put_address").val(postcode+"_"+addr1+"_"+addr2);
+					window.open("","pay_ment","width=500, height=500, scrollbars=no");
+					$("#payMent_frm").submit();
+				}else{
+					alert("주소를 입력해주세요.");
+				}
 			}else{
-				alert("주소를 입력해주세요.");
+				alert("결제방법을 선택하세요.");
 			}
 		});
 		
@@ -114,9 +121,6 @@
 			point = pay_price*0.02;
 			$(".pay_point").html(point);
 		}
-		
-		
-		
 		
 	});
 </script>
@@ -352,7 +356,7 @@
 							</c:forEach>
 						</select>
 					</td>
-					<td class="price">
+					<td class="price real_price">
 						${auction.max_price}원
 					</td>
 					<td class="seller">

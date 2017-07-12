@@ -50,6 +50,10 @@
 	<update id="pwUpdate" parameterType="java.util.Map">
 		update member set pw=#{password} where id=#{id}
 	</update>
+	
+	<update id="point_update" parameterType="java.util.Map">
+		update member set point=#{point} where id=#{id}
+	</update>
 
 	<select id="fileSelect" parameterType="java.lang.String"
 		resultType="java.lang.String">

@@ -97,5 +97,14 @@ public class CouponDAO {
 		
 		return sMoney+bMoney;
 	}
+	
+	public int couponUpdate(String c,String id)throws Exception{
+		String[] coupon = c.split(",");
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("contents", coupon[0]);
+		map.put("id", id);
+		map.put("kind", coupon[1]);
+		return sqlSession.update(namespace+"coupon_update", map);
+	}
 
 }

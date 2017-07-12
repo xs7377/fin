@@ -45,6 +45,11 @@
    	</select>
    	
    	<select id="couponAll" parameterType="String" resultType="com.choa.coupon.CouponDTO">
-   		select * from coupon where m_id=#{id}
+   		select * from coupon where m_id=#{id} and available='사용가능'
    	</select>
+   	
+   	<update id="coupon_update" parameterType="map">
+   		update coupon set available='사용불가' where contents=#{contents} and kind=#{kind} and m_id=#{id}
+   	</update>
+   	
     </mapper>
