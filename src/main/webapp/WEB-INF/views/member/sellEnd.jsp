@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,6 +7,8 @@
 <title>Insert title here</title>
 <link rel="stylesheet" href="/fin/resources/css/reset.css">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script
@@ -16,19 +18,20 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <style type="text/css">
-	body{
+body {
 	font-size: 16px;
 	font-family: inherit;
 }
-.mypage_wrap {
-	width: 1300px;  
-	height: 800px;  
-	margin: 100px auto;
 
-} 
+.mypage_wrap {
+	width: 1300px;
+	height: 800px;
+	margin: 100px auto;
+}
+
 button.accordion {
 	background-color: #eee;
-	color: #444; 
+	color: #444;
 	cursor: pointer;
 	padding: 18px;
 	width: 200px;
@@ -49,7 +52,6 @@ button.accordion:after {
 	font-weight: bold;
 	float: right;
 	margin-left: 5px;
-	
 }
 
 button.accordion.active:after {
@@ -67,7 +69,7 @@ div.panel2 {
 	width: 200px;
 }
 
-a{
+a {
 	text-decoration: none;
 	color: #595959;
 	line-height: 250%;
@@ -79,22 +81,22 @@ a{
 } */
 </style>
 <script type="text/javascript">
-$(function(){
+	$(function() {
 
-	var id = '${member.id}'
-	$(".go").click(function(){
-			var curPage=$(this).attr("id");
-			location.href="sellEnd?curPage="+curPage+"&id="+id;
-		}); 
-});
+		var id = '${member.id}'
+		$(".go").click(function() {
+			var curPage = $(this).attr("id");
+			location.href = "sellEnd?curPage=" + curPage + "&id=" + id;
+		});
+	});
 </script>
 </head>
 <body>
-<%@ include file="../sub/header.jspf"%>
+	<%@ include file="../sub/header.jspf"%>
 	<section class="mypage_wrap">
 
-	
-<div style="display: inline-block;">
+
+	<div style="display: inline-block;">
 	
 	<!--@hyo3  -->
 		<a href="/fin/member/memberMypage" style="font-weight: normal;">
@@ -111,12 +113,11 @@ $(function(){
 		<button class="accordion">
 			<span class="glyphicon glyphicon-user"></span> 나의 정보
 		</button> 
-		</a> 
-		
+		</a>
 		<div class="panel2"></div>
 		
 		
-		<a href="/fin/member/memberFriends?curPage=1&id=${member.id }" style="font-weight: normal;">
+		<a href="/fin/member/memberFriends?curPage=1" style="font-weight: normal;">
 		<button class="accordion">
 			<span class="glyphicon glyphicon-music"></span> 나의 친구
 		</button> 
@@ -135,7 +136,7 @@ $(function(){
 		<div class="panel2">
 			<dl>
 				<dd class="w3-bar-item w3-button tablink" onclick="openCity(event,'sendM')">
-					<a href="/fin/member/memberMessage?id=${member.id }" id="sendList" style="font-weight: normal; font-size: 0.9em;" > 보낸 쪽지함</a>
+					<a href="/fin/member/memberMessage" id="sendList" style="font-weight: normal; font-size: 0.9em;" > 보낸 쪽지함</a>
 				</dd>
 				<dd class="w3-bar-item w3-button tablink" onclick="openCity(event,'recvM')">
 					<a href="#" id="reciveList" style="font-weight: normal; font-size: 0.9em;" > 받은 쪽지함 </a>
@@ -143,7 +144,7 @@ $(function(){
 			</dl>
 		</div>
 		
-<a href="/fin/member/memberAttend?m_id=${member.id }" style="font-weight: normal;">
+<a href="/fin/member/memberAttend" style="font-weight: normal;">
 		<button class="accordion">
 			<span class="glyphicon glyphicon-ok-circle"></span> 나의 출석
 		</button>
@@ -166,16 +167,16 @@ $(function(){
 		<div class="panel2">
 			<dl>
 				<dd>
-					<a href="/fin/member/bidding?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">입찰 중 상품</a>
+					<a href="/fin/member/bidding?curPage=1" style="font-weight: normal; font-size: 0.9em;">입찰 중 상품</a>
 				</dd>
 				<dd>
-					<a href="/fin/member/buyIng?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">구매 중 상품</a>
+					<a href="/fin/member/buyIng?curPage=1" style="font-weight: normal; font-size: 0.9em;">구매 중 상품</a>
 				</dd>
 				<dd>
-					<a href="/fin/member/likesProduct?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">관심 상품</a>
+					<a href="/fin/member/likesProduct?curPage=1" style="font-weight: normal; font-size: 0.9em;">관심 상품</a>
 				</dd>
 				<dd>
-					<a href="/fin/member/buyEnd?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">구매 완료 상품</a>
+					<a href="/fin/member/buyEnd?curPage=1" style="font-weight: normal; font-size: 0.9em;">구매 완료 상품</a>
 				</dd>
 			</dl>
 		</div>
@@ -186,80 +187,173 @@ $(function(){
 		<div class="panel2">
 			<dl>
 				<dd>
-					<a href="/fin/member/sellIng?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">판매 중 상품</a>
+					<a href="/fin/member/sellIng?curPage=1" style="font-weight: normal; font-size: 0.9em;">판매 중 상품</a>
 				</dd>
 				<dd>
-					<a href="/fin/member/sellEnd?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">판매 완료 상품</a>
+					<a href="/fin/member/sellEnd?curPage=1" style="font-weight: normal; font-size: 0.9em;">판매 완료 상품</a>
 				</dd>
 			</dl>
 		</div>
 		
 	</div>	
-<div style="width: 1050px; height: 700px; float: right;">
+
+		<div style="width: 1050px; height: 700px; float: right;">
 
 
-<div style="border: 3px solid red; display: inline-block; width: 520px;">
- <table id="Mtable" class="table table-hover" style="font-size: 0.9em; width: 500px;">
-		<tr class="sellIng_tr" style="text-align: center; font-family: Georgia; font-weight: bolder;
-		height: 50px; vertical-align: middle;
-	line-height: 100%;">
-		<td style="vertical-align: middle;">CATEGORY</td>
-		<td style="vertical-align: middle;">TITLE</td>
-		<td style="vertical-align: middle;">BUYER</td>
-		<td style="vertical-align: middle;">PRICE</td>
-		<td style="vertical-align: middle;">DATE</td>
-		</tr>
-	
+			<div
+				style="display: inline-block; width: 520px;">
+				<table id="Mtable" class="table table-hover"
+					style="font-size: 0.9em; width: 500px;">
+					<tr class="sellIng_tr"
+						style="text-align: center; font-family: Georgia; font-weight: bolder; height: 50px; vertical-align: middle; line-height: 100%;">
+						<td style="vertical-align: middle;">CATEGORY</td>
+						<td style="vertical-align: middle;">TITLE</td>
+						<td style="vertical-align: middle;">BUYER</td>
+						<td style="vertical-align: middle;">PRICE</td>
 
-	<c:forEach items="${list}" var="f">
-			<tr style="text-align: center; ">
-		<td style="width: 150px; vertical-align: middle;">${f.category}</td>
-		<td style="vertical-align: middle;"><a href="/fin/auction/auctionView/${f.num}">${f.title}</a></td>
-		<td style="width: 100px; vertical-align: middle;">${f.buyer}</td>
-		<td style="width: 100px; vertical-align: middle;">${f.price}원</td>
-		<td style="width: 100px; vertical-align: middle;">${f.reg_date}</td>
-			</tr>
-		</c:forEach>
+					</tr>
 
-	<c:if test="${list == '[]'}">
-		<tr>
-		<td colspan="7" style="text-align: center;">판매 완료인 상품이 없습니다.</td>
-		</tr>
-	
-	</c:if>
-		
-		<tr><td></td><td></td><td></td><td></td><td></td></tr>
-	</table>
-	
-	
-	<div class="paging" style="border: 3px solid blue; text-align: center;">
-		<c:if test="${pageResult.curBlock>1}">
-			<span class="go" id="${pageResult.startNum-1}" style="cursor: pointer; font-weight: bolder;">[이전]</span>
-		</c:if>
-		<c:forEach begin="${pageResult.startNum}" end="${pageResult.lastNum}" var="i">
-			<span class="go" id="${i}" style="cursor: pointer; font-weight: bolder;">${i}</span>
-		</c:forEach>
-		<c:if test="${pageResult.curBlock<pageResult.totalBlock}">
-			<span class="go" id="${pageResult.lastNum+1}" style="cursor: pointer; font-weight: bolder;">[다음]</span>
-		</c:if>
-	</div>
-	
-	
-	</div>
-	
-	
-	
-	<table id="Mtable" class="table table-hover" style="font-size: 0.9em; width: 500px; float: right;">
-	<tr>
-	<td>TITLE</td><td>BUYER</td><td>HIT</td><td>DATE</td><td>SCORE</td>
-	</tr>
-	
-	</table>
-	
-	
 
-	
-</div>
+					<c:forEach items="${list}" var="f">
+						<tr style="text-align: center;">
+							<td style="width: 150px; vertical-align: middle;">${f.category}</td>
+							<td style="vertical-align: middle;"><a
+								href="/fin/auction/auctionView/${f.num}">${f.title}</a></td>
+							<td style="width: 100px; vertical-align: middle;">${f.buyer}</td>
+							<td style="width: 100px; vertical-align: middle;">${f.price}원</td>
+
+						</tr>
+					</c:forEach>
+
+					<c:if test="${list == '[]'}">
+						<tr>
+							<td colspan="7" style="text-align: center;">판매 완료인 상품이 없습니다.</td>
+						</tr>
+
+					</c:if>
+
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</table>
+
+
+				<div class="paging"
+					style="text-align: center;">
+					<c:if test="${pageResult.curBlock>1}">
+						<span class="go" id="${pageResult.startNum-1}"
+							style="cursor: pointer; font-weight: bolder;">[이전]</span>
+					</c:if>
+					<c:forEach begin="${pageResult.startNum}"
+						end="${pageResult.lastNum}" var="i">
+						<span class="go" id="${i}"
+							style="cursor: pointer; font-weight: bolder;">${i}</span>
+					</c:forEach>
+					<c:if test="${pageResult.curBlock<pageResult.totalBlock}">
+						<span class="go" id="${pageResult.lastNum+1}"
+							style="cursor: pointer; font-weight: bolder;">[다음]</span>
+					</c:if>
+				</div>
+			</div>
+
+
+
+			<table id="Mtable" class="table table-hover"
+				style="font-size: 0.9em; width: 500px; float: right;">
+
+				<c:forEach items="${reviewList}" var="rv">
+
+					<tr>
+						<td style="width: 310px;">
+						<img alt="by" src="/fin/resources/img/by.png">
+						${rv.m_id}
+						</td>
+						<td style="width: 45px;">${rv.hit}</td>
+
+						<td><c:choose>
+								<c:when test="${rv.score eq 5 }">
+									<i class="fa fa-star" style="font-size: 20px; color: yellow"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: yellow"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: yellow"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: yellow"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: yellow"></i>
+								</c:when>
+
+								<c:when test="${rv.score eq 4 }">
+									<i class="fa fa-star" style="font-size: 20px; color: yellow"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: yellow"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: yellow"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: yellow"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: #ddd"></i>
+								</c:when>
+
+								<c:when test="${rv.score eq 3 }">
+									<i class="fa fa-star" style="font-size: 20px; color: yellow"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: yellow"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: yellow"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: #ddd"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: #ddd"></i>
+								</c:when>
+
+								<c:when test="${rv.score eq 2 }">
+									<i class="fa fa-star" style="font-size: 20px; color: yellow"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: yellow"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: #ddd"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: #ddd"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: #ddd"></i>
+								</c:when>
+
+								<c:when test="${rv.score eq 1 }">
+									<i class="fa fa-star" style="font-size: 20px; color: yellow"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: #ddd"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: #ddd"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: #ddd"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: #ddd"></i>
+								</c:when>
+								<c:otherwise>
+									<i class="fa fa-star" style="font-size: 20px; color: #ddd"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: #ddd"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: #ddd"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: #ddd"></i>
+									<i class="fa fa-star" style="font-size: 20px; color: #ddd"></i>
+								</c:otherwise>
+							</c:choose></td>
+					</tr>
+					<tr>
+						<td colspan="3">${rv.title }</td>
+					</tr>
+				</c:forEach>
+
+<tr>
+<td colspan="3">
+<div class="paging"
+					style="text-align: center;">
+					<c:if test="${reivewPage.curBlock>1}">
+						<span class="go" id="${reivewPage.startNum-1}"
+							style="cursor: pointer; font-weight: bolder;">[이전]</span>
+					</c:if>
+					<c:forEach begin="${reivewPage.startNum}"
+						end="${reivewPage.lastNum}" var="i">
+						<span class="go" id="${i}"
+							style="cursor: pointer; font-weight: bolder;">${i}</span>
+					</c:forEach>
+					<c:if test="${reivewPage.curBlock<reivewPage.totalBlock}">
+						<span class="go" id="${reivewPage.lastNum+1}"
+							style="cursor: pointer; font-weight: bolder;">[다음]</span>
+					</c:if>
+				</div>
+
+</td>
+
+</tr>
+
+
+			</table>
+
+		</div>
 
 
 		<script>
@@ -279,6 +373,6 @@ $(function(){
 			}
 		</script>
 	</section>
-<%@ include file="../sub/footer.jspf"%>
+	<%@ include file="../sub/footer.jspf"%>
 </body>
 </html>

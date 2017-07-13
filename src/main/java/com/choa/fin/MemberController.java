@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,7 +35,9 @@ import com.choa.member.MemberService;
 import com.choa.member.SendSMS;
 import com.choa.message.MessageDTO;
 import com.choa.message.MessageService;
+import com.choa.review.ReviewService;
 import com.choa.util.PageMaker;
+import com.choa.util.PageResult;
 import com.choa.util.RowMaker;
 
 
@@ -57,22 +58,25 @@ public class MemberController {
 	private FriendService friendService;
 	@Inject
 	private AttendService attendService;
-	
-	
+	@Inject
+	private ReviewService reviewService;
 	
 
+	
 	//출석 체크
 	@RequestMapping(value="memberAttend",method=RequestMethod.GET)
-	public void attendCheck(String m_id, Model model, String msg) throws Exception{
+	public void attendCheck(Model model, String msg, HttpSession session) throws Exception{
+		String m_id = ((MemberDTO)session.getAttribute("member")).getId();
 		int total = attendService.totalCheck(m_id);
 		model.addAttribute("total", total);
 		model.addAttribute("msg", msg);
 		System.out.println(total);
 	}
 	
-	
+	 
 	@RequestMapping(value="attendCheck",method=RequestMethod.GET)
-	public String attendCheck(String id,RedirectAttributes redirectAttributes){
+	public String attendCheck(RedirectAttributes redirectAttributes , HttpSession session){
+		String id = ((MemberDTO)session.getAttribute("member")).getId();
 		String msg="출석 실패";
 		System.out.println("ㅇㅇ");
 		int result=0;
@@ -108,15 +112,14 @@ public class MemberController {
 		}
 
 		redirectAttributes.addAttribute("msg",msg);
-		
-		return "redirect: ./memberAttend?m_id="+id; 
+		return "redirect: ./memberAttend";
 	}
 
-
-
+	
 	//나의 친구
 	@RequestMapping(value = "memberFriends", method = RequestMethod.GET)
-	public void memberFriends(int curPage, String id, Model model) throws Exception {
+	public void memberFriends(int curPage, Model model, HttpSession session)  throws Exception {
+		String id = ((MemberDTO)session.getAttribute("member")).getId();
 		Map<String, Object> map = friendService.friendList(curPage, id);
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("pageResult", map.get("pageResult"));
@@ -126,7 +129,8 @@ public class MemberController {
 
 	//구매 완료 상품 리스트
 	@RequestMapping(value = "buyEnd", method = RequestMethod.GET)
-	public void buyEnd(int curPage, String id, Model model) throws Exception {
+	public void buyEnd(int curPage, Model model, HttpSession session) throws Exception {
+		String id = ((MemberDTO)session.getAttribute("member")).getId();
 		Map<String, Object> map = memberService.buyEnd(curPage, id);
 		List<AuctionDTO> list = (List<AuctionDTO>)map.get("list");
 		for(AuctionDTO auctionDTO: list){
@@ -156,7 +160,8 @@ public class MemberController {
 
 	//구매 중 상품 리스트
 	@RequestMapping(value = "buyIng", method = RequestMethod.GET)
-	public void buyIng(Integer curPage, String id, Model model) throws Exception {
+	public void buyIng(Integer curPage, Model model, HttpSession session) throws Exception {
+		String id = ((MemberDTO)session.getAttribute("member")).getId();
 		Map<String, Object> map = memberService.buyIng(id, curPage);
 		List<AuctionDTO> list = (List<AuctionDTO>)map.get("list");
 		for(AuctionDTO auctionDTO: list){
@@ -185,7 +190,8 @@ public class MemberController {
 
 	//입찰 중 상품 리스트
 	@RequestMapping(value = "bidding", method = RequestMethod.GET)
-	public void bidding(Integer curPage, String id, Model model) throws Exception {
+	public void bidding(Integer curPage, Model model, HttpSession session) throws Exception {
+		String id = ((MemberDTO)session.getAttribute("member")).getId();
 		Map<String, Object> map = memberService.bidding(id, curPage);
 		List<AuctionDTO> list = (List<AuctionDTO>)map.get("list");
 		for(AuctionDTO auctionDTO: list){
@@ -216,7 +222,8 @@ public class MemberController {
 
 	//관심 상품 리스트
 	@RequestMapping(value = "likesProduct", method = RequestMethod.GET)
-	public void likesProduct(Integer curPage, String id, Model model) throws Exception {
+	public void likesProduct(Integer curPage, Model model, HttpSession session) throws Exception {
+		String id = ((MemberDTO)session.getAttribute("member")).getId();
 		Map<String, Object> map = memberService.likesProduct(id, curPage);
 		List<AuctionDTO> list = (List<AuctionDTO>)map.get("list");
 		for(AuctionDTO auctionDTO: list){
@@ -246,7 +253,8 @@ public class MemberController {
 
 	//판매 중 상품 리스트
 	@RequestMapping(value = "sellIng", method = RequestMethod.GET)
-	public void sellIng(Integer curPage, String id, Model model) throws Exception {
+	public void sellIng(Integer curPage, Model model, HttpSession session) throws Exception {
+		String id = ((MemberDTO)session.getAttribute("member")).getId();
 		Map<String, Object> map = memberService.sellIng(curPage, id);
 		List<AuctionDTO> list = (List<AuctionDTO>)map.get("list");
 
@@ -272,27 +280,47 @@ public class MemberController {
 	}
 
 	//판매 완료 상품 리스트
-	@RequestMapping(value = "sellEnd", method = RequestMethod.GET)
-	public void sellEnd(Integer curPage, String id, Model model) throws Exception {
-		Map<String, Object> map = memberService.sellEnd(curPage, id);
-		List<AuctionDTO> list = (List<AuctionDTO>)map.get("list");
-
-		for(AuctionDTO auctionDTO: list){
-			String category = auctionDTO.getCategory();
-			String [] str = category.split(",");
-			category = str[str.length-1].trim();
-			String buyer = auctionDTO.getBuyer();
-			String [] str2 = buyer.split(",");
-			buyer = str2[0].trim();
-			int price = Integer.parseInt(str2[1].trim());
-			auctionDTO.setBuyer(buyer);
-			auctionDTO.setCategory(category);
-			auctionDTO.setPrice(price);
+		@RequestMapping(value = "sellEnd", method = RequestMethod.GET)
+		public void sellEnd(Integer curPage, Model model, HttpSession session) throws Exception {
+			String id = ((MemberDTO)session.getAttribute("member")).getId();
+			Map<String, Object> map = memberService.sellEnd(curPage, id);
+			List<AuctionDTO> list = (List<AuctionDTO>)map.get("list");
+			////////////////////////////////////////
+			Map<String , Object> reMap=new HashMap<String,Object>();
+			if(curPage==null){
+				curPage=1;
+			}
+			
+			PageMaker pageMaker=new PageMaker(curPage);
+			RowMaker rowMaker=pageMaker.getRowMaker();
+			PageResult pageing=new PageResult();
+			
+			reMap.put("p_id", id);
+			reMap.put("startRow", rowMaker.getStartRow());
+			reMap.put("lastRow", rowMaker.getLastRow());
+			
+			pageing=pageMaker.paging(reviewService.reviewTotal(reMap));
+			///////////////////////////////////////////////
+			for(AuctionDTO auctionDTO: list){
+				String category = auctionDTO.getCategory();
+				String [] str = category.split(",");
+				category = str[str.length-1].trim();
+				String buyer = auctionDTO.getBuyer();
+				String [] str2 = buyer.split(",");
+				buyer = str2[0].trim();
+				int price = Integer.parseInt(str2[1].trim());
+				auctionDTO.setBuyer(buyer);
+				auctionDTO.setCategory(category);
+				auctionDTO.setPrice(price);
+			}
+			model.addAttribute("list", map.get("list"));
+			model.addAttribute("pageResult",map.get("pageResult"));
+			model.addAttribute("curPage",curPage);
+		
+			/////////////////////////////
+			model.addAttribute("reivewPage", pageing);
+			model.addAttribute("reviewList", reviewService.reviewList(reMap));
 		}
-		model.addAttribute("list", map.get("list"));
-		model.addAttribute("pageResult",map.get("pageResult"));
-		model.addAttribute("curPage",curPage);
-	}
 
 
 	//쿠폰 조회
@@ -436,14 +464,13 @@ public class MemberController {
 
 
 	@RequestMapping(value = "phoneConfirm", method = RequestMethod.POST)
-	public String phoneConfirm(String phone, RedirectAttributes redirectAttributes) {
+	public void phoneConfirm(String phone, RedirectAttributes redirectAttributes, Model model) {
 		String text = randomNumber(6);
 		SendSMS sendSMS = new SendSMS();
 		sendSMS.SendMessage(text, phone);
-		redirectAttributes.addAttribute("message", "핸드폰으로 인증 번호가 발송되었습니다.");
-		redirectAttributes.addAttribute("phone", phone);
-		redirectAttributes.addAttribute("text", text);
-		return "redirect: ./phoneConfirm";
+		model.addAttribute("message", "핸드폰으로 인증 번호가 발송되었습니다.");
+		model.addAttribute("phone", phone);
+		model.addAttribute("text", text);
 	}
 
 	//휴대폰 인증번호 확인
@@ -493,9 +520,8 @@ public class MemberController {
 		model.addAttribute("number", number);
 	}
 
-
 	@RequestMapping(value = "emailConfirm", method = RequestMethod.POST)
-	public String emailConfirm(String email, RedirectAttributes redirectAttributes) {
+	public void emailConfirm(String email, RedirectAttributes redirectAttributes, Model model) {
 		try {
 			String number = randomPassword(10);
 			String from = "mina110288@gmail.com";
@@ -503,13 +529,12 @@ public class MemberController {
 			String subject = "중고 경매 사이트 [TRADEMARK] 인증 번호 발급";
 			String contents = "회원님의 인증 번호는 [ " +number+ " ] 입니다.";
 			mailService.sendMail(from, to, subject, contents);
-			redirectAttributes.addAttribute("message", "이메일로 인증 번호가 발송되었습니다.");
-			redirectAttributes.addAttribute("email", email);
-			redirectAttributes.addAttribute("number", number);
+			model.addAttribute("message", "이메일로 인증 번호가 발송되었습니다.");
+			model.addAttribute("email", email);
+			model.addAttribute("number", number);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "redirect: ./emailConfirm";
 	}
 
 
@@ -559,7 +584,7 @@ public class MemberController {
 	public void memberFindId(String message, Model model) {
 		model.addAttribute("message", message);
 	}
-
+ 
 	@RequestMapping(value = "idFind", method = RequestMethod.POST)
 	public String idFind(String name, String email, RedirectAttributes redirectAttributes) {
 		MemberDTO memberDTO = new MemberDTO();
@@ -859,7 +884,8 @@ public class MemberController {
 
 	//쪽지 보내기 및 받기
 	@RequestMapping(value="memberMessage", method=RequestMethod.GET)
-	public void memberMessage(String id, Model model) throws Exception{
+	public void memberMessage( Model model, HttpSession session) throws Exception{
+		String id = ((MemberDTO)session.getAttribute("member")).getId();
 		String from_id=id;
 		String to_id=id;
 		Map<String , Object> map=new HashMap<String, Object>();	
@@ -874,7 +900,7 @@ public class MemberController {
 		model.addAttribute("sendList", messageService.messageSendList(map));
 		model.addAttribute("recvList", messageService.messageReciveList(map));
 	}
-	
+
 	@RequestMapping(value="memberImages")
 	@ResponseBody
 	public String memberImages(@RequestParam(value="id",required=false)String id) throws Exception{

@@ -871,7 +871,6 @@ a {
 	margin-left: 18px;
 	font-size: 25px;
 	font-weight: bold;
-	
 }
 .al-top3-img{
 	margin-left:2px;
@@ -1374,8 +1373,8 @@ a {
 			<div class="al-w1">
 				<c:forEach begin="0" end="2" step="1" var="i">
 				<div class="top3-hover">
-				<div class="al-top3-rank al-mt fc${i+1}">${i+1}.</div>
-				<div class="al-top3-img al-mt"><img alt="" src='../resources/auction-img/no.png'width="100%" height="100%"></div>
+				<div class="al-top3-rank al-mt fc${i+1}" style="margin-top: 0;">${i+1}.</div>
+				<div class="al-top3-img al-mt" style="margin-top: 0;"><img alt="" src='../resources/auction-img/no.png'width="100%" height="100%"></div>
 				<div class="al-top3-contents al-mt back${i+1}"></div>
 				</div>
 				</c:forEach>

@@ -26,6 +26,18 @@
 	margin: 100px auto;
 
 } 
+#review_btn{
+width: 100px;
+	height: 35px;
+	background-color: #cccccc;
+	font-weight: bold;
+	text-align: center;
+	line-height: 100%;
+	color: white;
+	font-size: 0.95em;
+	border: none;
+	cursor: pointer;
+}
 button.accordion {
 	background-color: #eee;
 	color: #444; 
@@ -168,12 +180,11 @@ $(function(){
 		<button class="accordion">
 			<span class="glyphicon glyphicon-user"></span> 나의 정보
 		</button> 
-		</a> 
-		
+		</a>
 		<div class="panel2"></div>
 		
 		
-		<a href="/fin/member/memberFriends?curPage=1&id=${member.id }" style="font-weight: normal;">
+		<a href="/fin/member/memberFriends?curPage=1" style="font-weight: normal;">
 		<button class="accordion">
 			<span class="glyphicon glyphicon-music"></span> 나의 친구
 		</button> 
@@ -192,7 +203,7 @@ $(function(){
 		<div class="panel2">
 			<dl>
 				<dd class="w3-bar-item w3-button tablink" onclick="openCity(event,'sendM')">
-					<a href="/fin/member/memberMessage?id=${member.id }" id="sendList" style="font-weight: normal; font-size: 0.9em;" > 보낸 쪽지함</a>
+					<a href="/fin/member/memberMessage" id="sendList" style="font-weight: normal; font-size: 0.9em;" > 보낸 쪽지함</a>
 				</dd>
 				<dd class="w3-bar-item w3-button tablink" onclick="openCity(event,'recvM')">
 					<a href="#" id="reciveList" style="font-weight: normal; font-size: 0.9em;" > 받은 쪽지함 </a>
@@ -200,7 +211,7 @@ $(function(){
 			</dl>
 		</div>
 		
-<a href="/fin/member/memberAttend?m_id=${member.id }" style="font-weight: normal;">
+<a href="/fin/member/memberAttend" style="font-weight: normal;">
 		<button class="accordion">
 			<span class="glyphicon glyphicon-ok-circle"></span> 나의 출석
 		</button>
@@ -223,16 +234,16 @@ $(function(){
 		<div class="panel2">
 			<dl>
 				<dd>
-					<a href="/fin/member/bidding?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">입찰 중 상품</a>
+					<a href="/fin/member/bidding?curPage=1" style="font-weight: normal; font-size: 0.9em;">입찰 중 상품</a>
 				</dd>
 				<dd>
-					<a href="/fin/member/buyIng?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">구매 중 상품</a>
+					<a href="/fin/member/buyIng?curPage=1" style="font-weight: normal; font-size: 0.9em;">구매 중 상품</a>
 				</dd>
 				<dd>
-					<a href="/fin/member/likesProduct?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">관심 상품</a>
+					<a href="/fin/member/likesProduct?curPage=1" style="font-weight: normal; font-size: 0.9em;">관심 상품</a>
 				</dd>
 				<dd>
-					<a href="/fin/member/buyEnd?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">구매 완료 상품</a>
+					<a href="/fin/member/buyEnd?curPage=1" style="font-weight: normal; font-size: 0.9em;">구매 완료 상품</a>
 				</dd>
 			</dl>
 		</div>
@@ -243,16 +254,15 @@ $(function(){
 		<div class="panel2">
 			<dl>
 				<dd>
-					<a href="/fin/member/sellIng?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">판매 중 상품</a>
+					<a href="/fin/member/sellIng?curPage=1" style="font-weight: normal; font-size: 0.9em;">판매 중 상품</a>
 				</dd>
 				<dd>
-					<a href="/fin/member/sellEnd?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">판매 완료 상품</a>
+					<a href="/fin/member/sellEnd?curPage=1" style="font-weight: normal; font-size: 0.9em;">판매 완료 상품</a>
 				</dd>
 			</dl>
 		</div>
 		
 	</div>	
-	
 	
 <div style="width: 1050px; height: 700px; float: right;">
  <table id="Mtable" class="table table-hover" style="font-size: 0.9em;">
@@ -285,11 +295,11 @@ $(function(){
 
 	<c:if test="${list == '[]'}">
 		<tr>
-		<td colspan="7" style="text-align: center;">구매 완료 상품이 없습니다.</td>
+		<td colspan="8" style="text-align: center;">구매 완료 상품이 없습니다.</td>
 		</tr>
 	</c:if>
 		
-		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 	</table>
 <div class="paging">
 		<c:if test="${pageResult.curBlock>1}">
@@ -313,15 +323,15 @@ $(function(){
       <div class="modal-content">
         <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title" style="font-family: Georgia; font-weight: bolder;">SEND MESSAGE</h4>
+          <h4 class="modal-title" style="font-family: Georgia; font-weight: bolder; font-size: 2.5em;">REVIEW PAGE</h4>
         </div>
         <div class="modal-body">
     
      <form action="../review/reviewWrite" method="post">
           <table class="table table-hover">
           <tr>
-          	<td style="font-family: Georgia; font-weight: bolder;">작성자</td>
-          	<td style="font-family: Georgia; font-weight: bolder;">판매자</td>
+          	<td style="font-family: Georgia; font-weight: bolder;">WRITER</td>
+          	<td style="font-family: Georgia; font-weight: bolder;">SELLER</td>
           
           </tr>
           <tr>
@@ -330,7 +340,7 @@ $(function(){
           </tr>
          
          <!-- 별점 --> 
-         <tr><td colspan="2">별점</td></tr> 
+         <tr><td colspan="2" style="font-family: Georgia; font-weight: bolder;">SCORE</td></tr> 
           <tr>
           <td colspan="2">
           
@@ -353,20 +363,21 @@ $(function(){
           
           
 		<tr>
-		<td colspan="2" style="font-family: Georgia; font-weight: bolder;">T I T L E</td>
+		<td colspan="2" style="font-family: Georgia; font-weight: bolder;">TITLE</td>
 		</tr>
 		<tr >	
 			<td colspan="2"><input type="text" class="form-control" name="title"></td>
          </tr>
 	<tr>        
 	<td colspan="2">
-		<textarea rows="10" cols="60" id="contents" name="contents"></textarea>
+		<textarea rows="10" cols="75" id="contents" name="contents"></textarea>
 	</td>
 	</tr>		
 
 	<tr style="height: 40px;">
 	<td>
-	<button class="btn btn-default" style="width: 205px; margin-top: 25px; font-family: Georgia; font-weight: bolder;">WRITE</button>
+	<button class="btn btn-default" style="width: 205px; margin-top: 25px; font-family: Georgia; font-weight: bolder;
+	margin-left: 40px;">WRITE</button>
 	</td>
 	<td>
          <input type="button" id="mClose" 
@@ -376,9 +387,7 @@ $(function(){
 	</tr>
 
 </table>
-          
-					          
-         
+          		          
 </form>
         </div>
         <div class="modal-footer">

@@ -16,6 +16,11 @@ public class ReviewService {
 	private ReviewDAO reviewDAO;
 	
 	
+	public int reviewTotal(Map<String, Object> map) throws Exception{
+		return reviewDAO.reviewTotal(map);
+	}
+	
+	
 //	글쓰기
 	public int reviewInsert(ReviewDTO reviewDTO) throws Exception{
 		

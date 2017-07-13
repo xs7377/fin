@@ -22,6 +22,12 @@ public class ReviewDAO {
 	private SqlSession sqlSession;
 	private static String NAMESPACE="ReviewMapper.";
 	
+	
+	//카운트
+	public int reviewTotal(Map<String , Object> map) throws Exception{
+		return sqlSession.selectOne(NAMESPACE+"reviewTotal", map);
+	}
+	
 	//	글쓰기
 	public int reviewInsert(ReviewDTO reviewDTO) throws Exception{
 		

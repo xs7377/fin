@@ -7,14 +7,14 @@
 <title>Insert title here</title>
 <style type="text/css">
 footer {
-	height: 300px;
+	height: auto;
 	margin-top: 60px;
 	border-top: 1px dotted #a6a6a6;
 }
 
 .footer_wrap{
 	width: 1300px;
-	height: 220px;
+	height: 160px;
 	margin: 0 auto;
 	padding-top: 20px;
 }

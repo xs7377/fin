@@ -22,6 +22,12 @@
     	6.댓글// 답글은 불가능하게.
    	-->
    	
+   	
+   	<!--P_id의 count  -->
+   	<select id="reviewTotal" parameterType="String" resultType="int">
+   		select count(num) from review where p_id=#{p_id}
+   	</select>
+   	
    	<!--완료  -->
     <insert id="reviewInsert" parameterType="com.choa.review.ReviewDTO">
     insert into review 

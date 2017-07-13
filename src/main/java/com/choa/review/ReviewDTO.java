@@ -15,12 +15,6 @@ public class ReviewDTO {
 	private int depth;
 	private int score;
 	private String p_id;
-	public String getP_id() {
-		return p_id;
-	}
-	public void setP_id(String p_id) {
-		this.p_id = p_id;
-	}
 	private String category;
 	private String kind;
 	public int getNum() {
@@ -83,7 +77,13 @@ public class ReviewDTO {
 	public void setScore(int score) {
 		this.score = score;
 	}
-	
+
+	public String getP_id() {
+		return p_id;
+	}
+	public void setP_id(String p_id) {
+		this.p_id = p_id;
+	}
 	public String getCategory() {
 		return category;
 	}
@@ -96,7 +96,5 @@ public class ReviewDTO {
 	public void setKind(String kind) {
 		this.kind = kind;
 	}
-	
-	
 	
 }

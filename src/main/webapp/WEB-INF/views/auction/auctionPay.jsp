@@ -8,13 +8,19 @@
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
-	var price = "${auction.max_price}";
+	var price = "${auction.max_price}"*1;
+	var buyer = "${auction.buyer}";
+	if(buyer!=''){
+		buyer = buyer.split(",");
+		price = buyer[1]*1;
+		alert(price);
+	}
 	$(function(){
+		$(".input_price").html(price+"원");
 		var modal = this;
 		var hash = modal.id;
 		window.location.hash = hash;
 		var num = "${auction.num}";
-		var price = "${auction.max_price}"*1;
 		var address = "${member.addr}";
 		$(document).ready(function(){
 			var add = $(".address_mode[value='basic']");
@@ -26,7 +32,7 @@
 		$(".address_mode").click(function(){
 			var val = $(this).val();
 			if(val=="basic"){
-				var addr = address.split("_");
+				var addr = address.split(",");
 				$("#sample6_postcode").val(addr[0]); // 우편번호
 				$("#sample6_address").val(addr[1]); // 주소
 				$("#sample6_address2").val(addr[2]); // 상세주소
@@ -356,8 +362,8 @@
 							</c:forEach>
 						</select>
 					</td>
-					<td class="price real_price">
-						${auction.max_price}원
+					<td class="price real_price input_price">
+					
 					</td>
 					<td class="seller">
 						${auction.m_id }
@@ -386,7 +392,7 @@
 					<td class="payment"><span>결제금액</span></td>
 				</tr>
 				<tr style="margin-bottom: 20px;">
-					<td class="price">${auction.max_price }원</td>
+					<td class="price input_price"></td>
 					<td class="tran">2500원</td>
 					<td id="coupon_info" class="coupon">0</td>
 					<td class="point">

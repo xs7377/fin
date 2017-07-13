@@ -33,13 +33,13 @@
 			
 			if(t_price!=''){
 				t_price=t_price.split(",");
-				if(akind=='buy'){
-					$(".price_title").html("낙찰가");
-					$(".real_tprice").html(t_price[1]+"원");
-				}else{
-					$(".price_title").html("현재가");
-					$(".real_tprice").html(t_price[1]+"원");
+				if(akind=='결제'){
+					if(client==t_price[0]){
+						$("#tender_btn_wrap").prepend('<input type="button" class="tender_payMent_btn" value="결제하기">');
+					}
 				}
+				$(".price_title").html("현재가");
+				$(".real_tprice").html(t_price[1]+"원");
 			}else{
 				$(".price_title").html("현재가");
 				$(".real_tprice").html(+min_price+"원");
@@ -51,13 +51,14 @@
 				var img = $(".auctionView_reply_write").children("img");
 				$(img).attr("src","${pageContext.servletContext.contextPath }/resources/upload/${member.fname}");
 				$.ajax({
-					url:"../likeSelect",
+					url:"${pageContext.servletContext.contextPath }/likes/likesCheck",
 					type:"post",
 					data:{
-						id:client,
-						num:number
+						m_id:client,
+						pnum:number,
+						kind:"auction"
 					},success:function(data){
-						if(data==1){
+						if(data.m_id==client){
 							var img = $(".auction_likes").children("img");
 							$(img).attr("src","${pageContext.servletContext.contextPath }/resources/img/auction/heart_in.png");
 							$(img).attr("alt","yes");
@@ -129,6 +130,17 @@
  				}
  			});
 			
+		});
+		
+		$("body").on("click",".tender_payMent_btn",function(){
+			var num = '${auctionDTO.num}';
+			$("#modal_title").html("주문서")
+			$("body").css("overflow","hidden");
+			$("#tender_modal_frame").attr("src","${pageContext.servletContext.contextPath }/auction/auctionPay/"+num+"/tender");
+			$("#tender_modal_frame").css("height","650px");
+			$(".modal-content").css("width","750px");
+			$(".modal").css("padding-top","50px");
+			$("#myModal").css("display","block");
 		});
 		
 		$(".auction_mod").click(function(){
@@ -371,13 +383,15 @@
 			}else if(seller==client){
 			}else{
 				$.ajax({
-					url:"../auctionLike",
+					url:"${pageContext.servletContext.contextPath }/likes/likesInsert",
 					type:"post",
 					data:{
-						pNum:number,
-						m_id:client
+						pnum:number,
+						m_id:client,
+						kind:"auction"
 					},success:function(data){
-						if(data==1){
+						alert(data.count);
+						if(data.count==1){
 							like_count++;
 							$(img).attr("src","${pageContext.servletContext.contextPath }/resources/img/auction/heart_in.png");
 							$(img).attr("alt","yes");
@@ -387,7 +401,6 @@
 							$(img).attr("alt","no");
 						}
 						$(".like_count_wrap").html(like_count);
-						
 					}
 				});
 			}
@@ -586,32 +599,35 @@
 var countDownDate = new Date(period).getTime();
 
 // Update the count down every 1 second
-var x = setInterval(function() {
-
-    // Get todays date and time
-    
-    // Find the distance between now an the count down date
-	var now = new Date().getTime();
-	distance = countDownDate - now;
-    
-    // Time calculations for days, hours, minutes and seconds
-    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    // Output the result in an element with id="demo"
-    $(".demo").html(days + "일 " + hours + "시간 "
-    + minutes + "분 " + seconds + "초 "
-	);
-    
-    if (distance < 0) {
-        clearInterval(x);
-		$(".demo").remove();
-		check=false;
-    }
-    // If the count down is over, write some text 
-
-}, 0);
+if(akind=='auction'){
+	var x = setInterval(function() {
+	
+	    // Get todays date and time
+	    
+	    // Find the distance between now an the count down date
+		var now = new Date().getTime();
+		distance = countDownDate - now;
+	    
+	    // Time calculations for days, hours, minutes and seconds
+	    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+	    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+	    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+	    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+	    // Output the result in an element with id="demo"
+	    $(".demo").html(days + "일 " + hours + "시간 "
+	    + minutes + "분 " + seconds + "초 "
+		);
+	    
+	    if (distance < 0) {
+	        clearInterval(x);
+			$(".demo").remove();
+			location.reload();
+			check=false;
+	    }
+	    // If the count down is over, write some text 
+	
+	}, 0);
+}
 
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -837,6 +853,21 @@ var x = setInterval(function() {
 .dept .reply_imgs{
 	width: 42px;
 	height: 42px;
+}
+
+.tender_payMent_btn{
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 10px;
+  color: white;
+  background-color: #2196f3;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 20px;
+  font-weight: bolder;
+  border-radius: 5px;
 }
 
 #reply_more_btn{
@@ -1281,6 +1312,9 @@ var x = setInterval(function() {
 				<c:if test="${auctionDTO.kind eq '구매' }">
 					<div class="auction_end_text" style="margin-top: 50px;">경매가 종료되었습니다.</div>
 				</c:if>
+				<c:if test="${auctionDTO.kind eq '결제' }">
+					<div class="auction_end_text" style="margin-top: 25px;">경매가 종료되었습니다.</div>
+				</c:if>
 				<c:if test="${auctionDTO.kind eq 'auction' }">
 					<div class="auction_end_text demo" style="background-color: gray; margin-bottom: 15px;"></div>
 					<c:if test="${auctionDTO.m_id eq member.id }">
@@ -1320,6 +1354,9 @@ var x = setInterval(function() {
 				<div class="auction_bar_text" >경매가 취소되었습니다.</div>
 			</c:if>
 			<c:if test="${auctionDTO.kind eq '구매' }">
+				<div class="auction_bar_text">경매가 종료되었습니다.</div>
+			</c:if>
+			<c:if test="${auctionDTO.kind eq '결제' }">
 				<div class="auction_bar_text">경매가 종료되었습니다.</div>
 			</c:if>
 			<c:if test="${auctionDTO.kind eq 'auction' }">
@@ -1382,8 +1419,6 @@ var x = setInterval(function() {
 							<div style="margin: 25px 10px;">
 							<span style="font-weight: bolder;">${auctionDTO.m_id }</span>님의 멤버십 등급은
 							<span id="seller_membership" style="color: #ffbf00; font-weight: bolder;"></span>입니다.<br><br>
-							<span style="font-weight: bolder; color: #8c8c8c;">유지기간 | </span> 1개월 / 매월 1일 변경 <br> 
-							<span style="font-weight: bolder; color: #8c8c8c;">산정기간 | </span> 최근 3개월 / 
 							</div>
 				</div>
 				<div id="review_board"></div>

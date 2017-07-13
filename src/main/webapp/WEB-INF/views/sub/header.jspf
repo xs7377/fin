@@ -10,6 +10,14 @@
 <title>Insert title here</title>
 <script type="text/javascript">
 $(function(){
+	
+	
+	$.ajax({
+		url: "",
+		type:
+	});
+	
+	
 	//======================================검색어box hover처리=======================
 	$(".rank-search").hover(function(){
 		$(this).addClass('udl');
@@ -429,7 +437,7 @@ li>a:hover{
 	float: right;font-size:15px;display: inline-block;height: 20px;padding-top: 1.5px;
 }
 .roll4{
-	border: 1px solid #bcbcbc;width:225px;position: absolute;background-color: white;padding-bottom: 7px;
+	border: 1px solid #bcbcbc;width:225px;position: absolute;background-color: white;padding-bottom: 7px;z-index: 10;
 }
 .roll5{
 	display: inline-block; width: 20px; font-weight: bold;color: rgba(56, 56, 56, 0.8);font-size: 15px;
@@ -460,6 +468,11 @@ li>a:hover{
 .gray{
 	color: rgb(140,140,140);
 	margin-right: 4.5px;
+}
+@media(max-width: 1500px){
+	.header_wrap{
+		width: 100%;
+	}
 }
 @media ( max-width: 1500px ) {
   .user, .menu, .head-submenu, .logo{

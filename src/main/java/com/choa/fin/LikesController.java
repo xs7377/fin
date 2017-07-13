@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.choa.likes.LikesDTO;
@@ -46,6 +47,12 @@ public class LikesController {
 		map.put("count", count);
 		
 		return map;
+	}
+	
+	@RequestMapping(value="likesCheck", method=RequestMethod.POST)
+	@ResponseBody
+	public LikesDTO likeCheck(LikesDTO likesDTO) throws Exception{
+		return likesService.likesCheck(likesDTO);
 	}
 	
 	

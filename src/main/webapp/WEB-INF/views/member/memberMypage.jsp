@@ -108,13 +108,12 @@ a{
 		<button class="accordion">
 			<span class="glyphicon glyphicon-user"></span> 나의 정보
 		</button> 
-		</a> 
-		
+		</a>
 		<div class="panel2"></div>
 		
 		
-		<a href="/fin/member/memberFriends?curPage=1&id=${member.id }" style="font-weight: normal;">
-		<button class="accordion">
+		<a href="/fin/member/memberFriends?curPage=1" style="font-weight: normal;">
+		<button class="accordion"> 
 			<span class="glyphicon glyphicon-music"></span> 나의 친구
 		</button> 
 		</a> 
@@ -132,7 +131,7 @@ a{
 		<div class="panel2">
 			<dl>
 				<dd class="w3-bar-item w3-button tablink" onclick="openCity(event,'sendM')">
-					<a href="/fin/member/memberMessage?id=${member.id }" id="sendList" style="font-weight: normal; font-size: 0.9em;" > 보낸 쪽지함</a>
+					<a href="/fin/member/memberMessage" id="sendList" style="font-weight: normal; font-size: 0.9em;" > 보낸 쪽지함</a>
 				</dd>
 				<dd class="w3-bar-item w3-button tablink" onclick="openCity(event,'recvM')">
 					<a href="#" id="reciveList" style="font-weight: normal; font-size: 0.9em;" > 받은 쪽지함 </a>
@@ -140,7 +139,7 @@ a{
 			</dl>
 		</div>
 		
-	<a href="/fin/member/memberAttend?m_id=${member.id }" style="font-weight: normal;">
+<a href="/fin/member/memberAttend" style="font-weight: normal;">
 		<button class="accordion">
 			<span class="glyphicon glyphicon-ok-circle"></span> 나의 출석
 		</button>
@@ -163,16 +162,16 @@ a{
 		<div class="panel2">
 			<dl>
 				<dd>
-					<a href="/fin/member/bidding?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">입찰 중 상품</a>
+					<a href="/fin/member/bidding?curPage=1" style="font-weight: normal; font-size: 0.9em;">입찰 중 상품</a>
 				</dd>
 				<dd>
-					<a href="/fin/member/buyIng?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">구매 중 상품</a>
+					<a href="/fin/member/buyIng?curPage=1" style="font-weight: normal; font-size: 0.9em;">구매 중 상품</a>
 				</dd>
 				<dd>
-					<a href="/fin/member/likesProduct?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">관심 상품</a>
+					<a href="/fin/member/likesProduct?curPage=1" style="font-weight: normal; font-size: 0.9em;">관심 상품</a>
 				</dd>
 				<dd>
-					<a href="/fin/member/buyEnd?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">구매 완료 상품</a>
+					<a href="/fin/member/buyEnd?curPage=1" style="font-weight: normal; font-size: 0.9em;">구매 완료 상품</a>
 				</dd>
 			</dl>
 		</div>
@@ -183,10 +182,10 @@ a{
 		<div class="panel2">
 			<dl>
 				<dd>
-					<a href="/fin/member/sellIng?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">판매 중 상품</a>
+					<a href="/fin/member/sellIng?curPage=1" style="font-weight: normal; font-size: 0.9em;">판매 중 상품</a>
 				</dd>
 				<dd>
-					<a href="/fin/member/sellEnd?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">판매 완료 상품</a>
+					<a href="/fin/member/sellEnd?curPage=1" style="font-weight: normal; font-size: 0.9em;">판매 완료 상품</a>
 				</dd>
 			</dl>
 		</div>
@@ -195,8 +194,8 @@ a{
 		
 </div>
 		
-		<div style="display: inline-block;">
 		<c:if test="${member.kind == 'manager' }">
+		<div style="display: inline-block; height:250px;">
 		<!--매니져  -->
 		<button class="accordion">
 			<span class="glyphicon glyphicon-user"></span> 매니져
@@ -214,9 +213,8 @@ a{
 				
 			</dl>
 		</div>
-		</c:if>
 		</div>
-		
+		</c:if>
 		
 		
 <c:if test="${member.kind == 'member' }">
@@ -275,7 +273,7 @@ a{
 <div style="padding: 20px;"> 
 
 <h3><span class="glyphicon glyphicon-search"></span>
-<span style="font-size: 0.8em; font-weight: bolder;">문의사항</span>
+<span style="font-size: 1.5em; font-weight: bolder;">문의사항</span>
 </h3><br> 
 <span style="font-size: 0.8em; color: #a6a6a6;">
 TRADEMARK 홈페이지 이용 시 문의사항은 
@@ -285,7 +283,7 @@ TRADEMARK 홈페이지 이용 시 문의사항은
 <br><br><br>
 
 <h3><span class="glyphicon glyphicon-share"></span>
-<span style="font-size: 0.8em; font-weight: bolder;">탈퇴하기</span>
+<span style="font-size: 1.5em; font-weight: bolder;">탈퇴하기</span>
 </h3><br> 
 <span style="font-size: 0.8em; color: #a6a6a6;">
 TRADEMARK 홈페이지를 더 이상 이용하지 않는다면 
@@ -298,6 +296,51 @@ onclick="return confirm('탈퇴하시겠습니까?');">
 </div>
 
 </div>
+</c:if>
+
+
+<c:if test="${member.id == 'manager'}">
+<div style="width: 1050px; height: auto;  display: inline-block; float: right;">
+<table class="table table-hover" style="width:500px; display: inline-block;">
+<tr>
+<td>
+<h4><span class="myPageHome">신고 접수</span>에서 신고된 목록을 확인하세요.</h4>
+<span class="myPageMiddle">신고 대기 상태인 신고 내역을 확인하고 접수해 주세요.</span>
+</td>
+</tr>
+
+<tr>
+<td>
+<h4><span class="myPageHome">판매 결산 페이지</span>에서 판매 내역을 확인하세요.</h4>
+<span class="myPageMiddle">TRADEMARK에서 판매를 진행한 판매자 아이디, 거래 건수, 거래 금액을 확인할 수 있습니다.</span>
+</td>
+</tr>
+
+<tr> 
+<td>
+</td>
+</tr>
+</table>   
+
+<div style="width: 520px; display: inline-block; height: 120px; float: right; border: 0.2px solid #d9d9d9;">
+<div style="padding: 20px;"> 
+
+<h3><span class="glyphicon glyphicon-search"></span>
+<span style="font-size:1.5em; font-weight: bolder;">문의사항 업로드</span>
+</h3><br> 
+<span style="font-size: 0.8em; color: #a6a6a6;">
+TRADEMARK 홈페이지 이용 시 문의사항을
+<span style="color: #ff8566">NOTICE 게시판</span>에 게재하실 수 있습니다. 
+</span> 
+<br><br><br> 
+
+</div>
+</div>
+
+</div>
+
+
+
 </c:if>
 
 

@@ -99,7 +99,9 @@ public class AuctionController {
 	
 	@RequestMapping(value="auction_tender/{num}/{kind}", method=RequestMethod.GET)
 	public ModelAndView auction_tender(@PathVariable(value="num")int num, @PathVariable(value="kind") String kind, ModelAndView modelAndView) throws Exception{
-		modelAndView.addObject("auction_info", this.auctionService.tenderInfo(num));
+		Map<String, Object> map = auctionService.view(num);
+		modelAndView.addObject("auction_info", map.get("auctionDTO")).addObject("imgs", map.get("imgList"));
+		
 		modelAndView.setViewName("auction/auction_tender");
 		return modelAndView;
 	}
@@ -107,7 +109,7 @@ public class AuctionController {
 	@RequestMapping(value="auction_tender", method=RequestMethod.POST)
 	@ResponseBody
 	public int auction_tender(int num, int price, String addr, String coupon, int point, HttpSession session) throws Exception{
-		boolean check_pay = false;
+		boolean check_pay = true;
 		MemberDTO memberDTO = (MemberDTO)session.getAttribute("member");
 		System.out.println(addr);
 		int result = 0;
@@ -149,12 +151,6 @@ public class AuctionController {
 		modelAndView.addObject("img", ar);
 		
 		return modelAndView;
-	}
-	
-	@RequestMapping(value="auctionLike", method=RequestMethod.POST)
-	@ResponseBody
-	public int auctionLikes(int pNum, String m_id) throws Exception{
-		return auctionService.auctionLikes(pNum, m_id);
 	}
 	
 	@RequestMapping(value="categoryDrop")
@@ -240,13 +236,6 @@ public class AuctionController {
 		}
 		return mv;
 	}
-	
-	@RequestMapping(value="likeSelect", method=RequestMethod.POST)
-	@ResponseBody
-	public int likeSelect(String id, int num) throws Exception{
-		return auctionService.likeSelect(id, num);
-	}
-	
 	
 	@RequestMapping(value="replyRemove")
 	@ResponseBody

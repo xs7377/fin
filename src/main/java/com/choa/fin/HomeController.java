@@ -32,11 +32,7 @@ public class HomeController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
-		return "home";
-	}
-	@RequestMapping(value="/index",method=RequestMethod.GET)
-	public void index(Model model)throws Exception{
+	public String home(Locale locale, Model model)throws Exception {
 		String [] icon={"fa fa-diamond","fa fa-gift","fa fa-car","fa fa-weixin","fa fa-heartbeat","fa fa-desktop","fa fa-book"};
 		// getRank
 		List<RankDTO> rank=auctionService.getRank();
@@ -47,10 +43,7 @@ public class HomeController {
 		model.addAttribute("li",auctionService.ctgAllList()).addAttribute("icon", icon);
 		model.addAttribute("searchTop10", searchTop10);
 		model.addAttribute("rankMove", rankMove);
-	}
-	
-	@RequestMapping(value="/NewFile")
-	public void NewFile(){
+		return "home";
 	}
 	
 }

@@ -31,15 +31,12 @@ public class LikesDAO {
 	
 	//kind 게시판의 pnum게시물의 좋아요 수
 	public int likesCount(LikesDTO likesDTO) throws Exception{
-		
-		
 		return sqlSession.selectOne(NAMESPACE+"likesCount", likesDTO);
 	}
 	
 	
 	//view에 접근 했을때 m_id 유저가 pnum의 게시글을 좋아요를 눌렀는지 확인.
 	public LikesDTO likesCheck(LikesDTO likesDTO) throws Exception{
-		
 		return sqlSession.selectOne(NAMESPACE+"likesCheck",likesDTO);
 		
 	}

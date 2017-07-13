@@ -25,6 +25,7 @@
 				var pad = depth[1]*1*50;
 				$(this).css("padding-left",pad);
 			});
+			$("#curPage_"+curPage).addClass("pager");
 			
 			$(".score_wrap").map(function(){
 				var id = $(this).attr("id");
@@ -149,6 +150,22 @@
 			});
 		});
 		
+		$(".reload_review").click(function(){
+			var page = $(this).attr("id");
+			page = page.split("_");
+			reload(page[1]);
+		});
+		
+		$("#prev_p").click(function(){
+			var page = curPage-1;
+			reload(page);
+		});
+		
+		$("#next_n").click(function(){
+			var page = curPage+1;
+			reload(page);
+		});
+		
 		$("body").on("click",".review_reply_input",function(){
 			var num = $(this).attr("id");
 			var id = $(this).parents(".review_reply_mid").attr("id");
@@ -256,27 +273,36 @@ margin: 5px 60px;;
 .page_wrap{
 	width: 100%;
 	height: 50px;
+	padding: 5px 10%;
+}
+.pagination{
+	width: 350px;
+	min-width: 50px;
+	height: 100%;
+	margin: 0 auto;
+	text-align: center;
 }
 
-.pagination a {
+.pagination span {
     color: black;
-    float: left;
     padding: 8px 16px;
     text-decoration: none;
     transition: background-color .3s;
+    cursor: pointer;
 }
 
-.pagination a.active {
+.pagination span.pager {
     background-color: #4CAF50;
     color: white;
 }
 
-.pagination a:hover:not(.active) {background-color: #ddd;}
+.pagination div:pager:not(.active) {background-color: #ddd;}
 </style>
 </head>
 <body>
 <div class="review_wrap">
 <div class="buyer_behind">구매자 후기</div>
+<c:if test="${list.size()>0}">
 <c:forEach items="${list }" var="l">
       <div class="media" id="depth_${l.depth }">
         <div class="media-left">
@@ -305,19 +331,23 @@ margin: 5px 60px;;
     </div>
   </div>
 </c:forEach>
+</c:if>
+<c:if test="${list.size()==0 }">
+	데이터가 없습니다.
+</c:if>
 </div>
 <div class="page_wrap">
-<c:forEach var="p" items="${pageResult }">
-
-  <a id="perv_">&laquo;</a>
-  <a href="#">1</a>
-  <a class="select" href="#">2</a>
-  <a href="#">3</a>
-  <a href="#">4</a>
-  <a href="#">5</a>
-  <a href="#">6</a>
-  <a href="#">&raquo;</a>
+<div class="pagination">
+<c:forEach var="p" begin="${pageResult.startNum }" end="${pageResult.lastNum }" step="1">
+<c:if test="${pageResult.curBlock>1 }">
+  <span id="perv_p">&laquo;</span>
+</c:if>
+	<span id="curPage_${p+1}" class="reload_review">${p+1}</span>
+ <c:if test="${pageResult.curBlock>pageResult.totalBlock }">
+  <span id="next_n">&raquo;</span>
+ </c:if>
 </c:forEach>
+</div>
 </div>
 </body>
 </html>

@@ -148,10 +148,6 @@ public class AuctionService {
 		return auctionDAO.auctionImage(uploadDTO);
 	}
 	
-	public int auctionLikes(int pNum, String m_id) throws Exception{
-		return auctionDAO.auctionLikes(pNum, m_id);
-	}
-	
 	public List<List<CategoryDTO>> category_search(String[] cate) throws Exception{
 		return auctionDAO.category_search(cate);
 	}
@@ -208,19 +204,15 @@ public class AuctionService {
 		
 	}
 	
-	public int likeSelect(String id, int num)throws Exception{
-		return auctionDAO.likeSelect(id, num);
-	}
-	
 	public int replyMod(ReplyDTO replyDTO) throws Exception{
 		return auctionDAO.replyMod(replyDTO);
 	}
 	
-	public boolean buyCheck(int num) throws Exception{
+	public boolean buyCheck(int num){
 		return auctionDAO.buyCheck(num);
 	}
 	
-	public boolean tenderCheck(String id, int num) throws Exception{
+	public boolean tenderCheck(String id, int num){
 		return auctionDAO.tenderCheck(id, num);
 	}
 	

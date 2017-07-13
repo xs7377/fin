@@ -172,12 +172,11 @@ function openCity(evt, menuList) {
 		<button class="accordion">
 			<span class="glyphicon glyphicon-user"></span> 나의 정보
 		</button> 
-		</a> 
-		
+		</a>
 		<div class="panel2"></div>
 		
 		
-		<a href="/fin/member/memberFriends?curPage=1&id=${member.id }" style="font-weight: normal;">
+		<a href="/fin/member/memberFriends?curPage=1" style="font-weight: normal;">
 		<button class="accordion">
 			<span class="glyphicon glyphicon-music"></span> 나의 친구
 		</button> 
@@ -196,7 +195,7 @@ function openCity(evt, menuList) {
 		<div class="panel2">
 			<dl>
 				<dd class="w3-bar-item w3-button tablink" onclick="openCity(event,'sendM')">
-					<a href="/fin/member/memberMessage?id=${member.id }" id="sendList" style="font-weight: normal; font-size: 0.9em;" > 보낸 쪽지함</a>
+					<a href="/fin/member/memberMessage" id="sendList" style="font-weight: normal; font-size: 0.9em;" > 보낸 쪽지함</a>
 				</dd>
 				<dd class="w3-bar-item w3-button tablink" onclick="openCity(event,'recvM')">
 					<a href="#" id="reciveList" style="font-weight: normal; font-size: 0.9em;" > 받은 쪽지함 </a>
@@ -204,7 +203,7 @@ function openCity(evt, menuList) {
 			</dl>
 		</div>
 		
-<a href="/fin/member/memberAttend?m_id=${member.id }" style="font-weight: normal;">
+<a href="/fin/member/memberAttend" style="font-weight: normal;">
 		<button class="accordion">
 			<span class="glyphicon glyphicon-ok-circle"></span> 나의 출석
 		</button>
@@ -227,16 +226,16 @@ function openCity(evt, menuList) {
 		<div class="panel2">
 			<dl>
 				<dd>
-					<a href="/fin/member/bidding?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">입찰 중 상품</a>
+					<a href="/fin/member/bidding?curPage=1" style="font-weight: normal; font-size: 0.9em;">입찰 중 상품</a>
 				</dd>
 				<dd>
-					<a href="/fin/member/buyIng?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">구매 중 상품</a>
+					<a href="/fin/member/buyIng?curPage=1" style="font-weight: normal; font-size: 0.9em;">구매 중 상품</a>
 				</dd>
 				<dd>
-					<a href="/fin/member/likesProduct?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">관심 상품</a>
+					<a href="/fin/member/likesProduct?curPage=1" style="font-weight: normal; font-size: 0.9em;">관심 상품</a>
 				</dd>
 				<dd>
-					<a href="/fin/member/buyEnd?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">구매 완료 상품</a>
+					<a href="/fin/member/buyEnd?curPage=1" style="font-weight: normal; font-size: 0.9em;">구매 완료 상품</a>
 				</dd>
 			</dl>
 		</div>
@@ -247,10 +246,10 @@ function openCity(evt, menuList) {
 		<div class="panel2">
 			<dl>
 				<dd>
-					<a href="/fin/member/sellIng?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">판매 중 상품</a>
+					<a href="/fin/member/sellIng?curPage=1" style="font-weight: normal; font-size: 0.9em;">판매 중 상품</a>
 				</dd>
 				<dd>
-					<a href="/fin/member/sellEnd?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">판매 완료 상품</a>
+					<a href="/fin/member/sellEnd?curPage=1" style="font-weight: normal; font-size: 0.9em;">판매 완료 상품</a>
 				</dd>
 			</dl>
 		</div>
@@ -258,13 +257,12 @@ function openCity(evt, menuList) {
 	</div>	
 
 
-
 <!--쪽지@hyo2 일단 만짐  -->
 <div id="sendM" class="w3-container w3-border menuList" style="width: 1050px; float: right;">
-   <h2 style="font-family: Georgia; font-weight: bolder;">SEND MESSAGE</h2>
+   <h2 style="font-family: Georgia; font-weight: bolder; font-size: 3em;">SEND MESSAGE</h2><br>
    	  
   <table class="table" id="sTable" style="text-align: center; font-size: 0.9em;">
-    <tr id="add" style="font-weight: bolder;"><td>NO</td><td colspan="2">TO</td><td>제목</td><td>READ</td><td>보낸날짜</td> </tr>
+    <tr id="add" style="font-weight: bolder;"><td>NO</td><td colspan="2">TO</td><td>TITLE</td><td>READ</td><td>보낸날짜</td> </tr>
     
     <c:forEach items="${sendList}" var="list">
     <tr>
@@ -291,9 +289,9 @@ function openCity(evt, menuList) {
 
 <!-- 받은 쪽지 -->
 <div id="recvM" class="w3-container w3-border menuList" style="width: 1050px; float: right; display: none;">
-   	 <h2 style="font-family: Georgia; font-weight: bolder;">RECEIVE MESSAGE</h2>
+   	 <h2 style="font-family: Georgia; font-weight: bolder; font-size: 3em;">RECEIVE MESSAGE</h2><br>
    	 <table class="table" id="rTable" style="text-align: center; font-size: 0.9em;">
-    <tr id="add" style="font-weight: bolder;"><td>NO</td><td colspan="2">FROM</td><td>제목</td><td>READ</td><td>보낸날짜</td> </tr>
+    <tr id="add" style="font-weight: bolder;"><td>NO</td><td colspan="2">FROM</td><td>TITLE</td><td>READ</td><td>보낸날짜</td> </tr>
     
     <c:forEach items="${recvList}" var="list">
     <tr>

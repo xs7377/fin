@@ -97,7 +97,6 @@
 
 	function go() {
 		for (var i = 0; i < check.length; i++) {
-			alert("ㅎㅇ");
 			if (check_all.checked) {
 				check[i].checked = true;
 				not_check[i].checked = false;

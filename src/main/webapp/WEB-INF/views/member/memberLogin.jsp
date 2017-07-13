@@ -64,7 +64,17 @@ a{
 }  
 </style> 
 <script type="text/javascript">
-
+/*  $(function(){
+	 $("#agree").click(function(){
+		 location.href="memberAgree" ;
+	 });
+	 $("#findId").click(function(){
+		 location.href="memberFindId" ;
+	 });
+	 $("#findPw").click(function(){
+		 location.href="memberFindPw" ;
+	 });
+ }); */
 
 </script>
 </head>
@@ -83,6 +93,9 @@ a{
 	<button class="memberlogin_btn">로그인</button>
 	<input type="checkbox" id="idcheck" name="idcheck" value="idcheck" > <span style="font-size: 0.8em;">아이디 저장</span> <br><br><br>
 	<div class="memberlogin_bottom">
+	
+	
+
 	<a href="memberAgree" style="font-size: 0.8em; font-style: normal;">회원가입</a>
 	<a href="memberFindId" style="font-size: 0.8em; font-style: normal;">아이디찾기</a>
 	<a href="memberFindPw" style="font-size: 0.8em; font-style: normal;">비밀번호찾기</a>
@@ -90,6 +103,10 @@ a{
 	</div>
 	</div>
 	</form> 
+	
+
+
+
 	</section>
 	<%@ include file="../sub/footer.jspf"%>
 </body>

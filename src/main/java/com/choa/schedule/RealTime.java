@@ -19,7 +19,7 @@ public class RealTime {
 			try {
 				List<SearchDTO> searchTop10=auctionService.getSearch();
 				auctionService.setRank(searchTop10);
-				//auctionService.auction();
+				auctionService.auction();
 			} catch (Exception e) {
 				e.printStackTrace();
 				// TODO: handle exception

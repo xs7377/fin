@@ -2,6 +2,7 @@ package com.choa.auction;
 
 import java.awt.Image;
 import java.sql.Date;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -251,18 +252,6 @@ public class AuctionDAO {
 		
 		return (Integer)map.get("result");
 	}
-	public int auctionLikes(int pNum, String m_id) throws Exception{
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("kind", "auction");
-		map.put("pNum", pNum);
-		map.put("m_id", m_id);
-		sqlSession.insert(NAME_SPACE+"likes", map);	
-		int result = (Integer)map.get("result");
-		map.put("result", result);
-		sqlSession.update(NAME_SPACE+"likesUpdate", map);
-		
-		return result;
-	}
 	public List<UploadDTO> auctionImage(UploadDTO uploadDTO) throws Exception{
 		uploadDTO.setKind("auction");
 		return this.uploadDAO.imgView(uploadDTO);
@@ -301,15 +290,6 @@ public class AuctionDAO {
 		return map;
 	}
 	
-	public int likeSelect(String id,int num)throws Exception{
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("kind", "auction");
-		map.put("id", id);
-		map.put("pnum", num);
-		num = sqlSession.selectOne(NAME_SPACE+"likes_select", map);
-		return num;
-	}
-	
 	public int replyMod(ReplyDTO replyDTO)throws Exception{
 		return replyDAO.reply_mod(replyDTO);
 	}
@@ -337,13 +317,18 @@ public class AuctionDAO {
 		return cateList;
 	}
 	
-	public boolean buyCheck(int num)throws Exception{
+	public boolean buyCheck(int num){
 		Calendar cal = Calendar.getInstance();
 		Calendar period = Calendar.getInstance();
 		String p = sqlSession.selectOne(NAME_SPACE+"buy_check", num);
 		System.out.println(p);
 		SimpleDateFormat s = new SimpleDateFormat("yyyy-M-d,HH:mm");
-		period.setTime(s.parse(p));
+		try {
+			period.setTime(s.parse(p));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		long result = period.getTimeInMillis() - cal.getTimeInMillis();
 		if(result>0){
 			return true;
@@ -352,17 +337,24 @@ public class AuctionDAO {
 		}
 	}
 	
-	public boolean tenderCheck(String id,int num)throws Exception{
+	public boolean tenderCheck(String id,int num){
 		boolean period = this.buyCheck(num);
 		boolean check = false;
-		String m_id = sqlSession.selectOne(NAME_SPACE+"tender_check", num);
-		if(m_id.equals(id) && !period){
-			check =true;
-		}else if(period){
-			check=true;
-		}else{
-			check=false;
+		String m_id = "no";
+		try {
+			m_id = sqlSession.selectOne(NAME_SPACE+"tender_check", num);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
 		}
+		System.out.println(m_id);
+			if(m_id!=null && m_id.equals(id) && !period){
+				check =true;
+			}else if(period){
+				check=true;
+			}else{
+				check=false;
+			}
 		return check;
 	}
 	

@@ -115,12 +115,11 @@ alert(message);
 		<button class="accordion">
 			<span class="glyphicon glyphicon-user"></span> 나의 정보
 		</button> 
-		</a> 
-		
+		</a>
 		<div class="panel2"></div>
 		
 		
-		<a href="/fin/member/memberFriends?curPage=1&id=${member.id }" style="font-weight: normal;">
+		<a href="/fin/member/memberFriends?curPage=1" style="font-weight: normal;">
 		<button class="accordion">
 			<span class="glyphicon glyphicon-music"></span> 나의 친구
 		</button> 
@@ -139,7 +138,7 @@ alert(message);
 		<div class="panel2">
 			<dl>
 				<dd class="w3-bar-item w3-button tablink" onclick="openCity(event,'sendM')">
-					<a href="/fin/member/memberMessage?id=${member.id }" id="sendList" style="font-weight: normal; font-size: 0.9em;" > 보낸 쪽지함</a>
+					<a href="/fin/member/memberMessage" id="sendList" style="font-weight: normal; font-size: 0.9em;" > 보낸 쪽지함</a>
 				</dd>
 				<dd class="w3-bar-item w3-button tablink" onclick="openCity(event,'recvM')">
 					<a href="#" id="reciveList" style="font-weight: normal; font-size: 0.9em;" > 받은 쪽지함 </a>
@@ -147,7 +146,7 @@ alert(message);
 			</dl>
 		</div>
 		
-<a href="/fin/member/memberAttend?m_id=${member.id }" style="font-weight: normal;">
+<a href="/fin/member/memberAttend" style="font-weight: normal;">
 		<button class="accordion">
 			<span class="glyphicon glyphicon-ok-circle"></span> 나의 출석
 		</button>
@@ -170,16 +169,16 @@ alert(message);
 		<div class="panel2">
 			<dl>
 				<dd>
-					<a href="/fin/member/bidding?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">입찰 중 상품</a>
+					<a href="/fin/member/bidding?curPage=1" style="font-weight: normal; font-size: 0.9em;">입찰 중 상품</a>
 				</dd>
 				<dd>
-					<a href="/fin/member/buyIng?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">구매 중 상품</a>
+					<a href="/fin/member/buyIng?curPage=1" style="font-weight: normal; font-size: 0.9em;">구매 중 상품</a>
 				</dd>
 				<dd>
-					<a href="/fin/member/likesProduct?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">관심 상품</a>
+					<a href="/fin/member/likesProduct?curPage=1" style="font-weight: normal; font-size: 0.9em;">관심 상품</a>
 				</dd>
 				<dd>
-					<a href="/fin/member/buyEnd?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">구매 완료 상품</a>
+					<a href="/fin/member/buyEnd?curPage=1" style="font-weight: normal; font-size: 0.9em;">구매 완료 상품</a>
 				</dd>
 			</dl>
 		</div>
@@ -190,10 +189,10 @@ alert(message);
 		<div class="panel2">
 			<dl>
 				<dd>
-					<a href="/fin/member/sellIng?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">판매 중 상품</a>
+					<a href="/fin/member/sellIng?curPage=1" style="font-weight: normal; font-size: 0.9em;">판매 중 상품</a>
 				</dd>
 				<dd>
-					<a href="/fin/member/sellEnd?curPage=1&id=${member.id }" style="font-weight: normal; font-size: 0.9em;">판매 완료 상품</a>
+					<a href="/fin/member/sellEnd?curPage=1" style="font-weight: normal; font-size: 0.9em;">판매 완료 상품</a>
 				</dd>
 			</dl>
 		</div>
