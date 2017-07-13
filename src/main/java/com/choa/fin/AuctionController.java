@@ -231,8 +231,6 @@ public class AuctionController {
 			Map<String, Object> map = auctionService.view(num);
 			mv.setViewName("/test");
 			mv.addObject("auction", map.get("auctionDTO"));
-		}else{
-			
 		}
 		return mv;
 	}

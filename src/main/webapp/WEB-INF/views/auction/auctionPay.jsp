@@ -13,7 +13,6 @@
 	if(buyer!=''){
 		buyer = buyer.split(",");
 		price = buyer[1]*1;
-		alert(price);
 	}
 	$(function(){
 		$(".input_price").html(price+"원");
@@ -60,15 +59,20 @@
 		
 		$("#point_info").change(function(){
 			var point = $(this).val()*1;
+			alert((price*0.7));
 			var real = "${member.point}"*1;
 			if(real<point){
 				$(this).val(0);
 				$("#real_point").val(real);
 				alert("포인트가 부족합니다.");
 			}else{
-				if(point>=500){
+				if(point>=500 && point<(price*0.7)){
 					$("#real_point").val(real-point);
 					price_check();
+				}else if(point>(price*0.7)){
+					$("#real_point").val(real);
+					$(this).val(0);
+					alert("포인트 사용은 물가의 70%로 제한됩니다.");
 				}else{
 					$("#real_point").val(real);
 					$(this).val(0);

@@ -33,14 +33,13 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model)throws Exception {
-		String [] icon={"fa fa-diamond","fa fa-gift","fa fa-car","fa fa-weixin","fa fa-heartbeat","fa fa-desktop","fa fa-book"};
 		// getRank
 		List<RankDTO> rank=auctionService.getRank();
 		// getSearch (searchTop10)
 		List<SearchDTO> searchTop10=auctionService.getSearch();
 		// getRankMove
 		List<Object> rankMove=auctionService.getRankMove(rank, searchTop10);
-		model.addAttribute("li",auctionService.ctgAllList()).addAttribute("icon", icon);
+		model.addAttribute("li",auctionService.ctgAllList());
 		model.addAttribute("searchTop10", searchTop10);
 		model.addAttribute("rankMove", rankMove);
 		return "home";

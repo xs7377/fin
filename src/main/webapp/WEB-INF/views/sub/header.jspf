@@ -11,13 +11,6 @@
 <script type="text/javascript">
 $(function(){
 	
-	
-	$.ajax({
-		url: "",
-		type:
-	});
-	
-	
 	//======================================검색어box hover처리=======================
 	$(".rank-search").hover(function(){
 		$(this).addClass('udl');
